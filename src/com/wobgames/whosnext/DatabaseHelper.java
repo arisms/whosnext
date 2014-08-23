@@ -1,0 +1,304 @@
+package com.wobgames.whosnext;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.ArrayList;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+	// Debug
+	private static final String TAG = "DatabaseHelper";
+	
+	/** Constants **/
+	// Database Details
+	public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "WhosNext.db";
+    
+    // Questions Table
+    public static final String TABLE_QUESTIONS = "questions_table";
+    public static final String QUESTIONS_COLUMN_ID = "id";
+    public static final String QUESTIONS_COLUMN_TEXT = "text";
+    public static final String QUESTIONS_COLUMN_ROUND = "round";
+    
+    // Users Table
+    public static final String TABLE_USERS = "users_table";
+    public static final String USERS_COLUMN_ID = "id";
+    public static final String USERS_COLUMN_NAME = "name";
+
+    // Answers Table
+    public static final String TABLE_ANSWERS = "answers_table";
+    public static final String ANSWERS_COLUMN_ID = "id";
+    public static final String ANSWERS_COLUMN_TEXT = "text";
+    public static final String ANSWERS_COLUMN_USERID = "userId";
+    public static final String ANSWERS_COLUMN_QUESTIONID = "questionId";
+
+    // Strings
+    public static final String[] QUESTIONS_ALL_COLUMNS= {
+    	QUESTIONS_COLUMN_ID,
+    	QUESTIONS_COLUMN_TEXT,
+    	QUESTIONS_COLUMN_ROUND
+    	};
+    
+    public static final String[] USERS_ALL_COLUMNS= {
+    	USERS_COLUMN_ID,
+    	USERS_COLUMN_NAME,
+    	};
+    
+    public static final String[] ANSWERS_ALL_COLUMNS= {
+    	ANSWERS_COLUMN_ID,
+    	ANSWERS_COLUMN_TEXT,
+    	ANSWERS_COLUMN_USERID,
+    	ANSWERS_COLUMN_QUESTIONID
+    	};
+    
+    /** SQL Queries **/
+    // Create Questions Table
+    private static final String QUERY_QUESTIONS_TABLE_CREATE = 
+    		"CREATE TABLE IF NOT EXISTS " + TABLE_QUESTIONS + " (" +
+    		QUESTIONS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		QUESTIONS_COLUMN_TEXT + " TEXT, " +
+    		QUESTIONS_COLUMN_ROUND + " INT" + ");";
+    
+    // Create Users Table
+    private static final String QUERY_USERS_TABLE_CREATE = 
+    		"CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
+    		USERS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		USERS_COLUMN_NAME + " TEXT" + ");";
+    
+ // Create Answers Table
+    private static final String QUERY_ANSWERS_TABLE_CREATE = 
+    		"CREATE TABLE IF NOT EXISTS " + TABLE_ANSWERS + " (" +
+    		ANSWERS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		ANSWERS_COLUMN_TEXT + " TEXT, " +
+    		ANSWERS_COLUMN_USERID + " INT, " + 
+    		ANSWERS_COLUMN_QUESTIONID + " INT" + ");";
+    
+    /** Members **/
+    private Context context;
+    
+    // Database constructor
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+    
+    // onCreate
+    public void onCreate(SQLiteDatabase db) {
+    	//Log.d(TAG, "onCreate()"); <---??
+        db.execSQL(QUERY_QUESTIONS_TABLE_CREATE);
+        db.execSQL(QUERY_USERS_TABLE_CREATE);
+        db.execSQL(QUERY_ANSWERS_TABLE_CREATE);
+    }
+    
+    // onUpgrade
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // This database is only a cache for online data, so its upgrade policy is
+        // to simply to discard the data and start over
+        //db.execSQL();
+        //onCreate(db);
+    }
+    
+    // onDowngrade
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //onUpgrade(db, oldVersion, newVersion);
+    }
+
+    // Check if Questions Table is empty
+    public boolean IsTableEmpty (String table) {
+    	SQLiteDatabase db = getReadableDatabase();
+    	Cursor mCursor = db.rawQuery("SELECT * FROM " + table, null);
+    	boolean empty;
+
+    	if (mCursor.getCount() != 0)
+    	{
+    	   // Table is not empty
+    	  empty = false;
+
+    	} else
+    	{
+    	   // Table is empty
+    	   empty = true;
+    	}
+    	return empty;
+    }
+    
+    // Initialize Database
+    public void init() {
+    	// If Questions table is empty, insert default questions from text file
+        if(IsTableEmpty(TABLE_QUESTIONS)) {
+        	
+        	BufferedReader reader = null;
+        	try {
+        		// Open txt file in Assets folder, for reading
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_questions.txt"), "UTF-8")); 
+
+        	    // Parse each line of the text file
+        	    String text;
+        	    String delim = "_";
+        	    int round;
+        	    String mLine = reader.readLine();
+        	    while (mLine != null) {
+        	       
+        	       String[] tokens = mLine.split(delim);
+        	       round = Integer.parseInt(tokens[0]);
+        	       text = tokens[1];
+        	       
+        	       Question question = new Question(0, text, round);
+        	       addQuestion(question);
+        	       
+        	       mLine = reader.readLine();
+        	    }
+        	} catch (IOException e) {
+        		Log.e("DatabaseHelper", "open txt file error 1" + e);
+        	} 
+        	finally {
+        	    if (reader != null) {
+        	         try {
+        	             reader.close();
+        	         } catch (IOException e) {
+        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
+        	         }
+        	    }
+        	}
+        }
+    }
+    
+    // Insert Question
+    public void addQuestion(Question question) {
+    	ContentValues values = new ContentValues();
+    	
+    	values.put(QUESTIONS_COLUMN_TEXT, question.text());
+    	values.put(QUESTIONS_COLUMN_ROUND, question.round());
+    	
+    	SQLiteDatabase db = getWritableDatabase();
+    	long ret = db.insert(TABLE_QUESTIONS, null, values);
+    	Log.i(TAG, "ret value = " + ret);
+    }
+    
+    
+    // SELECT * FROM QUESTIONS
+    public List<Question> getQuestions () {
+    	SQLiteDatabase db = getReadableDatabase();
+    	
+    	Cursor mCursor = db.query(TABLE_QUESTIONS,
+    			QUESTIONS_ALL_COLUMNS,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null);
+    	
+    	// Get ids of columns
+    	final int idIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ID);    	
+    	final int textIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_TEXT);    	
+    	final int roundIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ROUND);    	
+
+    	List<Question> questions_list = new ArrayList<Question>();
+    	
+    	// Add the questions to the list
+    	while(mCursor.moveToNext()) {
+    		final int id = mCursor.getInt(idIdx);
+        	final String text = mCursor.getString(textIdx);
+        	final int round = mCursor.getInt(roundIdx);
+        	Question question = new Question(id, text, round);
+    		questions_list.add(question);
+    	}
+    	
+    	return questions_list;
+    }
+    
+    // Insert User
+    public void addUser (User user) {
+    	ContentValues values = new ContentValues();
+    	
+    	values.put(USERS_COLUMN_NAME, user.name());
+    	
+    	SQLiteDatabase db = getWritableDatabase();
+    	long ret = db.insert(TABLE_USERS, null, values);
+    	Log.i(TAG, "ret value = " + ret);
+    }
+    
+    // SELECT * FROM USERS
+    public List<User> getUsers () {
+    	SQLiteDatabase db = getReadableDatabase();
+    	
+    	Cursor mCursor = db.query(TABLE_USERS,
+    			USERS_ALL_COLUMNS,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null);
+    	
+    	// Get ids of columns
+    	final int idIdx = mCursor.getColumnIndex(USERS_COLUMN_ID);    	
+    	final int nameIdx = mCursor.getColumnIndex(USERS_COLUMN_NAME);    	
+
+    	List<User> users_list = new ArrayList<User>();
+    	
+    	// Add the users to the list
+    	while(mCursor.moveToNext()) {
+    		final int id = mCursor.getInt(idIdx);
+        	final String name = mCursor.getString(nameIdx);
+        	User user = new User(id, name);
+    		users_list.add(user);
+    	}
+    	
+    	return users_list;
+    }
+    
+    // Insert Answer
+    public void addAnswer (Answer answer) {
+    	ContentValues values = new ContentValues();
+    	
+    	values.put(ANSWERS_COLUMN_TEXT, answer.text());
+    	values.put(ANSWERS_COLUMN_USERID, answer.userId());
+    	values.put(ANSWERS_COLUMN_QUESTIONID, answer.questionId());
+
+    	SQLiteDatabase db = getWritableDatabase();
+    	long ret = db.insert(TABLE_ANSWERS, null, values);
+    	Log.i(TAG, "ret value = " + ret);
+    }
+    
+    // SELECT * FROM ANSWERS
+    public List<Answer> getAnswers () {
+    	SQLiteDatabase db = getReadableDatabase();
+    	
+    	Cursor mCursor = db.query(TABLE_ANSWERS,
+    			ANSWERS_ALL_COLUMNS,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null);
+    	
+    	// Get ids of columns
+    	final int idIdx = mCursor.getColumnIndex(ANSWERS_COLUMN_ID);    	
+    	final int textIdx = mCursor.getColumnIndex(ANSWERS_COLUMN_TEXT);    	
+    	final int userIdIdx = mCursor.getColumnIndex(ANSWERS_COLUMN_USERID); 
+    	final int questionIdIdx = mCursor.getColumnIndex(ANSWERS_COLUMN_QUESTIONID); 
+    	
+    	List<Answer> answers_list = new ArrayList<Answer>();
+    	
+    	// Add the questions to the list
+    	while(mCursor.moveToNext()) {
+    		final int id = mCursor.getInt(idIdx);
+        	final String text = mCursor.getString(textIdx);
+        	final int userId = mCursor.getInt(userIdIdx);
+        	final int questionId = mCursor.getInt(questionIdIdx);
+        	Answer answer = new Answer(id, text, userId, questionId);
+    		answers_list.add(answer);
+    	}
+    	
+    	return answers_list;
+    }
+    
+}
