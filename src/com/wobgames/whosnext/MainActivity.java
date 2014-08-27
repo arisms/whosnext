@@ -1,39 +1,56 @@
 package com.wobgames.whosnext;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends Activity {
 	// Debug
 	private static final String TAG = "MainActivity";
+	
+	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
 
 	// On Create
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_screen);
+        setContentView(R.layout.activity_main);
         
-        // Start Screen Fragment
-        if (findViewById(R.id.start_screen_fragment_container) != null) {
-        	
-        	if (savedInstanceState != null) {
-                return;
-            }
-
-        	// Create a new Fragment to be placed in the activity layout
-            StartScreenFragment startFragment = new StartScreenFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            startFragment.setArguments(getIntent().getExtras());
-        	
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction().add(R.id.start_screen_fragment_container, startFragment).commit();
-        }
+        // Create the Database
+        DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());
         
-
+        mDBHelper.init();
+        
+        List<Question> questions_list = mDBHelper.getQuestions();
+        
     }
 
-
+    public void startGame(View view) {
+    	// When the user taps the Start Game button
+    	//setContentView(R.layout.activity_questions);
+    	
+    	Intent intent = new Intent(this, QuestionsActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.startgame);
+        //String message = editText.getText().toString();
+    	
+        String message = "Start Game";
+    	intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    	
+    }
     
+    public void joinGame(View view) {
+    	// When the user taps the Join Game button
+    	Intent intent = new Intent(this, QuestionsActivity.class);
+    	
+    	String message = "Join Game";
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    	
+    }
 }
