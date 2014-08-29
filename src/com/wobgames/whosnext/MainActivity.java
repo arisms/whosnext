@@ -2,55 +2,65 @@ package com.wobgames.whosnext;
 
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.ViewGroup;
 
-public class MainActivity extends Activity {
+import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+
+public class MainActivity extends FragmentActivity implements OnButtonSelectedListener {
 	// Debug
 	private static final String TAG = "MainActivity";
-	
 	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
-
+	
+	// Members
+	ButtonsFragment mButtonsFragment;
+	QuestionsFragment mQuestionsFragment;
+	
 	// On Create
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getActionBar().hide();
         setContentView(R.layout.activity_main);
+        
+        if (savedInstanceState == null) {
+			// Add the fragment on initial activity setup
+        	mButtonsFragment = new ButtonsFragment();
+			getSupportFragmentManager().beginTransaction().add(R.id.rootlayout, mButtonsFragment).commit();
+		} else {
+			// Or set the fragment from restored state info
+			mButtonsFragment = (ButtonsFragment) getSupportFragmentManager().findFragmentById(R.id.rootlayout);
+		}
+        
+        // Fragments
+//        mButtonsFragment = new ButtonsFragment();
+        mQuestionsFragment = new QuestionsFragment();
+//        getSupportFragmentManager().beginTransaction().show(mButtonsFragment).commit();
         
         // Create the Database
         DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());
-        
         mDBHelper.init();
-        
         List<Question> questions_list = mDBHelper.getQuestions();
         
     }
 
-    public void startGame(View view) {
-    	// When the user taps the Start Game button
-    	//setContentView(R.layout.activity_questions);
-    	
-    	Intent intent = new Intent(this, QuestionsActivity.class);
-        //EditText editText = (EditText) findViewById(R.id.startgame);
-        //String message = editText.getText().toString();
-    	
-        String message = "Start Game";
-    	intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    	
+    @Override
+    public void onCreateGame() {
+    	// When the user taps the Create Game button
+    	Log.d(TAG, "onCreateGame()");
+//    	getSupportFragmentManager().beginTransaction()
+//    		.replace(((ViewGroup)(getRootView().getParent())).getId(), mQuestionsFragment).addToBackStack(null).commit();
+    	getSupportFragmentManager().beginTransaction()
+    		.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     }
     
-    public void joinGame(View view) {
+    @Override
+    public void onJoinGame() {
     	// When the user taps the Join Game button
-    	Intent intent = new Intent(this, QuestionsActivity.class);
-    	
-    	String message = "Join Game";
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+    
     	
     }
 }

@@ -1,6 +1,36 @@
+	// Member Data
+	Button mCreateGame;
+	Button mJoinGame;
+	
+	
+	
+	// Buttons
+    mCreateGame = (Button) findViewById(R.id.creategame);
+    mCreateGame.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			createGame();				
+		}
+	});
+    mJoinGame = (Button) findViewById(R.id.joingame);
+    mJoinGame.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			joinGame();				
+		}
+	});
+
+
+
+
+
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
+import com.wobgames.whosnext.QuestionsFragment;
 import com.wobgames.whosnext.R;
 
         DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());

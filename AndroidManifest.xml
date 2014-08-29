@@ -26,9 +26,6 @@
             android:name=".QuestionsActivity"
             android:label="@string/app_name"
             android:parentActivityName="com.wobgames.whosnext.MainActivity" >
-            <meta-data
-            	android:name="android.support.PARENT_ACTIVITY"
-            	android:value="com.wobgames.whosnext.MainActivity" />
         </activity>
     </application>
 
