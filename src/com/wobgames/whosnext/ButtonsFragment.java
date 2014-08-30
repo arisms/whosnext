@@ -32,6 +32,14 @@ public class ButtonsFragment extends Fragment{
     		}
     	});
         
+        mJoinGame = (Button) view.findViewById(R.id.joingame);
+        mJoinGame.setOnClickListener(new View.OnClickListener() {
+    		@Override
+    		public void onClick(View v) {
+    			mListener.onJoinGame();
+    		}
+    	});
+        
         return view;
 	}
 	

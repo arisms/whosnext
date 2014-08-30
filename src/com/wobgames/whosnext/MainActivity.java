@@ -51,8 +51,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onCreateGame() {
     	// When the user taps the Create Game button
     	Log.d(TAG, "onCreateGame()");
-//    	getSupportFragmentManager().beginTransaction()
-//    		.replace(((ViewGroup)(getRootView().getParent())).getId(), mQuestionsFragment).addToBackStack(null).commit();
+    	
+    	// Load Questions Fragment
     	getSupportFragmentManager().beginTransaction()
     		.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     }
@@ -60,7 +60,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onJoinGame() {
     	// When the user taps the Join Game button
-    
+    	Log.d(TAG, "onJoinGame()");
     	
+    	// Load Questions Fragment
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     }
 }

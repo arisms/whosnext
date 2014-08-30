@@ -7,5 +7,8 @@
     <string name="join_game_button">Join Game</string>
     <string name="title_activity_questions">QuestionsActivity</string>
     <string name="hello_world">Hello world!</string>
+    
+    <color name="dark1">#220A29</color>
+    <color name="light1">#01A9DB</color>
 
 </resources>
