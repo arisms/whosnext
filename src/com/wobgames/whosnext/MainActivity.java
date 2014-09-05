@@ -1,15 +1,12 @@
 package com.wobgames.whosnext;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.ViewGroup;
-
 import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 
-public class MainActivity extends FragmentActivity implements OnButtonSelectedListener {
+public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener {
 	// Debug
 	private static final String TAG = "MainActivity";
 	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
@@ -17,13 +14,14 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	// Members
 	ButtonsFragment mButtonsFragment;
 	QuestionsFragment mQuestionsFragment;
+	GameMainFragment mGameMainFragment;
+	ImageFragment mImageFragment;
 	
 	// On Create
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActionBar().hide();
         setContentView(R.layout.activity_main);
         
         if (savedInstanceState == null) {
@@ -36,14 +34,15 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 		}
         
         // Fragments
-//        mButtonsFragment = new ButtonsFragment();
         mQuestionsFragment = new QuestionsFragment();
-//        getSupportFragmentManager().beginTransaction().show(mButtonsFragment).commit();
+        mGameMainFragment = new GameMainFragment();
+        mImageFragment = new ImageFragment();
+        
         
         // Create the Database
         DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());
         mDBHelper.init();
-        List<Question> questions_list = mDBHelper.getQuestions();
+        //List<Question> questions_list = mDBHelper.getQuestions();
         
     }
 
@@ -63,7 +62,19 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	Log.d(TAG, "onJoinGame()");
     	
     	// Load Questions Fragment
+//    	getSupportFragmentManager().beginTransaction()
+//			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+    }
+    
+    @Override
+    public void onStartGame() {
+    	// When the user taps the Start Game button
+    	Log.d(TAG, "onStartGame()");
+    	
+    	// Load GameMain Fragment
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mGameMainFragment).commit();
     }
 }

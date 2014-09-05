@@ -132,8 +132,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     // Initialize Database
     public void init() {
-    	// If Questions table is empty, insert default questions from text file
+    	
+    	// QUESTIONS table initialization
         if(IsTableEmpty(TABLE_QUESTIONS)) {
+        	// If Questions table is empty, insert default questions from text file
         	
         	BufferedReader reader = null;
         	try {
@@ -151,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	       round = Integer.parseInt(tokens[0]);
         	       text = tokens[1];
         	       
-        	       Question question = new Question(0, text, round);
+        	       Question question = new Question(text, round);
         	       addQuestion(question);
         	       
         	       mLine = reader.readLine();
@@ -169,6 +171,87 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	    }
         	}
         }
+        
+        // USERS table initialization (to be removed)
+        if(IsTableEmpty(TABLE_USERS)) {
+        	
+        	BufferedReader reader = null;
+        	try {
+        		// Open txt file in Assets folder, for reading
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_users.txt"), "UTF-8")); 
+
+        	    // Parse each line of the text file
+        	    String name;
+        	    String delim = "_";
+        	    String mLine = reader.readLine();
+        	    while (mLine != null) {
+        	       
+        	       String[] tokens = mLine.split(delim);
+        	       name = tokens[0];
+        	       
+        	       User user = new User();
+        	       user.setName(name);
+        	       addUser(user);
+        	       
+        	       mLine = reader.readLine();
+        	    }
+        	} catch (IOException e) {
+        		Log.e("DatabaseHelper", "open txt file error 1" + e);
+        	}
+        	finally {
+        	    if (reader != null) {
+        	         try {
+        	             reader.close();
+        	         } catch (IOException e) {
+        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
+        	         }
+        	    }
+        	}
+        }
+        
+     // ANSWERS table initialization (to be removed)
+        if(IsTableEmpty(TABLE_ANSWERS)) {
+        	
+        	BufferedReader reader = null;
+        	try {
+        		// Open txt file in Assets folder, for reading
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_answers.txt"), "UTF-8")); 
+
+        	    // Parse each line of the text file
+        	    String text;
+        	    int userId;
+        	    int questionId;
+        	    String delim = "_";
+        	    String mLine = reader.readLine();
+        	    while (mLine != null) {
+        	       
+        	       String[] tokens = mLine.split(delim);
+        	       text = tokens[0];
+        	       userId = Integer.parseInt(tokens[1]);
+        	       questionId = Integer.parseInt(tokens[2]);
+        	       
+        	       Answer answer = new Answer(text, userId, questionId);
+        	       addAnswer(answer);
+        	       
+        	       mLine = reader.readLine();
+        	    }
+        	} catch (IOException e) {
+        		Log.e("DatabaseHelper", "open txt file error 1" + e);
+        	}
+        	finally {
+        	    if (reader != null) {
+        	         try {
+        	             reader.close();
+        	         } catch (IOException e) {
+        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
+        	         }
+        	    }
+        	}
+        }
+        
+        
+        
+        
     }
     
     // Insert Question
@@ -208,11 +291,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     		final int id = mCursor.getInt(idIdx);
         	final String text = mCursor.getString(textIdx);
         	final int round = mCursor.getInt(roundIdx);
-        	Question question = new Question(id, text, round);
+        	Question question = new Question(text, round);
     		questions_list.add(question);
     	}
     	
     	return questions_list;
+    }
+    
+    // SELECT FROM QUESTIONS WHERE ID = ID
+    public Question getQuestionById (int id) {
+    	SQLiteDatabase db = getReadableDatabase();
+    	String where = QUESTIONS_COLUMN_ID + " = ?";
+    	String[] args = {Integer.toString(id)};
+    	
+    	Cursor mCursor = db.query(TABLE_QUESTIONS,
+    			QUESTIONS_ALL_COLUMNS,
+    			where,
+    			args,
+    			null,
+    			null,
+    			null);
+    		
+    	// Get ids of columns
+    	//final int idIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ID);    	
+    	final int textIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_TEXT);    	
+    	final int roundIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ROUND); 
+    	
+    	// Select the correct question
+    	mCursor.moveToNext();
+    	//final int id = mCursor.getInt(idIdx);
+    	final String text = mCursor.getString(textIdx);
+    	final int round = mCursor.getInt(roundIdx);
+    	
+    	Question result = new Question(text, round);
+    	
+    	return result;
     }
     
     // Insert User
@@ -294,7 +407,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	final String text = mCursor.getString(textIdx);
         	final int userId = mCursor.getInt(userIdIdx);
         	final int questionId = mCursor.getInt(questionIdIdx);
-        	Answer answer = new Answer(id, text, userId, questionId);
+        	Answer answer = new Answer(text, userId, questionId);
     		answers_list.add(answer);
     	}
     	

@@ -2,18 +2,63 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:gravity="center">
+    android:background="@drawable/backrepeat" 
+    android:gravity="top">
+    
     <LinearLayout 
     	android:baselineAligned="false"
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent" 
-    	android:background="@drawable/backrepeat" 
-    	android:gravity="center" >
-    
-    	<TextView android:text="ASDDF"
-	    	android:layout_width="fill_parent"
-    		android:layout_height="fill_parent" />
+    	android:layout_margin="12dp" >
     	
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:text="@string/questions_answers_header"
+            android:layout_marginBottom="10dp"
+			android:background="@drawable/backrepeat_header"
+			android:textSize="20sp"   
+			android:gravity="center"
+			/>
+        
+         <TextView 
+            android:id="@+id/question_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:textSize="22sp"   
+			android:textStyle="italic"
+			android:gravity="center"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			/>
+         
+         <EditText 
+             android:id="@+id/answer_text"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:minHeight="50dp"
+           	 android:layout_marginBottom="5dp"
+             android:hint="Answer"
+             android:singleLine="false"
+             android:paddingBottom="10dp"
+             android:gravity="top"
+             />
+         
+         <Button android:id="@+id/submit_question_button"
+        	android:layout_width="wrap_content"
+        	android:minWidth="80dp"
+        	android:layout_height="40dp"
+        	android:layout_marginTop="5dp"
+        	android:background="@drawable/backrepeat_button"
+        	android:layout_gravity="right"
+        	android:text="@string/next_button"
+        	android:textSize="22sp" />
+         
+        
     </LinearLayout>
+    
+
+    
 </FrameLayout>

@@ -10,8 +10,8 @@ public class Question {
 		
 	}
 	
-	public Question(int id, String text, int round) {
-		this.mId = id;
+	public Question(String text, int round) {
+		//this.mId = id;
 		this.mText = text;
 		this.mRound = round;
 	}

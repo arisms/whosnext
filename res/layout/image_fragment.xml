@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buttonsfragment"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <LinearLayout 
+    	android:baselineAligned="false"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:background="@drawable/backrepeat"
+    	android:gravity="top|center_horizontal" >
+    
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="48sp" 
+            android:textColor="@color/light1"
+            android:text="Please wait for your turn!"
+            android:paddingTop="40dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="40dp"
+            android:gravity="center"
+            />
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:src="@drawable/iphone_clock"
+    		android:background="@android:color/transparent"
+    		/>
+    	
+    </LinearLayout>
+</FrameLayout>

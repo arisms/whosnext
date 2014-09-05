@@ -11,8 +11,8 @@ public class Answer {
 		
 	}
 	
-	public Answer(int id, String text, int userId, int questionId) {
-		this.mId = id;
+	public Answer(String text, int userId, int questionId) {
+		//this.mId = id;
 		this.mText = text;
 		this.mUserId = userId;
 		this.mQuestionId = questionId;
