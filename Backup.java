@@ -1,4 +1,37 @@
 /*****************************/
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:minHeight="60dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    >
+    
+        
+    <TextView
+        android:id="@+id/list_question" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:gravity="left|center_vertical"
+        android:layout_gravity="left"
+        android:paddingLeft="20dp"
+        />
+    
+    <Button 
+        	android:layout_width="80dp"
+        	android:layout_height="40dp"
+        	android:layout_marginTop="5dp"
+        	android:background="@drawable/backrepeat_button"
+        	android:layout_gravity="right"
+        	android:text="@string/next_button"
+        	android:textSize="22sp" />
+</RelativeLayout>
+
+
+
+
 // questions_fragment.xml
 
 <ListView
