@@ -63,23 +63,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Create Questions Table
     private static final String QUERY_QUESTIONS_TABLE_CREATE = 
     		"CREATE TABLE IF NOT EXISTS " + TABLE_QUESTIONS + " (" +
-    		QUESTIONS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		QUESTIONS_COLUMN_ID + " INTEGER PRIMARY KEY, " +
     		QUESTIONS_COLUMN_TEXT + " TEXT, " +
-    		QUESTIONS_COLUMN_ROUND + " INT" + ");";
+    		QUESTIONS_COLUMN_ROUND + " INTEGER" + ");";
     
     // Create Users Table
     private static final String QUERY_USERS_TABLE_CREATE = 
     		"CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
-    		USERS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		USERS_COLUMN_ID + " INTEGER PRIMARY KEY, " +
     		USERS_COLUMN_NAME + " TEXT" + ");";
     
  // Create Answers Table
     private static final String QUERY_ANSWERS_TABLE_CREATE = 
     		"CREATE TABLE IF NOT EXISTS " + TABLE_ANSWERS + " (" +
-    		ANSWERS_COLUMN_ID + " INT PRIMARY KEY, " +
+    		ANSWERS_COLUMN_ID + " INTEGER PRIMARY KEY, " +
     		ANSWERS_COLUMN_TEXT + " TEXT, " +
-    		ANSWERS_COLUMN_USERID + " INT, " + 
-    		ANSWERS_COLUMN_QUESTIONID + " INT" + ");";
+    		ANSWERS_COLUMN_USERID + " INTEGER, " + 
+    		ANSWERS_COLUMN_QUESTIONID + " INTEGER" + ");";
     
     /** Members **/
     private Context context;
@@ -263,6 +263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	
     	SQLiteDatabase db = getWritableDatabase();
     	long ret = db.insert(TABLE_QUESTIONS, null, values);
+    	db.close();
     	Log.i(TAG, "ret value = " + ret);
     }
     
@@ -292,6 +293,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	final String text = mCursor.getString(textIdx);
         	final int round = mCursor.getInt(roundIdx);
         	Question question = new Question(text, round);
+        	question.setId(id);
+        	//Log.i(TAG, "id = " + id + " q.id = " + question.id());
     		questions_list.add(question);
     	}
     	
@@ -301,30 +304,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SELECT FROM QUESTIONS WHERE ID = ID
     public Question getQuestionById (int id) {
     	SQLiteDatabase db = getReadableDatabase();
-    	String where = QUESTIONS_COLUMN_ID + " = ?";
-    	String[] args = {Integer.toString(id)};
+    	String where = QUESTIONS_COLUMN_ID + "=" + id;
+    	//String[] args = {Integer.toString(id)};
     	
     	Cursor mCursor = db.query(TABLE_QUESTIONS,
     			QUESTIONS_ALL_COLUMNS,
     			where,
-    			args,
+    			null,
     			null,
     			null,
     			null);
     		
     	// Get ids of columns
-    	//final int idIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ID);    	
+    	final int idIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ID);    	
     	final int textIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_TEXT);    	
     	final int roundIdx = mCursor.getColumnIndex(QUESTIONS_COLUMN_ROUND); 
     	
     	// Select the correct question
     	mCursor.moveToNext();
-    	//final int id = mCursor.getInt(idIdx);
+    	final int id_final = mCursor.getInt(idIdx);
     	final String text = mCursor.getString(textIdx);
     	final int round = mCursor.getInt(roundIdx);
     	
     	Question result = new Question(text, round);
-    	
+    	result.setId(id_final);
     	return result;
     }
     
@@ -408,6 +411,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	final int userId = mCursor.getInt(userIdIdx);
         	final int questionId = mCursor.getInt(questionIdIdx);
         	Answer answer = new Answer(text, userId, questionId);
+        	answer.setId(id);
     		answers_list.add(answer);
     	}
     	

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,9 +40,11 @@ public class GameMainFragment extends ListFragment{
 
 		View view = inflater.inflate(R.layout.game_main_fragment, container, false);
 	
+		playSound();
+		
 		// Hide keyboard
-		//final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	    //imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+//		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//	    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 		
 		// Get data from the database
 		mDBHelper = new DatabaseHelper(getActivity());
@@ -67,23 +69,16 @@ public class GameMainFragment extends ListFragment{
 		mQuestionsList = mDBHelper.getQuestions();
 		
 		// Choose a random answer from the list
-//		getRandomAnswer(mAnswersList);
-//		
-//		// Find the question with the same id
-//		for(int i=0; i<mQuestionsList.size(); i++)
-//		{
-//			if(mQuestionsList.get(i).id() == mRandomAnswer.questionId())
-//			{
-//				mRandomQuestion = mQuestionsList.get(i);
-//				break;
-//			}
-//		}
+		getRandomAnswer(mAnswersList);
 		
-		//mRandomQuestion = mDBHelper.getQuestionById(10);
+		// Find the question with the same id
+		mRandomQuestion = mDBHelper.getQuestionById(mRandomAnswer.questionId());
 		
 		questionAnswerTv = (TextView) view.findViewById(R.id.random_question_answer);
-		questionAnswerTv.setText("Q: " + mQuestionsList.get(6).text() + '\n' 
-				+ "A: " + mAnswersList.get(6).text());
+		questionAnswerTv.setText("Q: " + mRandomQuestion.text() + '\n' 
+				+ "A: " + mRandomAnswer.text());
+		
+		questionAnswerTv.requestFocus();
 		
 		
 //		button = (Button) view.findViewById(R.id.select_player_button);
@@ -103,10 +98,9 @@ public class GameMainFragment extends ListFragment{
 		
 		int randomId = randInt(1, mAnswersList.size());
 		
-		/******** !!!!!!!! *******/
-		// REPLACE WITH SELECT WHERE ID = RANDOMID
+		// Get function?
 		mRandomAnswer = mAnswersList.get(randomId);
-		
+		Log.i(TAG, "randomId = " + randomId);
 		//return mRandomAnswer;
 	}
 	
@@ -120,5 +114,15 @@ public class GameMainFragment extends ListFragment{
 		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
+	}
+	
+	public void playSound() {
+		
+		MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.bell);
+		mediaPlayer.start();
+		
+		/************/
+		// MediaPlayer.setOnCompletionListener() <------!!!!!
+		
 	}
 }

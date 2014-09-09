@@ -94,18 +94,22 @@ public class QuestionsFragment extends Fragment{
 		}
 		
 		// Empty answer
-		if(mAnswerEt.getText().toString().trim().length() == 0)
-    	{
-    		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);
-    		toast.setGravity(Gravity.CENTER, 0, 0);
-    		toast.show();
-    		
-    		return;
-    	}
+//		if(mAnswerEt.getText().toString().trim().length() == 0)
+//    	{
+//    		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);
+//    		toast.setGravity(Gravity.CENTER, 0, 0);
+//    		toast.show();
+//    		
+//    		return;
+//    	}
 		
 		// If Start Game is selected replace the fragment
 		if(mQuestionCounter == mTotalQuestions)
 		{
+			// 
+			mAnswerEt.clearFocus();
+			button.requestFocus();
+			
 			// Commit answer to database
 			// ...
 			
