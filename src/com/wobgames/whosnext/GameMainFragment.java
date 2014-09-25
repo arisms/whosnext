@@ -17,8 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameMainFragment extends ListFragment{
-	private static final String TAG = "ButtonsFragment";
+import com.wobgames.whosnext.QuestionsAnswersListAdapter.OnSelectPlayerListener;
+
+public class GameMainFragment extends ListFragment implements OnSelectPlayerListener{
+	private static final String TAG = "GameMainFragment";
 
 	// Member data
 	ListView mListView;
@@ -60,7 +62,7 @@ public class GameMainFragment extends ListFragment{
 		//Link ListView to the data
 		mListView = (ListView) view.findViewById(android.R.id.list);
 
-		QuestionsAnswersListAdapter mAdapter = new QuestionsAnswersListAdapter(getActivity(), mUsersStrings);
+		QuestionsAnswersListAdapter mAdapter = new QuestionsAnswersListAdapter(getActivity(), mUsersStrings, this, mUsersList);
 
 		mListView.setAdapter(mAdapter);
 		
@@ -100,7 +102,7 @@ public class GameMainFragment extends ListFragment{
 		
 		// Get function?
 		mRandomAnswer = mAnswersList.get(randomId);
-		Log.i(TAG, "randomId = " + randomId);
+		//Log.i(TAG, "randomId = " + randomId);
 		//return mRandomAnswer;
 	}
 	
@@ -124,5 +126,19 @@ public class GameMainFragment extends ListFragment{
 		/************/
 		// MediaPlayer.setOnCompletionListener() <------!!!!!
 		
+	}
+
+	@Override
+	public void onSelectPlayer(int id) {
+		final int position = id - 1;
+		
+		Toast toast = Toast.makeText(getActivity(), "" + mUsersList.get(position).name(), Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+		
+		
+		
+		// If wrong player
+		//wrongPlayer();
 	}
 }
