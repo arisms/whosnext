@@ -264,7 +264,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = getWritableDatabase();
     	long ret = db.insert(TABLE_QUESTIONS, null, values);
     	db.close();
-    	Log.i(TAG, "ret value = " + ret);
+    	//Log.i(TAG, "ret value = " + ret);
     }
     
     
@@ -339,7 +339,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	
     	SQLiteDatabase db = getWritableDatabase();
     	long ret = db.insert(TABLE_USERS, null, values);
-    	Log.i(TAG, "ret value = " + ret);
+    	//Log.i(TAG, "ret value = " + ret);
     }
     
     // SELECT * FROM USERS
@@ -381,7 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     	SQLiteDatabase db = getWritableDatabase();
     	long ret = db.insert(TABLE_ANSWERS, null, values);
-    	Log.i(TAG, "ret value = " + ret);
+    	//Log.i(TAG, "ret value = " + ret);
     }
     
     // SELECT * FROM ANSWERS

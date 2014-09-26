@@ -45,36 +45,45 @@ public final class R {
         public static final int grey=0x7f02000d;
         public static final int ic_launcher=0x7f02000e;
         public static final int iphone_clock=0x7f02000f;
-        public static final int retina_wood=0x7f020010;
-        public static final int stardust=0x7f020011;
-        public static final int starfield=0x7f020012;
-        public static final int starring=0x7f020013;
-        public static final int stars=0x7f020014;
-        public static final int stopwatch=0x7f020015;
-        public static final int wn=0x7f020016;
+        public static final int machine=0x7f020010;
+        public static final int retina_wood=0x7f020011;
+        public static final int stardust=0x7f020012;
+        public static final int starfield=0x7f020013;
+        public static final int starring=0x7f020014;
+        public static final int stars=0x7f020015;
+        public static final int stopwatch=0x7f020016;
+        public static final int wn=0x7f020017;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a000b;
-        public static final int answer_text=0x7f0a0009;
+        public static final int action_settings=0x7f0a0011;
+        public static final int answer_text=0x7f0a000c;
         public static final int buttonsfragment=0x7f0a0002;
         public static final int creategame=0x7f0a0003;
+        public static final int device_details=0x7f0a0010;
+        public static final int device_list=0x7f0a0005;
+        public static final int device_name=0x7f0a000f;
+        public static final int header=0x7f0a0006;
+        public static final int icon=0x7f0a000e;
         public static final int joingame=0x7f0a0004;
-        public static final int list_question=0x7f0a0006;
-        public static final int question_text=0x7f0a0008;
-        public static final int random_question_answer=0x7f0a0005;
+        public static final int list_question=0x7f0a0009;
+        public static final int question_text=0x7f0a000b;
+        public static final int random_question_answer=0x7f0a0008;
         public static final int rootlayout=0x7f0a0000;
-        public static final int select_player_button=0x7f0a0007;
-        public static final int submit_question_button=0x7f0a000a;
+        public static final int select_player_button=0x7f0a000a;
+        public static final int submit_question_button=0x7f0a000d;
         public static final int temp_text=0x7f0a0001;
+        public static final int this_device=0x7f0a0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_questions=0x7f030001;
         public static final int buttons_fragment=0x7f030002;
-        public static final int game_main_fragment=0x7f030003;
-        public static final int image_fragment=0x7f030004;
-        public static final int questions_answers_list_item=0x7f030005;
-        public static final int questions_fragment=0x7f030006;
+        public static final int device_list_fragment=0x7f030003;
+        public static final int game_main_fragment=0x7f030004;
+        public static final int image_fragment=0x7f030005;
+        public static final int questions_answers_list_item=0x7f030006;
+        public static final int questions_fragment=0x7f030007;
+        public static final int row_devices=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f090000;
@@ -87,6 +96,7 @@ public final class R {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int create_game_button=0x7f060002;
+        public static final int device_list_header=0x7f06000a;
         public static final int game_main_header=0x7f060009;
         public static final int join_game_button=0x7f060006;
         public static final int next_button=0x7f060003;

@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/device_list"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/backrepeat" 
+    android:gravity="top">
+    
+    <LinearLayout 
+    	android:baselineAligned="false"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent" 
+    	android:layout_margin="12dp" >
+    	
+        <TextView 
+            android:id="@+id/header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:text="@string/device_list_header"
+			android:background="@drawable/backrepeat_header"
+			android:textSize="20sp"   
+			android:gravity="center"
+			/>
+        
+        <TextView 
+            android:id="@+id/this_device"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+			android:textSize="18sp"   
+			android:textStyle="italic"
+			android:gravity="left|center_vertical"
+			/>
+        
+        <ListView
+        	android:id="@id/android:list"
+        	android:layout_height="0dp"
+        	android:layout_weight="1"
+        	android:layout_width="match_parent"
+        	android:background="@color/transparent" >
+		</ListView>
+         
+    </LinearLayout>
+    
+</FrameLayout>

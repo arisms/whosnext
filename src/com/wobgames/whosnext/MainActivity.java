@@ -3,8 +3,11 @@ package com.wobgames.whosnext;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -13,25 +16,27 @@ import android.widget.Toast;
 import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
 import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 
-public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener {
+public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, PeerListListener {
 	// Debug
-	private static final String TAG = "MainActivity";
+	public static final String TAG = "MainActivity";
 	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
 	
-	/** Members **/
-	
+	/********** Member data **********/
 	// Fragments
 	ButtonsFragment mButtonsFragment;
 	QuestionsFragment mQuestionsFragment;
 	GameMainFragment mGameMainFragment;
 	ImageFragment mImageFragment;
+	DeviceListFragment mDeviceListFragment;
+	
 	// WiFi p2p
 	WifiP2pManager mManager;
 	Channel mChannel;
-	BroadcastReceiver mReceiver;
-	// Used for WiFip2p
-	private Context mContext;
+	BroadcastReceiver mReceiver = null;
 	private IntentFilter mIntentFilter;
+	private boolean isWifiP2pEnabled = false;
+	WifiP2pDevice mDevice;
+	/*********************************/
 	
 	/** On Create() **/
     @Override
@@ -53,6 +58,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mQuestionsFragment = new QuestionsFragment();
         mGameMainFragment = new GameMainFragment();
         mImageFragment = new ImageFragment();
+        mDeviceListFragment = new DeviceListFragment();
         
         // Create the Database
         DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());
@@ -61,10 +67,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         /** WiFiDirect **/
         
         // WiFi p2p Initial Setup
-        mContext = getApplicationContext();
-        mManager = (WifiP2pManager) getSystemService(mContext.WIFI_P2P_SERVICE);
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        //mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        
         
         // Intent filter & intents
         mIntentFilter = new IntentFilter();
@@ -72,7 +78,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-        
+
     }
     
     /** onResume() **/
@@ -94,12 +100,58 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         unregisterReceiver(mReceiver);
     }
     
+    /************* WiFiP2p Functions *************/
+    
+    /**
+     * @param isWifiP2pEnabled the isWifiP2pEnabled to set
+     */
+    public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
+        this.isWifiP2pEnabled = isWifiP2pEnabled;
+    }
+    
+    public void updateDevice (WifiP2pDevice device) {
+    	Log.d(TAG, "updateThisDevice()");
+    	
+    	mDevice = device;    	
+    }
+    
+    /**
+     * Remove all peers and clear all fields. This is called on
+     * BroadcastReceiver receiving a state change event.
+     */
+    public void resetData() {
+        if (mDeviceListFragment != null) {
+            mDeviceListFragment.clearPeers();
+        }
+    }
+        
+    /** PeerListListener **/
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList peerList) {
+    	Log.d(TAG, "onPeersAvailable()");
 
-    /**** FRAGMENT INTERFACES ****/
+    	if(mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
+    		mDeviceListFragment.updatePeerList(peerList);
+    		mDeviceListFragment.updateThisDevice(mDevice);
+    	}
+    }
+    
+    /************* Fragment Interfaces *************/
+    
+    /**
+     * onCreateGame() - ButtonsFragment
+     */
     @Override
     public void onCreateGame() {
     	// When the user taps the Create Game button
     	Log.d(TAG, "onCreateGame()");
+    	
+    	// Check if WiFiP2p is enabled
+    	if (!isWifiP2pEnabled) {
+            Toast.makeText(MainActivity.this, "Wi-Fi Direct is not enabled.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
     	
     	// Discover Peers
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -108,6 +160,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Peers Discovery Initiated",
                         Toast.LENGTH_SHORT).show();
+                
             }
 
             @Override
@@ -116,14 +169,19 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
                         Toast.LENGTH_SHORT).show();
             }
         });
-    	
+
     	// Load Questions Fragment
     	getSupportFragmentManager().beginTransaction()
-    		.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+
     }
     
+    /**
+     * onJoinGame() - ButtonsFragment
+     */
     @Override
     public void onJoinGame() {
+    	
     	// When the user taps the Join Game button
     	Log.d(TAG, "onJoinGame()");
     	
@@ -134,6 +192,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
     }
     
+    /**
+     * onStartGame() - GameMainFragment
+     */
     @Override
     public void onStartGame() {
     	// When the user taps the Start Game button

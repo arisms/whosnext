@@ -135,7 +135,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		Toast toast = Toast.makeText(getActivity(), "" + mUsersList.get(position).name(), Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
-		
+		Log.d(TAG, "onSelectPlayer()");
 		
 		
 		// If wrong player

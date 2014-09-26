@@ -11,6 +11,7 @@
     <string name="title_activity_questions">QuestionsActivity</string>
     <string name="questions_answers_header">Please answer the questions below</string>
     <string name="game_main_header">Choose the correct player!</string>
+    <string name="device_list_header">List of devices in range</string>
     
     <color name="dark1">#220A29</color>
     <color name="light1">#01A9DB</color>

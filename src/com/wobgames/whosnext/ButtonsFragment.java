@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class ButtonsFragment extends Fragment{
+public class ButtonsFragment extends Fragment {
 	private static final String TAG = "ButtonsFragment";
 
 	// Member Data
@@ -54,7 +54,7 @@ public class ButtonsFragment extends Fragment{
 	          + " must implemenet ButtonsFragment.OnButtonSelectedListener");
 	    }
 	  }
-
+	
 	
 	public interface OnButtonSelectedListener {
 		
