@@ -14,9 +14,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+import com.wobgames.whosnext.DeviceListFragment.OnCreateGroupListener;
 import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 
-public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, PeerListListener {
+public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, PeerListListener, OnCreateGroupListener {
 	// Debug
 	public static final String TAG = "MainActivity";
 	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
@@ -28,6 +29,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	GameMainFragment mGameMainFragment;
 	ImageFragment mImageFragment;
 	DeviceListFragment mDeviceListFragment;
+	
+	// Objects
+	GameDevice mGameDevice;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -100,7 +104,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         unregisterReceiver(mReceiver);
     }
     
-    /************* WiFiP2p Functions *************/
+    /* ************ WiFiP2p Functions ************ */
     
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
@@ -112,7 +116,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void updateDevice (WifiP2pDevice device) {
     	Log.d(TAG, "updateThisDevice()");
     	
-    	mDevice = device;    	
+    	mDevice = device;
+    	mGameDevice = new GameDevice(device);
     }
     
     /**
@@ -136,7 +141,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	}
     }
     
-    /************* Fragment Interfaces *************/
+    /* ************ Fragment Interfaces ************ */
     
     /**
      * onCreateGame() - ButtonsFragment
@@ -160,7 +165,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Peers Discovery Initiated",
                         Toast.LENGTH_SHORT).show();
-                
             }
 
             @Override
@@ -169,8 +173,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
                         Toast.LENGTH_SHORT).show();
             }
         });
+        
+        mGameDevice.setIsGroupOwner(true);
 
-    	// Load Questions Fragment
+    	// Load DeviceList Fragment
     	getSupportFragmentManager().beginTransaction()
     		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
 
@@ -184,6 +190,29 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	
     	// When the user taps the Join Game button
     	Log.d(TAG, "onJoinGame()");
+    	
+    	// Check if WiFiP2p is enabled
+    	if (!isWifiP2pEnabled) {
+            Toast.makeText(MainActivity.this, "Wi-Fi Direct is not enabled.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+    	
+    	// Discover Peers
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "Peers Discovery Initiated",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Toast.makeText(MainActivity.this, "Peers Discovery Failed : " + reasonCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     	
     	// Load Questions Fragment
 //    	getSupportFragmentManager().beginTransaction()
@@ -203,5 +232,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	// Load GameMain Fragment
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameMainFragment).commit();
+    }
+    
+    /**
+     * onCreateGroup - DeviceListFragment
+     */
+    public void onCreateGroup() {
+    	Toast.makeText(MainActivity.this, "onCreateGroup",
+                Toast.LENGTH_SHORT).show();
     }
 }

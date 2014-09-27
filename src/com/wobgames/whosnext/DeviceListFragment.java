@@ -3,6 +3,9 @@ package com.wobgames.whosnext;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+
+import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class DeviceListFragment extends ListFragment {
@@ -23,6 +27,9 @@ public class DeviceListFragment extends ListFragment {
 	private WifiP2pDevice device;
 	private View mView = null;
 	private Boolean thisDeviceCalled = false;
+	OnCreateGroupListener mListener;
+	
+	Button button;
 
 	
 	// onCreateView
@@ -32,8 +39,29 @@ public class DeviceListFragment extends ListFragment {
 		
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 		
+		button = (Button) mView.findViewById(R.id.create_group_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	// If the answer text is empty
+            	mListener.onCreateGroup();
+            }
+        });
+		
+		
 		return mView;
 	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		Log.d(TAG, "onAttach()");
+	    super.onAttach(activity);
+	    if (activity instanceof OnButtonSelectedListener) {
+	    	mListener = (OnCreateGroupListener) activity;
+	    } else {
+	      throw new ClassCastException(activity.toString()
+	          + " must implemenet ButtonsFragment.OnButtonSelectedListener");
+	    }
+	  }
 	
 	/**
      * @return this device
@@ -57,7 +85,6 @@ public class DeviceListFragment extends ListFragment {
                 return "Unavailable";
             default:
                 return "Unknown";
-
         }
     }
 	
@@ -77,9 +104,7 @@ public class DeviceListFragment extends ListFragment {
                 List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
-
         }
-        
         
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -100,9 +125,7 @@ public class DeviceListFragment extends ListFragment {
                     bottom.setText(getDeviceStatus(device.status));
                 }
             }
-
             return v;
-
         }
     }
     
@@ -117,7 +140,6 @@ public class DeviceListFragment extends ListFragment {
         }
     }
 	
-	
 
     /**
      * Update UI for this device.
@@ -129,8 +151,8 @@ public class DeviceListFragment extends ListFragment {
     	if(!thisDeviceCalled){
 	        this.device = device;
 	        TextView header = (TextView) mView.findViewById(R.id.this_device);
-	        header.append("Current Device: " + device.deviceName);
-	        header.append(" - " + device.status);
+	        header.append(device.deviceName);
+	        header.append(" - " + getDeviceStatus(device.status));
 	        thisDeviceCalled = true;
     	}
     }
@@ -140,4 +162,11 @@ public class DeviceListFragment extends ListFragment {
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
     }
 
+    
+    public interface OnCreateGroupListener {
+		
+		public void onCreateGroup();
+		
+	}
+    
 }

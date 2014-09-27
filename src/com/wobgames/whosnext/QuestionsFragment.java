@@ -3,6 +3,11 @@ package com.wobgames.whosnext;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wobgames.whosnext.R;
+import com.wobgames.whosnext.R.id;
+import com.wobgames.whosnext.R.layout;
+import com.wobgames.whosnext.R.string;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

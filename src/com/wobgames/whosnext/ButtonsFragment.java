@@ -1,5 +1,9 @@
 package com.wobgames.whosnext;
 
+import com.wobgames.whosnext.R;
+import com.wobgames.whosnext.R.id;
+import com.wobgames.whosnext.R.layout;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
