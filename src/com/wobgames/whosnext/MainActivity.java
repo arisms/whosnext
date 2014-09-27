@@ -215,10 +215,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         });
     	
     	// Load Questions Fragment
-//    	getSupportFragmentManager().beginTransaction()
-//			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+//    	getSupportFragmentManager().beginTransaction()
+//			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
     }
     
     /**

@@ -16,10 +16,9 @@
         <TextView 
             android:id="@+id/header"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="70dp"
+            android:layout_height="60dp"
             android:text="@string/device_list_header"
-			android:background="@drawable/backrepeat_header"
+			android:background="@drawable/backrepeat_h"
 			android:textSize="20sp"   
 			android:gravity="center"
 			/>
@@ -45,9 +44,9 @@
 		</ListView>
 		
         <Button android:id="@+id/create_group_button"
-        	android:layout_width="140dp"
-        	android:layout_height="40dp"
-        	android:layout_marginTop="5dp"
+        	android:layout_width="160dp"
+        	android:layout_height="45dp"
+        	android:layout_marginTop="10dp"
         	android:background="@drawable/backrepeat_button"
         	android:layout_gravity="right"
         	android:text="@string/create_group"
