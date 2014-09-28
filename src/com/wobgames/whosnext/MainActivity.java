@@ -1,6 +1,5 @@
 package com.wobgames.whosnext;
 
-import java.net.InetAddress;
 import java.util.List;
 
 import android.content.BroadcastReceiver;
@@ -102,6 +101,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onResume() {
         super.onResume();
         
+        resetData();
         // Register the broadcast receiver with same intent values
         mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
         registerReceiver(mReceiver, mIntentFilter);
@@ -143,19 +143,16 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     }
     
     // Connect to a single device from the list of peers
-    public void connect() {
-    	
-    	// Get the list of peer devices from the fragment
-    	List<WifiP2pDevice> peers = mDeviceListFragment.getPeersList();
-    	totalPeers = peers.size();
+    public void connect(List<WifiP2pDevice> peers) {
     	
     	WifiP2pDevice peerDevice;
     	WifiP2pConfig config;
     	
-    	Log.d(TAG, "peers size: " + peers.size());
+    	//Log.d(TAG, "peers size: " + peers.size());
     	
     	// Connect to the device in the list of peers pointed by peersCounter
-    	if(peers.size() > 0 && peersCounter < totalPeers)
+    	// if it is not already connected
+    	if(mDeviceListFragment.getDeviceStatus(peers.get(peersCounter).status) == "Available")
     	{
     		peerDevice = peers.get(peersCounter);
     		config = new WifiP2pConfig();
@@ -197,7 +194,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
     	Log.d(TAG, "onConnectionInfoAvailable");
-    	Boolean flag = false;
     	
         // After the group negotiation, we can determine the group owner.
         if (info.groupFormed && info.isGroupOwner) {
@@ -209,7 +205,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
                     Toast.LENGTH_SHORT).show();
         	
         	Log.d(TAG, "GROUP OWNER");
-        	flag = true;
         	
         } else if (info.groupFormed) {
             // The other device acts as the client. In this case,
@@ -219,16 +214,16 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	
         	getSupportFragmentManager().beginTransaction()
 				.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
-        	flag = true;
         }
         
         // If the peersCounter has not reached the end of the list
         // continue connecting to the rest of the peers
-        if(flag && peersCounter < totalPeers)
-        {
-        	connect();
+        //if(flag && peersCounter < totalPeers)
+        //{
+        	//connect();
         	//mManager.
-        }
+        //}
+        //mReceiver.
     }
     
     /* ************ Fragment Interfaces ************ */
@@ -327,41 +322,17 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     /**
      * onCreateGroup - DeviceListFragment
      */
-    public void onCreateGroup() {
+    public void onConnect() {
     	// Connect current device to all peers in the list, 
     	// and set it as group owner
     	Log.d(TAG, "onCreateGroup()");
     	
-    	connect();
+    	// Get the list of peer devices from the fragment
+    	List<WifiP2pDevice> peers = mDeviceListFragment.getPeersList();
+    	totalPeers = peers.size();
     	
-    	// For every device in the list of peers
-//    	for(int i=0; i<peers.size(); i++)
-//    	{
-//    		peerDevice = peers.get(i);
-//    		
-//    		config = new WifiP2pConfig();
-//    		config.deviceAddress = peerDevice.deviceAddress;
-//    		config.wps.setup = WpsInfo.PBC;
-//    		
-//    		// Connect to current peer device
-//    		mManager.connect(mChannel, config, new ActionListener() {
-//
-//                @Override
-//                public void onSuccess() {
-//                    // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-//                }
-//
-//                @Override
-//                public void onFailure(int reason) {
-//                    Toast.makeText(MainActivity.this, "Connect failed. Retry.",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//    	}
-    	
-    	
-    	
-    	
+    	if(peers.size() > 0 && peersCounter < totalPeers)
+    		connect(peers);
     }
 }
 

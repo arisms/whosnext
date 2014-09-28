@@ -78,7 +78,7 @@ public final class R {
         public static final int action_settings=0x7f0a0012;
         public static final int answer_text=0x7f0a000d;
         public static final int buttonsfragment=0x7f0a0002;
-        public static final int create_group_button=0x7f0a0008;
+        public static final int connect_button=0x7f0a0008;
         public static final int creategame=0x7f0a0003;
         public static final int device_details=0x7f0a0011;
         public static final int device_list=0x7f0a0005;
@@ -116,8 +116,8 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int connect=0x7f06000c;
         public static final int create_game_button=0x7f060002;
-        public static final int create_group=0x7f06000c;
         public static final int device_list_header=0x7f06000a;
         public static final int game_main_header=0x7f060009;
         public static final int join_game_button=0x7f060006;

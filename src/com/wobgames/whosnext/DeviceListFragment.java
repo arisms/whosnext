@@ -5,12 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.wifi.WpsInfo;
-import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -30,7 +26,6 @@ public class DeviceListFragment extends ListFragment {
 	private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	private WifiP2pDevice device;
 	private View mView = null;
-	private Boolean thisDeviceCalled = false;
 	OnCreateGroupListener mListener;
 	
 	Button button;
@@ -44,10 +39,10 @@ public class DeviceListFragment extends ListFragment {
 		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 		
-		button = (Button) mView.findViewById(R.id.create_group_button);
+		button = (Button) mView.findViewById(R.id.connect_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	mListener.onCreateGroup();
+            	mListener.onConnect();
             }
         });
 		
@@ -74,7 +69,7 @@ public class DeviceListFragment extends ListFragment {
         return device;
     }
 	
-	private static String getDeviceStatus(int deviceStatus) {
+	public String getDeviceStatus(int deviceStatus) {
         //Log.d(TAG, "Peer status :" + deviceStatus);
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
@@ -174,6 +169,6 @@ public class DeviceListFragment extends ListFragment {
      */
     public interface OnCreateGroupListener {
 		
-		public void onCreateGroup();
+		public void onConnect();
 	}
 }

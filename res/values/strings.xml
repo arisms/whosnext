@@ -13,7 +13,7 @@
     <string name="game_main_header">Choose the correct player!</string>
     <string name="device_list_header">List of devices in range</string>
     <string name="please_wait">Please wait!</string>
-    <string name="create_group">Create group</string>
+    <string name="connect">Connect</string>
     
     <color name="dark1">#220A29</color>
     <color name="light1">#01A9DB</color>

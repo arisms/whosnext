@@ -43,13 +43,13 @@
         	android:background="@color/transparent" >
 		</ListView>
 		
-        <Button android:id="@+id/create_group_button"
+        <Button android:id="@+id/connect_button"
         	android:layout_width="160dp"
         	android:layout_height="45dp"
         	android:layout_marginTop="10dp"
         	android:background="@drawable/backrepeat_button"
         	android:layout_gravity="right"
-        	android:text="@string/create_group"
+        	android:text="@string/connect"
         	android:textSize="18sp" />
          
     </LinearLayout>
