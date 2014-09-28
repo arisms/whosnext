@@ -1,12 +1,20 @@
 package com.wobgames.whosnext;
 
+import java.net.InetAddress;
+import java.util.List;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +25,9 @@ import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
 import com.wobgames.whosnext.DeviceListFragment.OnCreateGroupListener;
 import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 
-public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, PeerListListener, OnCreateGroupListener {
+public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, 
+	PeerListListener, OnCreateGroupListener, ConnectionInfoListener {
+	
 	// Debug
 	public static final String TAG = "MainActivity";
 	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
@@ -40,6 +50,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	private IntentFilter mIntentFilter;
 	private boolean isWifiP2pEnabled = false;
 	WifiP2pDevice mDevice;
+	private int peersCounter;
+	private int totalPeers;
 	/*********************************/
 	
 	/** On Create() **/
@@ -75,6 +87,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mChannel = mManager.initialize(this, getMainLooper(), null);
         //mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
         
+        peersCounter = 0;
         
         // Intent filter & intents
         mIntentFilter = new IntentFilter();
@@ -82,7 +95,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
     }
     
     /** onResume() **/
@@ -125,9 +137,49 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * BroadcastReceiver receiving a state change event.
      */
     public void resetData() {
-        if (mDeviceListFragment != null) {
+        if (mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
             mDeviceListFragment.clearPeers();
         }
+    }
+    
+    // Connect to a single device from the list of peers
+    public void connect() {
+    	
+    	// Get the list of peer devices from the fragment
+    	List<WifiP2pDevice> peers = mDeviceListFragment.getPeersList();
+    	totalPeers = peers.size();
+    	
+    	WifiP2pDevice peerDevice;
+    	WifiP2pConfig config;
+    	
+    	Log.d(TAG, "peers size: " + peers.size());
+    	
+    	// Connect to the device in the list of peers pointed by peersCounter
+    	if(peers.size() > 0 && peersCounter < totalPeers)
+    	{
+    		peerDevice = peers.get(peersCounter);
+    		config = new WifiP2pConfig();
+    		config.deviceAddress = peerDevice.deviceAddress;
+    		config.wps.setup = WpsInfo.PBC;
+    		config.groupOwnerIntent = 15;   // Make current device group owner
+    		
+    		mManager.connect(mChannel, config, new ActionListener() {
+    			
+                @Override
+                public void onSuccess() {
+                    // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+                }
+
+                @Override
+                public void onFailure(int reason) {
+                    Toast.makeText(MainActivity.this, "Connect failed. Retry.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+    		
+    		peersCounter++;
+    	}
+    	
     }
         
     /** PeerListListener **/
@@ -139,6 +191,44 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     		mDeviceListFragment.updatePeerList(peerList);
     		mDeviceListFragment.updateThisDevice(mDevice);
     	}
+    }
+    
+    /** ConnectionInfoListener **/
+    @Override
+    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+    	Log.d(TAG, "onConnectionInfoAvailable");
+    	Boolean flag = false;
+    	
+        // After the group negotiation, we can determine the group owner.
+        if (info.groupFormed && info.isGroupOwner) {
+            // Do whatever tasks are specific to the group owner.
+            // One common case is creating a server thread and accepting
+            // incoming connections.
+        	
+        	Toast.makeText(MainActivity.this, "I am teh group owner.",
+                    Toast.LENGTH_SHORT).show();
+        	
+        	Log.d(TAG, "GROUP OWNER");
+        	flag = true;
+        	
+        } else if (info.groupFormed) {
+            // The other device acts as the client. In this case,
+            // you'll want to create a client thread that connects to the group
+            // owner.
+        	Log.d(TAG, "NOT GROUP OWNER");
+        	
+        	getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+        	flag = true;
+        }
+        
+        // If the peersCounter has not reached the end of the list
+        // continue connecting to the rest of the peers
+        if(flag && peersCounter < totalPeers)
+        {
+        	connect();
+        	//mManager.
+        }
     }
     
     /* ************ Fragment Interfaces ************ */
@@ -214,11 +304,11 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
             }
         });
     	
-    	// Load Questions Fragment
-    	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+    	// Load Image Fragment
 //    	getSupportFragmentManager().beginTransaction()
-//			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+//			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
     }
     
     /**
@@ -238,7 +328,84 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * onCreateGroup - DeviceListFragment
      */
     public void onCreateGroup() {
-    	Toast.makeText(MainActivity.this, "onCreateGroup",
-                Toast.LENGTH_SHORT).show();
+    	// Connect current device to all peers in the list, 
+    	// and set it as group owner
+    	Log.d(TAG, "onCreateGroup()");
+    	
+    	connect();
+    	
+    	// For every device in the list of peers
+//    	for(int i=0; i<peers.size(); i++)
+//    	{
+//    		peerDevice = peers.get(i);
+//    		
+//    		config = new WifiP2pConfig();
+//    		config.deviceAddress = peerDevice.deviceAddress;
+//    		config.wps.setup = WpsInfo.PBC;
+//    		
+//    		// Connect to current peer device
+//    		mManager.connect(mChannel, config, new ActionListener() {
+//
+//                @Override
+//                public void onSuccess() {
+//                    // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+//                }
+//
+//                @Override
+//                public void onFailure(int reason) {
+//                    Toast.makeText(MainActivity.this, "Connect failed. Retry.",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//    	}
+    	
+    	
+    	
+    	
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

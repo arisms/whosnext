@@ -127,6 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	   // Table is empty
     	   empty = true;
     	}
+    	db.close();   // ?????
     	return empty;
     }
     

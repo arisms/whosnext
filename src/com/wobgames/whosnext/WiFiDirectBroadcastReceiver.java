@@ -3,6 +3,7 @@ package com.wobgames.whosnext;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -50,18 +51,30 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         	
         	// Request available peers from the WiFiP2pManager
             if (mManager != null) {
-            	//mManager.requestPeers(mChannel, myPeerListListener);
                 mManager.requestPeers(mChannel, (PeerListListener) mActivity);
-                
             }
-            
             Log.d(TAG, "P2P peers changed");
-        	
         }
         // Connection changed
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
         	Log.d(TAG, "P2P connection changed");
+        	
+        	NetworkInfo networkInfo = (NetworkInfo) intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        	
+        	if (networkInfo.isConnected()) {
+        		Log.d(TAG, "P2P connection changed - if isConnected");
+                // we are connected with the other device, request connection
+                // info to find group owner IP
+                mManager.requestConnectionInfo(mChannel, mActivity);
+            } 
+        	else 
+        	{
+        		Log.d(TAG, "P2P connection changed - else !isConnected");
+                // It's a disconnect
+                mActivity.resetData();
+            }
         	
         	// IF CONNECTED
         	// ELSE
@@ -72,10 +85,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's Wi-Fi state changing
         	Log.d(TAG, "P2P this device changed");
-        	//DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager().findFragmentById(R.id.frag_list);
-            //fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
-        	mActivity.updateDevice((WifiP2pDevice) intent.
-        			getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+        	mActivity.updateDevice((WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager
+        			.EXTRA_WIFI_P2P_DEVICE));
         }
     }
 }

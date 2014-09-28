@@ -114,7 +114,7 @@ public class QuestionsFragment extends Fragment{
 			mAnswerEt.clearFocus();
 			button.requestFocus();
 			
-			// Commit answer to database
+			// Commit answer to database		<------------ Implement this!
 			// ...
 			
 			// Replace the fragment

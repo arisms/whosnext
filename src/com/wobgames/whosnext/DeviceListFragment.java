@@ -3,12 +3,14 @@ package com.wobgames.whosnext;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
-
 import android.app.Activity;
 import android.content.Context;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -18,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
 
 public class DeviceListFragment extends ListFragment {
 
@@ -37,12 +41,12 @@ public class DeviceListFragment extends ListFragment {
 		
 		mView = inflater.inflate(R.layout.device_list_fragment, container, false);
 		
+		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 		
 		button = (Button) mView.findViewById(R.id.create_group_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	// If the answer text is empty
             	mListener.onCreateGroup();
             }
         });
@@ -71,7 +75,7 @@ public class DeviceListFragment extends ListFragment {
     }
 	
 	private static String getDeviceStatus(int deviceStatus) {
-        Log.d(MainActivity.TAG, "Peer status :" + deviceStatus);
+        //Log.d(TAG, "Peer status :" + deviceStatus);
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
                 return "Available";
@@ -140,6 +144,11 @@ public class DeviceListFragment extends ListFragment {
         }
     }
 	
+    
+    public List<WifiP2pDevice> getPeersList() {
+    	return this.peers;
+    }
+    
 
     /**
      * Update UI for this device.
@@ -148,25 +157,23 @@ public class DeviceListFragment extends ListFragment {
      */
     public void updateThisDevice(WifiP2pDevice device) {
     	Log.d(TAG, "updateThisDevice()");
-    	if(!thisDeviceCalled){
-	        this.device = device;
-	        TextView header = (TextView) mView.findViewById(R.id.this_device);
-	        header.append(device.deviceName);
-	        header.append(" - " + getDeviceStatus(device.status));
-	        thisDeviceCalled = true;
-    	}
-    }
+        this.device = device;
+        TextView header = (TextView) mView.findViewById(R.id.this_device);
+        header.setText(device.deviceName);
+        header.append(" - " + getDeviceStatus(device.status));
+}
 
     public void clearPeers() {
         peers.clear();
+        ((WiFiPeerListAdapter) getListAdapter()).clear();
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
     }
 
-    
+    /**
+     * Public interface for Create Group button in DeviceListFragment 
+     */
     public interface OnCreateGroupListener {
 		
 		public void onCreateGroup();
-		
 	}
-    
 }
