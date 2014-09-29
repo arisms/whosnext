@@ -44,14 +44,33 @@
 		</ListView>
 		
         <Button android:id="@+id/connect_button"
-        	android:layout_width="160dp"
+        	android:layout_width="130dp"
+        	android:layout_height="45dp"
+        	android:layout_marginTop="10dp"
+        	android:background="@drawable/backrepeat_button"
+        	android:layout_gravity="left"
+        	android:text="@string/connect"
+        	android:textSize="18sp" />
+         
+    </LinearLayout>
+    
+    <LinearLayout 
+    	android:baselineAligned="false"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent" 
+    	android:layout_margin="12dp"
+    	android:gravity="right|bottom" >
+        
+        <Button android:id="@+id/server_start_button"
+        	android:layout_width="130dp"
         	android:layout_height="45dp"
         	android:layout_marginTop="10dp"
         	android:background="@drawable/backrepeat_button"
         	android:layout_gravity="right"
-        	android:text="@string/connect"
+        	android:text="@string/start_button"
         	android:textSize="18sp" />
-         
+        
     </LinearLayout>
     
 </FrameLayout>

@@ -28,7 +28,8 @@ public class DeviceListFragment extends ListFragment {
 	private View mView = null;
 	OnCreateGroupListener mListener;
 	
-	Button button;
+	Button buttonConnect;
+	Button buttonStart;
 
 	
 	// onCreateView
@@ -39,13 +40,21 @@ public class DeviceListFragment extends ListFragment {
 		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
 		
-		button = (Button) mView.findViewById(R.id.connect_button);
-        button.setOnClickListener(new View.OnClickListener() {
+		// Connect button
+		buttonConnect = (Button) mView.findViewById(R.id.connect_button);
+        buttonConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	mListener.onConnect();
             }
         });
-		
+        
+        // Start Game button
+        buttonStart = (Button) mView.findViewById(R.id.server_start_button);
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		mListener.onListStartGame();
+        	}
+        });
 		
 		return mView;
 	}
@@ -170,5 +179,7 @@ public class DeviceListFragment extends ListFragment {
     public interface OnCreateGroupListener {
 		
 		public void onConnect();
+		
+		public void onListStartGame();
 	}
 }

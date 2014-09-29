@@ -5,7 +5,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 public class GameDevice {
 	
 	private WifiP2pDevice mDevice;
-	private User mUser;
+	public User mUser;
 	private Boolean isGroupOwner;
 	
 	public GameDevice(WifiP2pDevice device) {
