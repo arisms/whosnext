@@ -1,5 +1,5 @@
 <bitmap
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:src="@drawable/pc12"
+	android:src="@drawable/pc14"
 	android:tileMode="repeat"
 	android:dither="true" />

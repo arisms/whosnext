@@ -1,7 +1,9 @@
 package com.wobgames.whosnext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,6 +19,7 @@ import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -55,6 +58,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	private int peersCounter;
 	private int totalPeers;
 	private List<GameDevice> connectedDevices;
+	public int SERVER_PORT = 8080;
 	/*********************************/
 	
 	/** On Create() **/
@@ -137,7 +141,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	if(mGameDevice == null)
     	{
     		mGameDevice = new GameDevice(device);
-    		mGameDevice.setIsGroupOwner(true);
+    		mGameDevice.setIsGroupOwner(device.isGroupOwner());
     	}
     }
     
@@ -153,6 +157,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     // Connect to a single device from the list of peers
     public void connect(List<WifiP2pDevice> peers) {
+    	
+    	Log.d(TAG, "Connect to peer: " + peers.get(peersCounter).deviceName + " - " + peersCounter);
     	
     	WifiP2pDevice peerDevice;
     	WifiP2pConfig config;
@@ -171,7 +177,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     			
                 @Override
                 public void onSuccess() {
-                    // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
+                    // WiFiDirectBroadcastReceiver will notify.
                 }
 
                 @Override
@@ -181,9 +187,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
                 }
             });
     		
-    		// Add the peer device to the list of Active Connections
-    		//active
-    		
+    		peersCounter++;
     	}
     	
     }
@@ -215,26 +219,40 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	
         	// If the list of connected devices is empty, add the current device (group owner)
         	if(connectedDevices.isEmpty())
+        	{
+        		mGameDevice.setInfo(info);
         		connectedDevices.add(mGameDevice);
+        	}
         	
         	// Add the peer device to the list of connected devices
-        	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter));
+        	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
+        	peerDevice.setInfo(info);
         	connectedDevices.add(peerDevice);
         	
-        	//Log.d(TAG, "Group owner");
+        	ServerSocketHelper sHelper = new ServerSocketHelper(this);
+        	sHelper.connect();
         	
         } else if (info.groupFormed) {
             // The other device acts as the client. In this case,
             // you'll want to create a client thread that connects to the group
             // owner.
-        	//Log.d(TAG, "Not group owner");
+        	
+        	// If the list of connected devices is empty, add the current device (not group owner)
+        	if(connectedDevices.isEmpty())
+        	{
+        		mGameDevice.setIsGroupOwner(false);
+        		mGameDevice.setInfo(info);
+        		connectedDevices.add(mGameDevice);
+        	}
+        	
+        	// Connect to the server socket
+        	ClientSocketHelper cHelper = new ClientSocketHelper(this);
+        	cHelper.connect();
         	
         	getSupportFragmentManager().beginTransaction()
-				.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
+				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+        	//peersCounter++;
         }
-        peersCounter++;
-        for(int i=0; i<connectedDevices.size(); i++)
-        	Log.d(TAG, "Device [" + i +"] : " + connectedDevices.get(i).device().deviceName);
     }
     
     /* ************ Fragment Interfaces ************ */
@@ -270,8 +288,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
             }
         });
         
-        //mGameDevice.setIsGroupOwner(true);
-
     	// Load DeviceList Fragment
     	getSupportFragmentManager().beginTransaction()
     		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
@@ -311,10 +327,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         });
     	
     	// Load Image Fragment
-//    	getSupportFragmentManager().beginTransaction()
-//			.replace(R.id.rootlayout, mQuestionsFragment).addToBackStack(null).commit();
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+    	
+    	Intent intent = new Intent(this, ServerService.class);
+    	intent.putExtra(EXTRA_MESSAGE, "Client");
+    	startService(intent);
     }
     
     /**
@@ -348,15 +366,18 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /**
      * onStart - DeviceListFragment
+     * When the button Start Game is pressed in DevieListFragment
      */
     public void onListStartGame() {
     	// Connect current device to all peers in the list, 
     	// and set it as group owner
     	Log.d(TAG, "onListStartGame()");
     	
-    	Intent intent = new Intent(this, ServerService.class);
-    	intent.putExtra(EXTRA_MESSAGE, "asdf");
-    	startService(intent);
+//    	ServerSocketHelper sHelper = new ServerSocketHelper(this);
+//    	sHelper.connect();
+//    	Intent intent = new Intent(this, ServerService.class);
+//    	intent.putExtra(EXTRA_MESSAGE, "Server");
+//    	startService(intent);
     }
 }
 
