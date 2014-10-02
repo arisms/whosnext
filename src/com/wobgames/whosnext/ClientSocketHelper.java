@@ -35,11 +35,16 @@ public class ClientSocketHelper {
 					
 					OutputStream outputStream = clientSocket.getOutputStream();
 					
-					String msg = "ASDF";
-					buf = msg.getBytes();
+					//String msg = "ASDF";
+					 User msg = new User(5, "Vikas");
 					
-					outputStream.write(buf, 0, 4);
-					Log.d("Output Stream", "" + buf.toString());
+					
+					buf = Serializer.serialize(msg);
+					
+					outputStream.write(buf, 0, buf.length);
+					
+					String temp = new String(buf, "UTF-8");
+					Log.d("Output Stream", temp);
 					
 				} catch (Exception e) {
 			    	e.printStackTrace();
@@ -50,6 +55,7 @@ public class ClientSocketHelper {
 		clientThread.start();
 		
 	}
+	
 	
 	
 	

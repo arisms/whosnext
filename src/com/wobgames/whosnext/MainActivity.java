@@ -58,7 +58,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	private int peersCounter;
 	private int totalPeers;
 	private List<GameDevice> connectedDevices;
-	public int SERVER_PORT = 8080;
+	public int SERVER_PORT = 17777;
 	/*********************************/
 	
 	/** On Create() **/
@@ -208,7 +208,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
     	Log.d(TAG, "onConnectionInfoAvailable");
     	
-        // After the group negotiation, we can determine the group owner.
+        // Group Owner (Server)
         if (info.groupFormed && info.isGroupOwner) {
             // Do whatever tasks are specific to the group owner.
             // One common case is creating a server thread and accepting
@@ -216,7 +216,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	
         	Toast.makeText(MainActivity.this, "Connected as group owner.",
                     Toast.LENGTH_SHORT).show();
-        	
+        	mGameDevice.setIsGroupOwner(true);
         	// If the list of connected devices is empty, add the current device (group owner)
         	if(connectedDevices.isEmpty())
         	{
@@ -232,10 +232,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	ServerSocketHelper sHelper = new ServerSocketHelper(this);
         	sHelper.connect();
         	
-        } else if (info.groupFormed) {
-            // The other device acts as the client. In this case,
-            // you'll want to create a client thread that connects to the group
-            // owner.
+        }
+        // Client (not group owner)
+        else if (info.groupFormed) {
         	
         	// If the list of connected devices is empty, add the current device (not group owner)
         	if(connectedDevices.isEmpty())
@@ -249,8 +248,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	ClientSocketHelper cHelper = new ClientSocketHelper(this);
         	cHelper.connect();
         	
-        	getSupportFragmentManager().beginTransaction()
-				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+//        	getSupportFragmentManager().beginTransaction()
+//				.replace(R.id.rootlayout, mQuestionsFragment).commit();
         	//peersCounter++;
         }
     }
@@ -330,9 +329,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
     	
-    	Intent intent = new Intent(this, ServerService.class);
-    	intent.putExtra(EXTRA_MESSAGE, "Client");
-    	startService(intent);
+    	// Start service
+//    	Intent intent = new Intent(this, ServerService.class);
+//    	intent.putExtra(EXTRA_MESSAGE, "Client");
+//    	startService(intent);
     }
     
     /**
@@ -344,8 +344,19 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	Log.d(TAG, "onStartGame()");
     	
     	// Load GameMain Fragment
-    	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mGameMainFragment).commit();
+//    	getSupportFragmentManager().beginTransaction()
+//			.replace(R.id.rootlayout, mGameMainFragment).commit();
+    	
+    	// If Group Owner, load GameMainFragment
+    	if(mGameDevice.isGroupOwner())
+    	{
+    		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mGameMainFragment).commit();
+    	}
+    	// If not group owner, load image fragment
+    	else
+    		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
     }
     
     /**
@@ -373,6 +384,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	// and set it as group owner
     	Log.d(TAG, "onListStartGame()");
     	
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mQuestionsFragment).commit();
+    	
 //    	ServerSocketHelper sHelper = new ServerSocketHelper(this);
 //    	sHelper.connect();
 //    	Intent intent = new Intent(this, ServerService.class);
@@ -380,46 +394,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 //    	startService(intent);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

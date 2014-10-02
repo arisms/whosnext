@@ -1,6 +1,8 @@
 package com.wobgames.whosnext;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private int mId;
 	private String mName;

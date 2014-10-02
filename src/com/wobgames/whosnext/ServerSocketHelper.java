@@ -27,7 +27,7 @@ public class ServerSocketHelper {
 	    public void run() {         
 	    	Log.d(mActivity.TAG, "SERVER THREAD STARTED, buf length = " + buf.length);
 		    try {
-		    	serverSocket = new ServerSocket(mActivity.SERVER_PORT); 
+		    	serverSocket = new ServerSocket(17777); 
 		
 		    	 Socket clientSocket = serverSocket.accept();
 		
@@ -35,7 +35,10 @@ public class ServerSocketHelper {
 		    	 inputStream.read(buf, 0, buf.length);
 		    	 Log.d("Client's InetAddress", "" + clientSocket.getInetAddress());
 		
-		    	 Log.d("Input Stream", "" + buf.toString());
+		    	 //String temp = new String(buf, "UTF-8");
+		    	 
+		    	 User user = (User) Serializer.deserialize(buf);
+		    	 Log.d("Input Stream", user.name());
 		    } catch (Exception e) {
 		    	e.printStackTrace();
 		
