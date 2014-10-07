@@ -1,6 +1,83 @@
+OutputStream outputStream = clientSocket.getOutputStream();
+					
+					//String msg = "ASDF";
+					 User msg = new User(5, "Vikas");
+					
+					
+					buf = Serializer.serialize(msg);
+					
+					outputStream.write(buf, 0, buf.length);
+					
+					String temp = new String(buf, "UTF-8");
+					Log.d("Output Stream", temp);
+
+import com.wobgames.whosnext.Serializer;
+import com.wobgames.whosnext.User;
+public class SendMessageThread extends Thread {
+		
+		@Override
+		public void run() {
+			try{
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+		    	Log.d(TAG, "Client exception - SendMessageThread");
+			}
+		}
+	}
+
+
+
+/****  ON LIST START GAME ******/
+
+    	// Connect current device to all peers in the list, 
+    	// and set it as group owner
+    	//Log.d(TAG, "onListStartGame()");
+    	
+//    	getSupportFragmentManager().beginTransaction()
+//			.replace(R.id.rootlayout, mQuestionsFragment).commit();
+    	
+//    	ServerSocketHelper sHelper = new ServerSocketHelper(this);
+//    	sHelper.connect();
+//    	Intent intent = new Intent(this, ServerService.class);
+//    	intent.putExtra(EXTRA_MESSAGE, "Server");
+//    	startService(intent);
+
+	
+	
+	// Client socket helper
+//	Socket  clientSocket = new Socket(ServerIP,ServerPort);
+//	outputStream = clientSocket.getOutputStream();
+//	bufferedReader=newBufferedReader(new 
+//	InputStreamReader(clientSocket.getInputStream()));
+
+
+
+
+
+/****  SERVER SOCKET HELPER ******/
+public class ConnectServerThread extends Thread {
+		
+		 @Override
+		 public void run() {         
+	    	Log.d(TAG, "SERVER THREAD STARTED");
+		    try {
+		    	serverSocket = new ServerSocket(mActivity.SERVER_PORT); 
+		    	connectionSocket = serverSocket.accept();
+		    	Log.d(TAG, "SERVER THREAD CONNECTED");
+		    } 
+		    catch (Exception e) {
+		    	e.printStackTrace();
+		   	}
+		 }
+	}
+}
+
 /*****************************/
 package com.wobgames.whosnext;
 
+import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Map;
 

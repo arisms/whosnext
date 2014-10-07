@@ -3,11 +3,6 @@ package com.wobgames.whosnext;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wobgames.whosnext.R;
-import com.wobgames.whosnext.R.id;
-import com.wobgames.whosnext.R.layout;
-import com.wobgames.whosnext.R.string;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,9 +29,12 @@ public class QuestionsFragment extends Fragment{
 	final CharSequence emptyAnswerToast = "Answer cannot be empty!";
 	boolean NAME = true;
 	OnStartGameSelectedListener mListener;
+	MainActivity mActivity;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		mActivity = (MainActivity) getActivity();
 		
 		// PROGRESS BAR
 		mDBHelper = new DatabaseHelper(getActivity());
@@ -94,6 +92,9 @@ public class QuestionsFragment extends Fragment{
 			button.setText(getResources().getString(R.string.next_button));
 	        NAME = false;
 	        
+	        // Send message to server --- TEMPORARY!
+	        String msg = mAnswerEt.getText().toString();
+	        mActivity.sendToServer(msg);
 	        return;
 		}
 		

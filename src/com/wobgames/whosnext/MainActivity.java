@@ -53,12 +53,15 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	BroadcastReceiver mReceiver = null;
 	private IntentFilter mIntentFilter;
 	private boolean isWifiP2pEnabled = false;
+	private boolean threadStarted = false;
 	WifiP2pDevice mDevice = null;
 	List<WifiP2pDevice> mPeers;
 	private int peersCounter;
 	private int totalPeers;
-	private List<GameDevice> connectedDevices;
-	public int SERVER_PORT = 17777;
+	public List<GameDevice> connectedDevices;
+	public int SERVER_PORT = 8888;
+	private ServerSocketHelper sHelper;
+	private ClientSocketHelper cHelper;
 	/*********************************/
 	
 	/** On Create() **/
@@ -135,7 +138,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     }
     
     public void updateDevice (WifiP2pDevice device) {
-    	Log.d(TAG, "updateThisDevice()");
+    	//Log.d(TAG, "updateThisDevice()");
     	
     	mDevice = device;
     	if(mGameDevice == null)
@@ -158,7 +161,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     // Connect to a single device from the list of peers
     public void connect(List<WifiP2pDevice> peers) {
     	
-    	Log.d(TAG, "Connect to peer: " + peers.get(peersCounter).deviceName + " - " + peersCounter);
+    	//Log.d(TAG, "Connect to peer: " + peers.get(peersCounter).deviceName + " - " + peersCounter);
     	
     	WifiP2pDevice peerDevice;
     	WifiP2pConfig config;
@@ -195,7 +198,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     /** PeerListListener **/
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-    	Log.d(TAG, "onPeersAvailable()");
+    	//Log.d(TAG, "onPeersAvailable()");
 
     	if(mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
     		mDeviceListFragment.updatePeerList(peerList);
@@ -206,7 +209,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     /** ConnectionInfoListener **/
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-    	Log.d(TAG, "onConnectionInfoAvailable");
+    	//Log.d(TAG, "onConnectionInfoAvailable");
     	
         // Group Owner (Server)
         if (info.groupFormed && info.isGroupOwner) {
@@ -229,8 +232,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	peerDevice.setInfo(info);
         	connectedDevices.add(peerDevice);
         	
-        	ServerSocketHelper sHelper = new ServerSocketHelper(this);
-        	sHelper.connect();
+//        	ServerSocketHelper sHelper = new ServerSocketHelper(this); 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//        	sHelper.connect();
         	
         }
         // Client (not group owner)
@@ -243,15 +246,31 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         		mGameDevice.setInfo(info);
         		connectedDevices.add(mGameDevice);
         	}
+        	else
+        	{
+        		// Add the peer device to the list of connected devices
+            	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
+            	peerDevice.setInfo(info);
+            	connectedDevices.add(peerDevice);
+        	}
         	
-        	// Connect to the server socket
-        	ClientSocketHelper cHelper = new ClientSocketHelper(this);
-        	cHelper.connect();
+        	if(!threadStarted) {
+	        	Log.d(TAG, "CLIENT CONNECT");
+	        	// Connect to the server socket
+	        	cHelper = new ClientSocketHelper(this);
+	        	cHelper.connect();
+	        	threadStarted = true;
+        	}
         	
-//        	getSupportFragmentManager().beginTransaction()
-//				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+        	getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mQuestionsFragment).commit();
         	//peersCounter++;
         }
+    }
+    
+    public void sendToServer(String message) {
+    	Log.d(TAG, "Message: " + message);
+    	cHelper.sendToServer(message);
     }
     
     /* ************ Fragment Interfaces ************ */
@@ -262,7 +281,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onCreateGame() {
     	// When the user taps the Create Game button
-    	Log.d(TAG, "onCreateGame()");
+    	//Log.d(TAG, "onCreateGame()");
     	
     	// Check if WiFiP2p is enabled
     	if (!isWifiP2pEnabled) {
@@ -287,6 +306,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
             }
         });
         
+        // Create the server socket and threads
+        sHelper = new ServerSocketHelper(this); 
+    	sHelper.connect();
+        
     	// Load DeviceList Fragment
     	getSupportFragmentManager().beginTransaction()
     		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
@@ -300,7 +323,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onJoinGame() {
     	
     	// When the user taps the Join Game button
-    	Log.d(TAG, "onJoinGame()");
+    	//Log.d(TAG, "onJoinGame()");
     	
     	// Check if WiFiP2p is enabled
     	if (!isWifiP2pEnabled) {
@@ -328,11 +351,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	// Load Image Fragment
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
-    	
-    	// Start service
-//    	Intent intent = new Intent(this, ServerService.class);
-//    	intent.putExtra(EXTRA_MESSAGE, "Client");
-//    	startService(intent);
     }
     
     /**
@@ -341,7 +359,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onStartGame() {
     	// When the user taps the Start Game button
-    	Log.d(TAG, "onStartGame()");
+    	//Log.d(TAG, "onStartGame()");
     	
     	// Load GameMain Fragment
 //    	getSupportFragmentManager().beginTransaction()
@@ -365,7 +383,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onConnect() {
     	// Connect current device to all peers in the list, 
     	// and set it as group owner
-    	Log.d(TAG, "onConnect()");
+    	//Log.d(TAG, "onConnect()");
     	
     	// Get the list of peer devices from the fragment
     	mPeers = new ArrayList<WifiP2pDevice>(mDeviceListFragment.getPeersList());
@@ -380,18 +398,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * When the button Start Game is pressed in DevieListFragment
      */
     public void onListStartGame() {
-    	// Connect current device to all peers in the list, 
-    	// and set it as group owner
-    	Log.d(TAG, "onListStartGame()");
     	
-    	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mQuestionsFragment).commit();
+    	//Log.d(TAG, "connectedDevices size: " + connectedDevices.size());
+    	sHelper.sendToAll();
     	
-//    	ServerSocketHelper sHelper = new ServerSocketHelper(this);
-//    	sHelper.connect();
-//    	Intent intent = new Intent(this, ServerService.class);
-//    	intent.putExtra(EXTRA_MESSAGE, "Server");
-//    	startService(intent);
     }
 }
 

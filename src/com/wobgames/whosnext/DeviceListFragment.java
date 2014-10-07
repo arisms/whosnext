@@ -160,7 +160,7 @@ public class DeviceListFragment extends ListFragment {
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) {
-    	Log.d(TAG, "updateThisDevice()");
+    	//Log.d(TAG, "updateThisDevice()");
         this.device = device;
         TextView header = (TextView) mView.findViewById(R.id.this_device);
         header.setText(device.deviceName);

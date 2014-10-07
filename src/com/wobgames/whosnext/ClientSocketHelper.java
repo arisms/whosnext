@@ -8,15 +8,23 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
 
 public class ClientSocketHelper {
-
+	private String TAG = "CientSocketHelper";
+	
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
 	private Socket clientSocket = new Socket();
 	byte buf[]  = new byte[1024];
+	String mMessage;
 	
 	public ClientSocketHelper(MainActivity activity) {
 		mActivity = activity;
 		mGameDevice = activity.mGameDevice;
+	}
+	
+	public void sendToServer(String message) {
+		mMessage = message;
+		Thread msgThread = new SendMessageThread();
+		msgThread.start();
 	}
 	
 	
@@ -27,28 +35,16 @@ public class ClientSocketHelper {
 
 			@Override
 			public void run() {   
-				Log.d(mActivity.TAG, "CLIENT THREAD STARTED, info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
+				Log.d(TAG, "Client Thread Started, info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
 				try {
 					clientSocket.bind(null);
 					InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
-					clientSocket.connect(serverAddr, 1000);
-					
-					OutputStream outputStream = clientSocket.getOutputStream();
-					
-					//String msg = "ASDF";
-					 User msg = new User(5, "Vikas");
-					
-					
-					buf = Serializer.serialize(msg);
-					
-					outputStream.write(buf, 0, buf.length);
-					
-					String temp = new String(buf, "UTF-8");
-					Log.d("Output Stream", temp);
+					//InetSocketAddress serverAddr = new InetSocketAddress(mActivity.SERVER_PORT);
+					clientSocket.connect(serverAddr, 500);
 					
 				} catch (Exception e) {
 			    	e.printStackTrace();
-			    	Log.d(mActivity.TAG, "CLIENT EXCEPTION");
+			    	Log.d(TAG, "Client exception");
 			   	}
 			}
 	    });
@@ -56,12 +52,30 @@ public class ClientSocketHelper {
 		
 	}
 	
-	
-	
-	
-	
-//	Socket  clientSocket = new Socket(ServerIP,ServerPort);
-//	outputStream = clientSocket.getOutputStream();
-//	bufferedReader=newBufferedReader(new 
-//	InputStreamReader(clientSocket.getInputStream()));
+	public class SendMessageThread extends Thread {
+		
+		@Override
+		public void run() {
+			Log.d(TAG, "SendMessageThread: " + mMessage);
+			
+			
+			try {
+				OutputStream outputStream = clientSocket.getOutputStream();
+				
+				String msg = mMessage;
+				buf = Serializer.serialize(msg);
+				outputStream.write(buf, 0, buf.length);
+				
+				String temp = new String(buf, "UTF-8");
+				Log.d("Output Stream", temp);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+		    	Log.d(TAG, "Client exception");
+			}
+			
+			
+		}
+	}
+
 }

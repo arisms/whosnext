@@ -44,7 +44,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             	mActivity.setIsWifiP2pEnabled(false);
                 mActivity.resetData();
             }
-            Log.d(TAG, "P2P state changed - " + state);
+            //Log.d(TAG, "P2P state changed - " + state);
         } 
         // Peers changed
         else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
@@ -53,25 +53,23 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (mManager != null) {
                 mManager.requestPeers(mChannel, (PeerListListener) mActivity);
             }
-            Log.d(TAG, "P2P peers changed");
+            //Log.d(TAG, "P2P peers changed");
         }
         // Connection changed
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
-        	Log.d(TAG, "P2P connection changed");
+        	//Log.d(TAG, "P2P connection changed");
         	
         	NetworkInfo networkInfo = (NetworkInfo) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         	
         	if (networkInfo.isConnected()) {
-        		Log.d(TAG, "P2P connection changed - if isConnected");
                 // we are connected with the other device, request connection
                 // info to find group owner IP
                 mManager.requestConnectionInfo(mChannel, mActivity);
             } 
         	else 
         	{
-        		Log.d(TAG, "P2P connection changed - else !isConnected");
                 // It's a disconnect
                 mActivity.resetData();
             }
