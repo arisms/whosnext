@@ -9,7 +9,6 @@ import android.util.Log;
 
 public class ClientSocketHelper {
 	private String TAG = "CientSocketHelper";
-	
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
 	private Socket clientSocket = new Socket();

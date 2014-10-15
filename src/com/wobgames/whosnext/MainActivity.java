@@ -1,13 +1,10 @@
 package com.wobgames.whosnext;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -19,7 +16,6 @@ import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -57,7 +53,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	WifiP2pDevice mDevice = null;
 	List<WifiP2pDevice> mPeers;
 	private int peersCounter;
-	private int totalPeers;
+	public int totalPeers;
 	public List<GameDevice> connectedDevices;
 	public int SERVER_PORT = 8888;
 	private ServerSocketHelper sHelper;
@@ -80,7 +76,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			mButtonsFragment = (ButtonsFragment) getSupportFragmentManager().findFragmentById(R.id.rootlayout);
 		}
         
-        // Fragments
+        // Other fragments
         mQuestionsFragment = new QuestionsFragment();
         mGameMainFragment = new GameMainFragment();
         mImageFragment = new ImageFragment();
@@ -379,6 +375,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /**
      * onConnect - DeviceListFragment
+     * when the Connect button in the DeviceListFragment is pressed
      */
     public void onConnect() {
     	// Connect current device to all peers in the list, 
@@ -400,7 +397,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onListStartGame() {
     	
     	//Log.d(TAG, "connectedDevices size: " + connectedDevices.size());
-    	sHelper.sendToAll();
+    	Log.d(TAG, "onListStartGame");
+    	sHelper.receiveMessage();
     	
     }
 }

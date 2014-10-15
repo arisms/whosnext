@@ -92,10 +92,14 @@ public class QuestionsFragment extends Fragment{
 			button.setText(getResources().getString(R.string.next_button));
 	        NAME = false;
 	        
-	        // Send message to server --- TEMPORARY!
+	        return;
+		}
+		//TODO
+		else
+		{
+			// Send message to server --- TEMPORARY!
 	        String msg = mAnswerEt.getText().toString();
 	        mActivity.sendToServer(msg);
-	        return;
 		}
 		
 		// Empty answer

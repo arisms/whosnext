@@ -27,7 +27,7 @@ public class ServerSocketHelper {
 		serverThread.start();
 	}
 	
-	public void sendToAll() {
+	public void receiveMessage() {
 		Thread msgThread = new ConnectedServerThread();
 		msgThread.start();
 	}
@@ -42,6 +42,7 @@ public class ServerSocketHelper {
 	
 	// Thread that creates a socket and accepts incoming connections from clients
 	public class ConnectServerThread extends Thread {
+		int counter = 0;
 		
 		 @Override
 		 public void run() {         
@@ -57,11 +58,22 @@ public class ServerSocketHelper {
 		    	Log.d(TAG, "ConnectServerThread - new socket exception");
 		   	}
 		    
-		    // Accept connections from all the clients \o/
+		    // Accept connections from all the clients _o/
 		    while(true) {
 		    	try {
 		    		connectionSocket = serverSocket.accept();
 		    		Log.d(TAG, "ConnectServerThread - accept() - " + connectionSocket.getInetAddress());
+		    		
+		    		counter++;
+		    		// If the number of connected devices has reached the number of peers
+		    		// exit the loop and create a ConnectedServerThread
+		    		if(counter == mActivity.totalPeers)
+		    		{
+		    			receiveMessage();
+		    			Log.d(TAG, "ConnectServerThread - returning with counter = " + counter);
+		    			return;
+		    		}
+		    		
 		    	} catch (IOException e) {
 		    		e.printStackTrace();
 		    		Log.d(TAG, "ConnectServerThread - accept() exception");
@@ -75,10 +87,11 @@ public class ServerSocketHelper {
 	
 		@Override
 		public void run() {
-			ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
+			//Log.d(TAG, "ConnectedServerThread running...");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;
-			User user;
+			//User user;
 			
 			while(true) {
 				try {
@@ -87,14 +100,17 @@ public class ServerSocketHelper {
 					// Wait for data from client
 					while(inputStream.available() > 0 && (bytes = inputStream.read(buf, 0, buf.length)) > -1)
 					{
-						baOutputStream.write(buf, 0, bytes);
+						baos.write(buf, 0, bytes);
+						dataAvailable = true;
 					}
-					baOutputStream.flush();
+					//baos.flush();
 				   	//Log.d("Client's InetAddress", "" + connectionSocket.getInetAddress());
 				   	
 				   	if(dataAvailable)
 				   	{
 				   		String msg = (String) Serializer.deserialize(buf);
+				   		dataAvailable = false;
+				   		baos.flush();
 					   	Log.d("Input Stream ", msg);
 				   	}
 				   	

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 
-	private static final String TAG = "QuestionsAnswerListAdapter";
+	//private static final String TAG = "QuestionsAnswerListAdapter";
 	
 	private LayoutInflater mInflater;
 	private final List<String> strings;
