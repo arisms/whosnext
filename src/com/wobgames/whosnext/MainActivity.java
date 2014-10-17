@@ -28,9 +28,12 @@ import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, 
 	PeerListListener, OnCreateGroupListener, ConnectionInfoListener {
 	
+	// ^(?!dalvikvm)
+	
 	// Debug
 	public static final String TAG = "MainActivity";
-	public final static String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
+	public static final String EXTRA_MESSAGE = "com.wobgames.whosnext.MESSAGE";
+	public static final int NUMBER_OF_QUESTIONS = 15;
 	
 	/********** Member data **********/
 	// Fragments
@@ -41,7 +44,11 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	DeviceListFragment mDeviceListFragment;
 	
 	// Objects
-	GameDevice mGameDevice = null;
+	public GameDevice mGameDevice = null;
+	
+	// Game Info
+	public List<Answer> Answers;
+	User currentUser;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -56,8 +63,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public int totalPeers;
 	public List<GameDevice> connectedDevices;
 	public int SERVER_PORT = 8888;
-	private ServerSocketHelper sHelper;
-	private ClientSocketHelper cHelper;
+	public ServerSocketHelper sHelper;
+	public ClientSocketHelper cHelper;
 	/*********************************/
 	
 	/** On Create() **/
@@ -264,11 +271,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         }
     }
     
-    public void sendToServer(String message) {
-    	Log.d(TAG, "Message: " + message);
-    	cHelper.sendToServer(message);
-    }
-    
     /* ************ Fragment Interfaces ************ */
     
     /**
@@ -396,9 +398,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      */
     public void onListStartGame() {
     	
-    	//Log.d(TAG, "connectedDevices size: " + connectedDevices.size());
-    	Log.d(TAG, "onListStartGame");
-    	sHelper.receiveMessage();
+    	
+
+    	
     	
     }
 }

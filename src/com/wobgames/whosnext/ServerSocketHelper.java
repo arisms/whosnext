@@ -27,8 +27,8 @@ public class ServerSocketHelper {
 		serverThread.start();
 	}
 	
-	public void receiveMessage() {
-		Thread msgThread = new ConnectedServerThread();
+	public void receiveMessage(Socket connectionSocket) {
+		Thread msgThread = new ConnectedServerThread(connectionSocket);
 		msgThread.start();
 	}
 	
@@ -62,15 +62,17 @@ public class ServerSocketHelper {
 		    while(true) {
 		    	try {
 		    		connectionSocket = serverSocket.accept();
-		    		Log.d(TAG, "ConnectServerThread - accept() - " + connectionSocket.getInetAddress());
+		    		//Log.d(TAG, "ConnectServerThread - accept() - " + connectionSocket.getInetAddress());
+		    		
+		    		// Create a ConnectedServerThread for that peer
+		    		receiveMessage(connectionSocket);
 		    		
 		    		counter++;
-		    		// If the number of connected devices has reached the number of peers
-		    		// exit the loop and create a ConnectedServerThread
+		    		// If the number of connected devices has 
+		    		//reached the number of peers, exit the loop 
 		    		if(counter == mActivity.totalPeers)
 		    		{
-		    			receiveMessage();
-		    			Log.d(TAG, "ConnectServerThread - returning with counter = " + counter);
+		    			//Log.d(TAG, "ConnectServerThread - returning with counter = " + counter);
 		    			return;
 		    		}
 		    		
@@ -84,22 +86,28 @@ public class ServerSocketHelper {
 	
 	// Thread that performs data exchange between the server and the clients
 	public class ConnectedServerThread extends Thread {
-	
+		private Socket mySocket;
+		
+		public ConnectedServerThread(Socket myConnectionSocket) {
+			mySocket = myConnectionSocket;
+		}
+		
 		@Override
 		public void run() {
-			//Log.d(TAG, "ConnectedServerThread running...");
+			Log.d(TAG, "ConnectedServerThread running...");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;
-			//User user;
 			
 			while(true) {
 				try {
-					InputStream inputStream = connectionSocket.getInputStream();
+					//Log.d(TAG, "while 1");
+					InputStream inputStream = mySocket.getInputStream();
 					
 					// Wait for data from client
 					while(inputStream.available() > 0 && (bytes = inputStream.read(buf, 0, buf.length)) > -1)
 					{
+						//Log.d(TAG, "while 2");
 						baos.write(buf, 0, bytes);
 						dataAvailable = true;
 					}
@@ -108,10 +116,10 @@ public class ServerSocketHelper {
 				   	
 				   	if(dataAvailable)
 				   	{
-				   		String msg = (String) Serializer.deserialize(buf);
+				   		Message msg = (Message) Serializer.deserialize(buf);
 				   		dataAvailable = false;
 				   		baos.flush();
-					   	Log.d("Input Stream ", msg);
+					   	Log.d("Input Stream ", msg.type());
 				   	}
 				   	
 				}

@@ -84,6 +84,9 @@ public class QuestionsFragment extends Fragment{
 		// Set user name
 		if(NAME)
 		{
+			// Create currentUser object
+			mActivity.currentUser = new User("");
+			
 			mQuestionTv.setText("What is your name?");
 			
 			// Clear answer text
@@ -94,15 +97,55 @@ public class QuestionsFragment extends Fragment{
 	        
 	        return;
 		}
-		//TODO
 		else
 		{
+			// If name in currentUser is empty, send username to server
+			if(mActivity.currentUser.name().equals(""))
+			{
+				mActivity.currentUser.setName(mAnswerEt.getText().toString());
+				
+				// Send username to server
+				Message message = new Message();
+				
+				// If the current device is the server device
+				if(mActivity.mGameDevice.isGroupOwner())
+					message.setType(mAnswerEt.getText().toString() + " - G.O.");
+				else
+				{
+					message.setType(mAnswerEt.getText().toString() + " username not G.O.");
+					mActivity.cHelper.sendToServer(message);
+				}
+				
+			}
+			// Else store answer to Answers list
+			else
+			{
+				Message message = new Message();
+				
+				// If the current device is the server device
+				if(mActivity.mGameDevice.isGroupOwner())
+					message.setType(mAnswerEt.getText().toString() + " answer - G.O.");
+				else
+				{
+					message.setType(mAnswerEt.getText().toString() + " answer not G.O.");
+					mActivity.cHelper.sendToServer(message);
+				}
+				
+				
+			}
+				
 			// Send message to server --- TEMPORARY!
-	        String msg = mAnswerEt.getText().toString();
-	        mActivity.sendToServer(msg);
+	        //Message message = new Message();
+	        //message.setType(mAnswerEt.getText().toString());
+	        //mActivity.sendToServer(message);
+			
+			// Store answer in Answers list
+			//Answer answer = new Answer();
+			//answer.
+			//mActivity.Answers.add(object)
 		}
 		
-		// Empty answer
+		// Answer cannot be empty
 //		if(mAnswerEt.getText().toString().trim().length() == 0)
 //    	{
 //    		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);         <------------ Enable this!

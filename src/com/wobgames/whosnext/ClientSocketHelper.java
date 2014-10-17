@@ -13,14 +13,14 @@ public class ClientSocketHelper {
 	private GameDevice mGameDevice;
 	private Socket clientSocket = new Socket();
 	byte buf[]  = new byte[1024];
-	String mMessage;
+	Message mMessage;
 	
 	public ClientSocketHelper(MainActivity activity) {
 		mActivity = activity;
 		mGameDevice = activity.mGameDevice;
 	}
 	
-	public void sendToServer(String message) {
+	public void sendToServer(Message message) {
 		mMessage = message;
 		Thread msgThread = new SendMessageThread();
 		msgThread.start();
@@ -61,7 +61,7 @@ public class ClientSocketHelper {
 			try {
 				OutputStream outputStream = clientSocket.getOutputStream();
 				
-				String msg = mMessage;
+				Message msg = mMessage;
 				buf = Serializer.serialize(msg);
 				outputStream.write(buf, 0, buf.length);
 				
