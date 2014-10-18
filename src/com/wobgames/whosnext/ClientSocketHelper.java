@@ -1,5 +1,7 @@
 package com.wobgames.whosnext;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -11,7 +13,7 @@ public class ClientSocketHelper {
 	private String TAG = "CientSocketHelper";
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
-	private Socket clientSocket = new Socket();
+	private Socket connectionSocket = new Socket();
 	byte buf[]  = new byte[1024];
 	Message mMessage;
 	
@@ -22,24 +24,28 @@ public class ClientSocketHelper {
 	
 	public void sendToServer(Message message) {
 		mMessage = message;
-		Thread msgThread = new SendMessageThread();
-		msgThread.start();
+		Thread sendThread = new SendMessageThread();
+		sendThread.start();
 	}
 	
+	public void receiveFromServer() {
+		Thread receiveThread = new ReceiveMessageThread();
+		receiveThread.start();
+	}
 	
 	public void connect() {
 		final WifiP2pInfo info = mGameDevice.info();
 		
-		Thread clientThread = new Thread(new Runnable() {
+		Thread sendThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {   
 				Log.d(TAG, "Client Thread Started, info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
 				try {
-					clientSocket.bind(null);
+					connectionSocket.bind(null);
 					InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
 					//InetSocketAddress serverAddr = new InetSocketAddress(mActivity.SERVER_PORT);
-					clientSocket.connect(serverAddr, 500);
+					connectionSocket.connect(serverAddr, 500);
 					
 				} catch (Exception e) {
 			    	e.printStackTrace();
@@ -47,7 +53,7 @@ public class ClientSocketHelper {
 			   	}
 			}
 	    });
-		clientThread.start();
+		sendThread.start();
 		
 	}
 	
@@ -59,14 +65,11 @@ public class ClientSocketHelper {
 			
 			
 			try {
-				OutputStream outputStream = clientSocket.getOutputStream();
+				OutputStream outputStream = connectionSocket.getOutputStream();
 				
 				Message msg = mMessage;
 				buf = Serializer.serialize(msg);
 				outputStream.write(buf, 0, buf.length);
-				
-				String temp = new String(buf, "UTF-8");
-				Log.d("Output Stream", temp);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -75,6 +78,54 @@ public class ClientSocketHelper {
 			
 			
 		}
+	}
+	
+	public class ReceiveMessageThread extends Thread {
+		
+		@Override
+		public void run() {
+			Log.d(TAG, "ReceiveMessageThread in client running...");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			int bytes;
+			boolean dataAvailable = false;
+			
+			while(true) {
+				try {
+					InputStream inputStream = connectionSocket.getInputStream();
+					
+					// Wait for data from server
+					while(inputStream.available() > 0 && (bytes = inputStream.read(buf, 0, buf.length)) > -1)
+					{
+						baos.write(buf, 0, bytes);
+						dataAvailable = true;
+					}
+				   	
+				   	if(dataAvailable)
+				   	{
+				   		Message message = (Message) Serializer.deserialize(buf);
+				   		dataAvailable = false;
+				   		baos.flush();
+				   		
+				   		// Read message type
+				   		if(message.type().equals("USER"))
+				   		{
+				   			Log.i(TAG, "Received message from server: " + message.user().id() + " " + message.user().name());
+				   		}
+				   		else
+				   		{
+				   			Log.d(TAG, "Not user");
+				   		}
+				   			
+				   	}
+				   	
+				}
+				catch (Exception e) {
+			    	e.printStackTrace();
+			   	}
+			}
+		}
+		
+		
 	}
 
 }

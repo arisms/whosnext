@@ -173,43 +173,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	}
         }
         
-        // USERS table initialization (to be removed)
-        if(IsTableEmpty(TABLE_USERS)) {
-        	
-        	BufferedReader reader = null;
-        	try {
-        		// Open txt file in Assets folder, for reading
-        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_users.txt"), "UTF-8")); 
-
-        	    // Parse each line of the text file
-        	    String name;
-        	    String delim = "_";
-        	    String mLine = reader.readLine();
-        	    while (mLine != null) {
-        	       
-        	       String[] tokens = mLine.split(delim);
-        	       name = tokens[0];
-        	       
-        	       User user = new User();
-        	       user.setName(name);
-        	       addUser(user);
-        	       
-        	       mLine = reader.readLine();
-        	    }
-        	} catch (IOException e) {
-        		Log.e("DatabaseHelper", "open txt file error 1" + e);
-        	}
-        	finally {
-        	    if (reader != null) {
-        	         try {
-        	             reader.close();
-        	         } catch (IOException e) {
-        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
-        	         }
-        	    }
-        	}
-        }
-        
      // ANSWERS table initialization (to be removed)
         if(IsTableEmpty(TABLE_ANSWERS)) {
         	
@@ -249,13 +212,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	    }
         	}
         }
-        
-        
-        
-        
     }
     
-    // Insert Question
+    // INSERT Question
     public void addQuestion(Question question) {
     	ContentValues values = new ContentValues();
     	
@@ -264,9 +223,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	
     	SQLiteDatabase db = getWritableDatabase();
     	//long ret = db.insert(TABLE_QUESTIONS, null, values);
-    	db.insert(TABLE_QUESTIONS, null, values);
+    	long ret = db.insert(TABLE_QUESTIONS, null, values);
     	db.close();
-    	//Log.i(TAG, "ret value = " + ret);
+    	//Log.i(TAG, "ID? = " + ret + " TEXT = " + question.text());
     }
     
     
@@ -333,8 +292,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	return result;
     }
     
-    // Insert User
-    public void addUser (User user) {
+    // INSERT User
+    public long addUser (User user) {
     	ContentValues values = new ContentValues();
     	
     	values.put(USERS_COLUMN_NAME, user.name());
@@ -342,7 +301,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = getWritableDatabase();
     	//long ret = db.insert(TABLE_USERS, null, values);
     	//Log.i(TAG, "ret value = " + ret);
-    	db.insert(TABLE_USERS, null, values);
+    	long ret = db.insert(TABLE_USERS, null, values);
+    	return ret;
     }
     
     // SELECT * FROM USERS
@@ -374,7 +334,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	return users_list;
     }
     
-    // Insert Answer
+    // INSERT Answer
     public void addAnswer (Answer answer) {
     	ContentValues values = new ContentValues();
     	

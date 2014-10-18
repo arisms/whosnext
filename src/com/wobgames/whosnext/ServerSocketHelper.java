@@ -3,6 +3,7 @@ package com.wobgames.whosnext;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -28,8 +29,13 @@ public class ServerSocketHelper {
 	}
 	
 	public void receiveMessage(Socket connectionSocket) {
-		Thread msgThread = new ConnectedServerThread(connectionSocket);
-		msgThread.start();
+		Thread receiveThread = new ReceiveFromClientsThread(connectionSocket);
+		receiveThread.start();
+	}
+	
+	public void sendMessage(Socket connectionSocket, Message msg) {
+		Thread sendThread = new SendToClientThread(connectionSocket, msg);
+		sendThread.start();
 	}
 	
 	public void disconnect() {
@@ -38,6 +44,12 @@ public class ServerSocketHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addOwnUser() {
+		
+		//User user = new User(name);
+		int id = (int)mActivity.mDBHelper.addUser(mActivity.currentUser);
 	}
 	
 	// Thread that creates a socket and accepts incoming connections from clients
@@ -58,7 +70,7 @@ public class ServerSocketHelper {
 		    	Log.d(TAG, "ConnectServerThread - new socket exception");
 		   	}
 		    
-		    // Accept connections from all the clients _o/
+		    // Accept connections from all the clients
 		    while(true) {
 		    	try {
 		    		connectionSocket = serverSocket.accept();
@@ -73,6 +85,7 @@ public class ServerSocketHelper {
 		    		if(counter == mActivity.totalPeers)
 		    		{
 		    			//Log.d(TAG, "ConnectServerThread - returning with counter = " + counter);
+		    			mActivity.peersRemaining = false;
 		    			return;
 		    		}
 		    		
@@ -84,12 +97,12 @@ public class ServerSocketHelper {
 		 }
 	}
 	
-	// Thread that performs data exchange between the server and the clients
-	public class ConnectedServerThread extends Thread {
-		private Socket mySocket;
+	/** Thread that receives data from the client **/
+	public class ReceiveFromClientsThread extends Thread {
+		private Socket clientSocket;
 		
-		public ConnectedServerThread(Socket myConnectionSocket) {
-			mySocket = myConnectionSocket;
+		public ReceiveFromClientsThread(Socket clientConnectionSocket) {
+			clientSocket = clientConnectionSocket;
 		}
 		
 		@Override
@@ -101,25 +114,34 @@ public class ServerSocketHelper {
 			
 			while(true) {
 				try {
-					//Log.d(TAG, "while 1");
-					InputStream inputStream = mySocket.getInputStream();
+					InputStream inputStream = clientSocket.getInputStream();
 					
 					// Wait for data from client
 					while(inputStream.available() > 0 && (bytes = inputStream.read(buf, 0, buf.length)) > -1)
 					{
-						//Log.d(TAG, "while 2");
 						baos.write(buf, 0, bytes);
 						dataAvailable = true;
 					}
-					//baos.flush();
-				   	//Log.d("Client's InetAddress", "" + connectionSocket.getInetAddress());
 				   	
 				   	if(dataAvailable)
 				   	{
-				   		Message msg = (Message) Serializer.deserialize(buf);
+				   		Message message = (Message) Serializer.deserialize(buf);
 				   		dataAvailable = false;
 				   		baos.flush();
-					   	Log.d("Input Stream ", msg.type());
+					   	//Log.d("Input Stream ", msg.type());
+				   		
+				   		// Read message type
+				   		if(message.type().equals("USER"))
+				   		{
+				   			// Add user in database
+				   			message.user().setId((int)mActivity.mDBHelper.addUser(message.user()));
+				   			//sendMessage(clientSocket, message);
+				   		}
+				   		else
+				   		{
+				   			Log.d(TAG, "It's an answer!");
+				   		}
+				   			
 				   	}
 				   	
 				}
@@ -129,4 +151,35 @@ public class ServerSocketHelper {
 			}
 		}
 	}
+	
+	/** Thread that sends data to the client **/
+	public class SendToClientThread extends Thread {
+		private Socket clientSocket;
+		private Message message;
+		
+		public SendToClientThread(Socket clientConnectionSocket, Message msg) {
+			clientSocket = clientConnectionSocket;
+			message = msg;
+		}
+		
+		@Override
+		public void run() {
+			
+			try {
+				OutputStream outputStream = clientSocket.getOutputStream();
+				
+				buf = Serializer.serialize(message);
+				outputStream.write(buf, 0, buf.length);
+				
+				Log.i(TAG, "Sent message to client: " + message.user().id() + " " + message.user().name());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+		    	Log.d(TAG, "Client exception");
+			}
+			
+			
+		}
+	}
+	
 }

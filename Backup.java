@@ -1,3 +1,164 @@
+/** ConnectionInfoListener **/
+    @Override
+    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+    	//Log.d(TAG, "onConnectionInfoAvailable");
+    	
+        // Group Owner (Server)
+        if (info.groupFormed && info.isGroupOwner) {
+            // Do whatever tasks are specific to the group owner.
+            // One common case is creating a server thread and accepting
+            // incoming connections.
+        	
+        	Toast.makeText(MainActivity.this, "Connected as group owner.",
+                    Toast.LENGTH_SHORT).show();
+        	mGameDevice.setIsGroupOwner(true);
+        	// If the list of connected devices is empty, add the current device (group owner)
+        	if(connectedDevices.isEmpty())
+        	{
+        		mGameDevice.setInfo(info);
+        		connectedDevices.add(mGameDevice);
+        	}
+        	
+        	// Add the peer device to the list of connected devices
+        	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
+        	peerDevice.setInfo(info);
+        	connectedDevices.add(peerDevice);
+        	
+//        	ServerSocketHelper sHelper = new ServerSocketHelper(this); 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//        	sHelper.connect();
+        	
+        }
+        // Client (not group owner)
+        else if (info.groupFormed) {
+        	
+        	// If the list of connected devices is empty, add the current device (not group owner)
+        	if(connectedDevices.isEmpty())
+        	{
+        		mGameDevice.setIsGroupOwner(false);
+        		mGameDevice.setInfo(info);
+        		connectedDevices.add(mGameDevice);
+        	}
+        	else
+        	{
+        		// Add the peer device to the list of connected devices
+            	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
+            	peerDevice.setInfo(info);
+            	connectedDevices.add(peerDevice);
+        	}
+        	
+        	if(!threadStarted) {
+	        	Log.d(TAG, "CLIENT CONNECT");
+	        	// Connect to the server socket
+	        	cHelper = new ClientSocketHelper(this);
+	        	cHelper.connect();
+	        	threadStarted = true;
+        	}
+        	
+        	getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+        	//peersCounter++;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********** DATABASE INIT *************/
+// USERS table initialization (to be removed)
+        if(IsTableEmpty(TABLE_USERS)) {
+        	
+        	BufferedReader reader = null;
+        	try {
+        		// Open txt file in Assets folder, for reading
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_users.txt"), "UTF-8")); 
+
+        	    // Parse each line of the text file
+        	    String name;
+        	    String delim = "_";
+        	    String mLine = reader.readLine();
+        	    while (mLine != null) {
+        	       
+        	       String[] tokens = mLine.split(delim);
+        	       name = tokens[0];
+        	       
+        	       User user = new User();
+        	       user.setName(name);
+        	       addUser(user);
+        	       
+        	       mLine = reader.readLine();
+        	    }
+        	} catch (IOException e) {
+        		Log.e("DatabaseHelper", "open txt file error 1" + e);
+        	}
+        	finally {
+        	    if (reader != null) {
+        	         try {
+        	             reader.close();
+        	         } catch (IOException e) {
+        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
+        	         }
+        	    }
+        	}
+        }
+        
+     // ANSWERS table initialization (to be removed)
+        if(IsTableEmpty(TABLE_ANSWERS)) {
+        	
+        	BufferedReader reader = null;
+        	try {
+        		// Open txt file in Assets folder, for reading
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_answers.txt"), "UTF-8")); 
+
+        	    // Parse each line of the text file
+        	    String text;
+        	    int userId;
+        	    int questionId;
+        	    String delim = "_";
+        	    String mLine = reader.readLine();
+        	    while (mLine != null) {
+        	       
+        	       String[] tokens = mLine.split(delim);
+        	       text = tokens[0];
+        	       userId = Integer.parseInt(tokens[1]);
+        	       questionId = Integer.parseInt(tokens[2]);
+        	       
+        	       Answer answer = new Answer(text, userId, questionId);
+        	       addAnswer(answer);
+        	       
+        	       mLine = reader.readLine();
+        	    }
+        	} catch (IOException e) {
+        		Log.e("DatabaseHelper", "open txt file error 1" + e);
+        	}
+        	finally {
+        	    if (reader != null) {
+        	         try {
+        	             reader.close();
+        	         } catch (IOException e) {
+        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
+        	         }
+        	    }
+        	}
+        }
+
+
+
+
+
+
+
+
+
 public class ServerService extends IntentService {
 
 	private final String TAG = "ServerService";
@@ -118,6 +279,9 @@ public class ConnectServerThread extends Thread {
 /*****************************/
 package com.wobgames.whosnext;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -125,6 +289,7 @@ import java.util.Map;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.Handler;
@@ -295,6 +460,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wobgames.whosnext.Answer;
+import com.wobgames.whosnext.ClientSocketHelper;
+import com.wobgames.whosnext.GameDevice;
 import com.wobgames.whosnext.MainActivity;
 import com.wobgames.whosnext.QuestionsAnswersListAdapter;
 import com.wobgames.whosnext.QuestionsFragment;

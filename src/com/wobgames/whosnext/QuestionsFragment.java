@@ -104,16 +104,25 @@ public class QuestionsFragment extends Fragment{
 			{
 				mActivity.currentUser.setName(mAnswerEt.getText().toString());
 				
-				// Send username to server
 				Message message = new Message();
 				
 				// If the current device is the server device
 				if(mActivity.mGameDevice.isGroupOwner())
-					message.setType(mAnswerEt.getText().toString() + " - G.O.");
+				{
+					//message.setType(mAnswerEt.getText().toString() + " - G.O.");
+					mActivity.sHelper.addOwnUser();
+					
+					
+				}
 				else
 				{
-					message.setType(mAnswerEt.getText().toString() + " username not G.O.");
+					mActivity.currentUser.setName(mAnswerEt.getText().toString());
+					//message.setType(mAnswerEt.getText().toString() + " username not G.O.");
+					message.setType("USER");
+					message.setUser(mActivity.currentUser);
+					
 					mActivity.cHelper.sendToServer(message);
+					mActivity.cHelper.receiveFromServer();
 				}
 				
 			}

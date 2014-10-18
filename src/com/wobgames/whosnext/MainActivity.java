@@ -45,6 +45,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	
 	// Objects
 	public GameDevice mGameDevice = null;
+	public DatabaseHelper mDBHelper;
 	
 	// Game Info
 	public List<Answer> Answers;
@@ -65,6 +66,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public int SERVER_PORT = 8888;
 	public ServerSocketHelper sHelper;
 	public ClientSocketHelper cHelper;
+	public boolean peersRemaining = true;
+	public WifiP2pInfo connectionInfo;
 	/*********************************/
 	
 	/** On Create() **/
@@ -90,7 +93,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mDeviceListFragment = new DeviceListFragment();
         
         // Create the Database
-        DatabaseHelper mDBHelper = new DatabaseHelper(getApplication());
+        mDBHelper = new DatabaseHelper(getApplication());
         mDBHelper.init();
         
         /** WiFiDirect **/
@@ -99,7 +102,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
         //mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-        
         connectedDevices = new ArrayList<GameDevice>();
         peersCounter = 0;
         
@@ -147,7 +149,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	if(mGameDevice == null)
     	{
     		mGameDevice = new GameDevice(device);
-    		mGameDevice.setIsGroupOwner(device.isGroupOwner());
+    		//mGameDevice.setIsGroupOwner(device.isGroupOwner());
     	}
     }
     
@@ -202,26 +204,25 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
     	//Log.d(TAG, "onPeersAvailable()");
-
-    	if(mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
-    		mDeviceListFragment.updatePeerList(peerList);
-    		mDeviceListFragment.updateThisDevice(mDevice);
-    	}
+    	if(peersRemaining)
+	    	if(mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
+	    		mDeviceListFragment.updatePeerList(peerList);
+	    		mDeviceListFragment.updateThisDevice(mDevice);
+	    	}
     }
     
     /** ConnectionInfoListener **/
     @Override
-    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+    public void onConnectionInfoAvailable(final WifiP2pInfo info) {			// Check extra call for clients!!!!!
     	//Log.d(TAG, "onConnectionInfoAvailable");
     	
         // Group Owner (Server)
         if (info.groupFormed && info.isGroupOwner) {
-            // Do whatever tasks are specific to the group owner.
-            // One common case is creating a server thread and accepting
-            // incoming connections.
+            // Do the tasks that are specific to the group owner.
         	
         	Toast.makeText(MainActivity.this, "Connected as group owner.",
                     Toast.LENGTH_SHORT).show();
+        	
         	mGameDevice.setIsGroupOwner(true);
         	// If the list of connected devices is empty, add the current device (group owner)
         	if(connectedDevices.isEmpty())
@@ -229,19 +230,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         		mGameDevice.setInfo(info);
         		connectedDevices.add(mGameDevice);
         	}
-        	
-        	// Add the peer device to the list of connected devices
-        	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
-        	peerDevice.setInfo(info);
-        	connectedDevices.add(peerDevice);
-        	
-//        	ServerSocketHelper sHelper = new ServerSocketHelper(this); 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        	sHelper.connect();
-        	
         }
         // Client (not group owner)
         else if (info.groupFormed) {
-        	
         	// If the list of connected devices is empty, add the current device (not group owner)
         	if(connectedDevices.isEmpty())
         	{
@@ -251,6 +242,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	}
         	else
         	{
+        		Log.i(TAG, "ONE TIME, TWO TIMES???");
         		// Add the peer device to the list of connected devices
             	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
             	peerDevice.setInfo(info);
@@ -258,7 +250,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	}
         	
         	if(!threadStarted) {
-	        	Log.d(TAG, "CLIENT CONNECT");
 	        	// Connect to the server socket
 	        	cHelper = new ClientSocketHelper(this);
 	        	cHelper.connect();
@@ -267,7 +258,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	
         	getSupportFragmentManager().beginTransaction()
 				.replace(R.id.rootlayout, mQuestionsFragment).commit();
-        	//peersCounter++;
         }
     }
     
@@ -398,8 +388,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      */
     public void onListStartGame() {
     	
-    	
-
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mQuestionsFragment).commit();
     	
     	
     }
