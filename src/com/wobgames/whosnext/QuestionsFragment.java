@@ -121,6 +121,7 @@ public class QuestionsFragment extends Fragment{
 					message.setType("USER");
 					message.setUser(mActivity.currentUser);
 					
+					// Send the User info to the server (username) and wait to receive the id
 					mActivity.cHelper.sendToServer(message);
 					mActivity.cHelper.receiveFromServer();
 				}

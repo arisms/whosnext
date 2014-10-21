@@ -49,10 +49,10 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 //	    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 		
 		// Get data from the database
-		mDBHelper = new DatabaseHelper(getActivity());
-        mDBHelper.init();
-        
+		MainActivity mActivity = (MainActivity) getActivity();
+		mDBHelper = mActivity.mDBHelper;
         mUsersList = mDBHelper.getUsers();
+        
         /*****/
         mUsersStrings = new ArrayList<String>();
         for(int i=0; i<mUsersList.size(); i++)

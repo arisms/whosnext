@@ -15,7 +15,6 @@ public class ServerSocketHelper {
 	private ServerSocket serverSocket;
 	private Socket connectionSocket;
 	MainActivity mActivity;
-	byte buf[]  = new byte[1024];
 	
 	
 	public ServerSocketHelper(MainActivity activity) {
@@ -100,20 +99,23 @@ public class ServerSocketHelper {
 	/** Thread that receives data from the client **/
 	public class ReceiveFromClientsThread extends Thread {
 		private Socket clientSocket;
+		byte buf[]  = new byte[1024];
 		
 		public ReceiveFromClientsThread(Socket clientConnectionSocket) {
 			clientSocket = clientConnectionSocket;
+			Log.d(TAG, "ReceiveFromClientsThread created...");
 		}
 		
 		@Override
 		public void run() {
-			Log.d(TAG, "ConnectedServerThread running...");
+			Log.d(TAG, "ReceiveFromClientsThread running...");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;
 			
 			while(true) {
 				try {
+					//Log.i(TAG, "Server receive thread entered try");
 					InputStream inputStream = clientSocket.getInputStream();
 					
 					// Wait for data from client
@@ -134,8 +136,9 @@ public class ServerSocketHelper {
 				   		if(message.type().equals("USER"))
 				   		{
 				   			// Add user in database
+				   			Log.d("Input Stream - User name: ", message.user().name());
 				   			message.user().setId((int)mActivity.mDBHelper.addUser(message.user()));
-				   			//sendMessage(clientSocket, message);
+				   			sendMessage(clientSocket, message);
 				   		}
 				   		else
 				   		{
@@ -156,6 +159,7 @@ public class ServerSocketHelper {
 	public class SendToClientThread extends Thread {
 		private Socket clientSocket;
 		private Message message;
+		byte buf[]  = new byte[1024];
 		
 		public SendToClientThread(Socket clientConnectionSocket, Message msg) {
 			clientSocket = clientConnectionSocket;
@@ -175,7 +179,7 @@ public class ServerSocketHelper {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-		    	Log.d(TAG, "Client exception");
+		    	Log.d(TAG, "Server exception");
 			}
 			
 			

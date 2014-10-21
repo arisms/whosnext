@@ -36,7 +36,7 @@ public class ClientSocketHelper {
 	public void connect() {
 		final WifiP2pInfo info = mGameDevice.info();
 		
-		Thread sendThread = new Thread(new Runnable() {
+		Thread connectToServerThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {   
@@ -53,7 +53,7 @@ public class ClientSocketHelper {
 			   	}
 			}
 	    });
-		sendThread.start();
+		connectToServerThread.start();
 		
 	}
 	

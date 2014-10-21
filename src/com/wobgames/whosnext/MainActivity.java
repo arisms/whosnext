@@ -118,7 +118,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void onResume() {
         super.onResume();
         
-        resetData();
+        //resetData();
         // Register the broadcast receiver with same intent values
         mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
         registerReceiver(mReceiver, mIntentFilter);
@@ -158,8 +158,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * BroadcastReceiver receiving a state change event.
      */
     public void resetData() {
+    	Log.d(TAG, "resetData()");
         if (mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
             mDeviceListFragment.clearPeers();
+            Log.d(TAG, "resetData() - IF");
         }
     }
     
@@ -244,9 +246,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	{
         		Log.i(TAG, "ONE TIME, TWO TIMES???");
         		// Add the peer device to the list of connected devices
-            	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
-            	peerDevice.setInfo(info);
-            	connectedDevices.add(peerDevice);
+//            	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
+//            	peerDevice.setInfo(info);
+//            	connectedDevices.add(peerDevice);
         	}
         	
         	if(!threadStarted) {

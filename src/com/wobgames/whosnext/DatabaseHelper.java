@@ -173,6 +173,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	}
         }
         
+        // USERS clear table
+        if(!IsTableEmpty(TABLE_USERS)) {
+        	deleteUsers();
+        }
+        
      // ANSWERS table initialization (to be removed)
         if(IsTableEmpty(TABLE_ANSWERS)) {
         	
@@ -294,6 +299,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     // INSERT User
     public long addUser (User user) {
+    	Log.i(TAG, "Adding user: " + user.name());
     	ContentValues values = new ContentValues();
     	
     	values.put(USERS_COLUMN_NAME, user.name());
@@ -332,6 +338,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	}
     	
     	return users_list;
+    }
+    
+    // DELETE * FROM USERS
+    public void deleteUsers () {
+    	Log.i(TAG, "Deleting users");
+    	SQLiteDatabase db = getWritableDatabase();
+    	
+    	db.execSQL("delete from " + TABLE_USERS);
+    	db.close();
     }
     
     // INSERT Answer
