@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.util.Log;
 
@@ -15,10 +17,12 @@ public class ServerSocketHelper {
 	private ServerSocket serverSocket;
 	private Socket connectionSocket;
 	MainActivity mActivity;
+	private List<Device> mDevices;
 	
 	
 	public ServerSocketHelper(MainActivity activity) {
 		mActivity = activity;
+		mDevices = new ArrayList<Device>();
 	}
 	
 	public void connect() {
@@ -49,6 +53,20 @@ public class ServerSocketHelper {
 		
 		//User user = new User(name);
 		int id = (int)mActivity.mDBHelper.addUser(mActivity.currentUser);
+		
+		// Add server device in list of devices
+		Device device = new Device();
+		device.setClientSocket(connectionSocket);
+		device.setIsGroupOwner(true);
+		User user = mActivity.currentUser;
+		user.setId(id);
+		device.setUser(user);
+		device.setClientSocket(null);
+		mDevices.add(device);
+		
+		for(int i=0; i<mDevices.size(); i++)
+	        	Log.i("Device: ", "" + mDevices.get(i).user().id() + ". " + mDevices.get(i).user().name()
+	        			+ " - " + mDevices.get(i).isGroupOwner() + " - " + mDevices.get(i).clientSocket().toString());
 	}
 	
 	// Thread that creates a socket and accepts incoming connections from clients
@@ -75,6 +93,12 @@ public class ServerSocketHelper {
 		    		connectionSocket = serverSocket.accept();
 		    		//Log.d(TAG, "ConnectServerThread - accept() - " + connectionSocket.getInetAddress());
 		    		
+		    		// Create an entry in the Devices list, for the specific client
+		    		Device device = new Device();
+		    		device.setClientSocket(connectionSocket);
+		    		device.setIsGroupOwner(false);
+		    		mDevices.add(device);
+		    		
 		    		// Create a ConnectedServerThread for that peer
 		    		receiveMessage(connectionSocket);
 		    		
@@ -83,7 +107,6 @@ public class ServerSocketHelper {
 		    		//reached the number of peers, exit the loop 
 		    		if(counter == mActivity.totalPeers)
 		    		{
-		    			//Log.d(TAG, "ConnectServerThread - returning with counter = " + counter);
 		    			mActivity.peersRemaining = false;
 		    			return;
 		    		}
@@ -130,7 +153,6 @@ public class ServerSocketHelper {
 				   		Message message = (Message) Serializer.deserialize(buf);
 				   		dataAvailable = false;
 				   		baos.flush();
-					   	//Log.d("Input Stream ", msg.type());
 				   		
 				   		// Read message type
 				   		if(message.type().equals("USER"))
@@ -139,6 +161,19 @@ public class ServerSocketHelper {
 				   			Log.d("Input Stream - User name: ", message.user().name());
 				   			message.user().setId((int)mActivity.mDBHelper.addUser(message.user()));
 				   			sendMessage(clientSocket, message);
+				   			
+				   			// Update Devices list with user info
+				   			for(int i=0; i<mDevices.size(); i++)
+				   				if(mDevices.get(i).clientSocket() == clientSocket)
+				   				{
+				   					Log.i(TAG, "Adding user in list: " + message.user().id() + ". " + message.user().name());
+				   					//User user = new User();
+				   					//user.setId(message.user().id());
+				   					//user.setName(message.user().name());
+				   					mDevices.get(i).setUser(message.user());
+				   					
+				   					break;
+				   				}
 				   		}
 				   		else
 				   		{
@@ -184,6 +219,23 @@ public class ServerSocketHelper {
 			
 			
 		}
+	}
+	
+	
+	/** Class to handle in-game devices **/
+	public class Device {
+		private Socket mClientSocket;
+		public User mUser;
+		private Boolean isGroupOwner;
+		
+		public void setClientSocket(Socket clientSocket) { mClientSocket = clientSocket; }
+		public Socket clientSocket() { return mClientSocket; }
+		
+		public void setUser(User user) { mUser = user; }
+		public User user() { return mUser; }
+		
+		public void setIsGroupOwner(Boolean value) { isGroupOwner = value; }
+		public Boolean isGroupOwner() { return isGroupOwner; }
 	}
 	
 }

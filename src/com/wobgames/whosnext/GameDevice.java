@@ -7,7 +7,7 @@ public class GameDevice {
 	
 	private WifiP2pDevice mDevice;
 	private WifiP2pInfo mInfo;
-	public User mUser;
+	private User mUser;
 	private Boolean isGroupOwner;
 	
 	public GameDevice(WifiP2pDevice device) {
