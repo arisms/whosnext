@@ -11,8 +11,8 @@
     	android:layout_height="fill_parent"
     	android:background="@drawable/backrepeat" 
     	android:gravity="center" >
-    
-        <TextView 
+        
+       <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="52sp" 

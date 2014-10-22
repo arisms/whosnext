@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
@@ -16,6 +18,7 @@ public class ClientSocketHelper {
 	private Socket connectionSocket = new Socket();
 	byte buf[]  = new byte[1024];
 	Message mMessage;
+	
 	
 	public ClientSocketHelper(MainActivity activity) {
 		mActivity = activity;
@@ -109,7 +112,11 @@ public class ClientSocketHelper {
 				   		// Read message type
 				   		if(message.type().equals("USER"))
 				   		{
-				   			Log.i(TAG, "Received message from server: " + message.user().id() + " " + message.user().name());
+				   			//Log.i(TAG, "Received message from server: " + message.user().id() + " " + message.user().name());
+				   			
+				   			// Get userId from server, and add it to mainActivity's currentUser
+				   			mActivity.currentUser.setId(message.user().id());
+				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
 				   		else
 				   		{

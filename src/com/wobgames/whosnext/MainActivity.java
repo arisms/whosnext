@@ -48,8 +48,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public DatabaseHelper mDBHelper;
 	
 	// Game Info
-	public List<Answer> Answers;
-	User currentUser;
+	public User currentUser;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -244,7 +243,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         	}
         	else
         	{
-        		Log.i(TAG, "ONE TIME, TWO TIMES???");
+        		//Log.i(TAG, "ONE TIME, TWO TIMES???");
         		// Add the peer device to the list of connected devices
 //            	GameDevice peerDevice = new GameDevice(mPeers.get(peersCounter-1));
 //            	peerDevice.setInfo(info);

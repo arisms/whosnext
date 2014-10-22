@@ -1,6 +1,9 @@
 package com.wobgames.whosnext;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import android.util.Log;
 
 public class Message implements Serializable {
 
@@ -8,9 +11,11 @@ public class Message implements Serializable {
 	
 	private String mType;
 	private User mUser;
+	public ArrayList<Answer> clientAnswers;
 	
 	public Message() {
-		
+		Log.i("MESSAGE", "Message class created.");
+		clientAnswers = new ArrayList<Answer>();
 	}
 
 	public void setType(String type) { mType = type; }

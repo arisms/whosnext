@@ -1,3 +1,43 @@
+for(int i=0; i<clientAnswers.size(); i++)
+	Log.i("Answer: ", "" + clientAnswers.get(i).text() 
+			+ " - " + clientAnswers.get(i).userId() + " - " + clientAnswers.get(i).questionId());
+
+// Else store answer to clientAnswers list
+else
+{
+	Message message = new Message();
+	
+	// If the current device is the server device
+	if(mActivity.mGameDevice.isGroupOwner())
+		message.setType(mAnswerEt.getText().toString() + " answer - G.O.");
+	else
+	{
+		message.setType(mAnswerEt.getText().toString() + " answer not G.O.");
+		mActivity.cHelper.sendToServer(message);
+	}
+	
+	
+}
+
+
+<ImageView 
+            android:layout_width="192dp"
+            android:layout_height="148dp"
+            android:background="@drawable/logo2"
+            android:layout_marginBottom="40dp"
+            android:gravity="center"
+            />
+
+<TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="52sp" 
+            android:text="Who's next?"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="80dp"
+            android:gravity="center" />
+
 /** ConnectionInfoListener **/
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
@@ -464,6 +504,7 @@ import com.wobgames.whosnext.Answer;
 import com.wobgames.whosnext.ClientSocketHelper;
 import com.wobgames.whosnext.GameDevice;
 import com.wobgames.whosnext.MainActivity;
+import com.wobgames.whosnext.Message;
 import com.wobgames.whosnext.QuestionsAnswersListAdapter;
 import com.wobgames.whosnext.QuestionsFragment;
 import com.wobgames.whosnext.R;

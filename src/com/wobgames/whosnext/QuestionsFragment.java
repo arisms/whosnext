@@ -30,11 +30,13 @@ public class QuestionsFragment extends Fragment{
 	boolean NAME = true;
 	OnStartGameSelectedListener mListener;
 	MainActivity mActivity;
+	private ArrayList<Answer> clientAnswers;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		mActivity = (MainActivity) getActivity();
+		clientAnswers = new ArrayList<Answer>();
 		
 		// PROGRESS BAR
 		mDBHelper = new DatabaseHelper(getActivity());
@@ -55,7 +57,6 @@ public class QuestionsFragment extends Fragment{
         button = (Button) view.findViewById(R.id.submit_question_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	// If the answer text is empty
             	
             	nextQuestion();
             }
@@ -99,12 +100,12 @@ public class QuestionsFragment extends Fragment{
 		}
 		else
 		{
-			// If name in currentUser is empty, send username to server
+			// If name in currentUser is empty, send user-name to server
 			if(mActivity.currentUser.name().equals(""))
 			{
 				mActivity.currentUser.setName(mAnswerEt.getText().toString());
 				
-				Message message = new Message();
+				Message userMessage = new Message();
 				
 				// If the current device is the server device
 				if(mActivity.mGameDevice.isGroupOwner())
@@ -117,42 +118,23 @@ public class QuestionsFragment extends Fragment{
 				else
 				{
 					mActivity.currentUser.setName(mAnswerEt.getText().toString());
-					//message.setType(mAnswerEt.getText().toString() + " username not G.O.");
-					message.setType("USER");
-					message.setUser(mActivity.currentUser);
+
+					userMessage.setType("USER");
+					userMessage.setUser(mActivity.currentUser);
 					
-					// Send the User info to the server (username) and wait to receive the id
-					mActivity.cHelper.sendToServer(message);
+					// Send the User info to the server (user-name) and wait to receive the id
+					mActivity.cHelper.sendToServer(userMessage);
 					mActivity.cHelper.receiveFromServer();
 				}
 				
 			}
-			// Else store answer to Answers list
+			// Else store answer to clientAnswers list
 			else
 			{
-				Message message = new Message();
-				
-				// If the current device is the server device
-				if(mActivity.mGameDevice.isGroupOwner())
-					message.setType(mAnswerEt.getText().toString() + " answer - G.O.");
-				else
-				{
-					message.setType(mAnswerEt.getText().toString() + " answer not G.O.");
-					mActivity.cHelper.sendToServer(message);
-				}
-				
-				
+				Answer answer = new Answer(mAnswerEt.getText().toString(), 
+						mActivity.currentUser.id(), questions_list.get(mQuestionCounter-1).id());
+				clientAnswers.add(answer);
 			}
-				
-			// Send message to server --- TEMPORARY!
-	        //Message message = new Message();
-	        //message.setType(mAnswerEt.getText().toString());
-	        //mActivity.sendToServer(message);
-			
-			// Store answer in Answers list
-			//Answer answer = new Answer();
-			//answer.
-			//mActivity.Answers.add(object)
 		}
 		
 		// Answer cannot be empty
@@ -168,12 +150,22 @@ public class QuestionsFragment extends Fragment{
 		// If Start Game is selected replace the fragment
 		if(mQuestionCounter == mTotalQuestions)
 		{
-			// 
+			Message answersMessage = new Message();
+			answersMessage.setType("ANSWERS");
+			answersMessage.setUser(mActivity.currentUser);
+			for(int i=0; i<clientAnswers.size(); i++) {
+				answersMessage.clientAnswers.add(clientAnswers.get(i));
+			}
+			
+			if(mActivity.mGameDevice.isGroupOwner())
+				mActivity.sHelper.addOwnAnswers(answersMessage);
+			else {
+				// Send the list of answers to the server
+				mActivity.cHelper.sendToServer(answersMessage);
+			}
+			
 			mAnswerEt.clearFocus();
 			button.requestFocus();
-			
-			// Commit answer to database		<------------ Implement this!
-			// ...
 			
 			// Replace the fragment
 			mListener.onStartGame();

@@ -1,7 +1,13 @@
 package com.wobgames.whosnext;
 
-public class Answer {
+import java.io.Serializable;
 
+public class Answer implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int mId;
 	private String mText;
 	private int mUserId;
@@ -12,7 +18,6 @@ public class Answer {
 	}
 	
 	public Answer(String text, int userId, int questionId) {
-		//this.mId = id;
 		this.mText = text;
 		this.mUserId = userId;
 		this.mQuestionId = questionId;

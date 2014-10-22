@@ -41,16 +41,27 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.game_main_fragment, container, false);
-	
-		playSound();
+		
+		
+		MainActivity mActivity = (MainActivity) getActivity();
+		mDBHelper = mActivity.mDBHelper;
+		//playSound();
+		List<Answer> answers_list = mDBHelper.getAnswers();
+        
+		Log.i(TAG, "answers_list.size(): " + answers_list.size());
+		
+        for(int i=0; i<answers_list.size(); i++)
+        {
+        	Log.i("Answer: ", "" + answers_list.get(i).text() 
+					+ " - " + answers_list.get(i).userId() 
+					+ " - " + answers_list.get(i).questionId());
+        }
 		
 		// Hide keyboard
 //		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //	    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 		
 		// Get data from the database
-		MainActivity mActivity = (MainActivity) getActivity();
-		mDBHelper = mActivity.mDBHelper;
         mUsersList = mDBHelper.getUsers();
         
         /*****/

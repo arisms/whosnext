@@ -178,45 +178,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	deleteUsers();
         }
         
-     // ANSWERS table initialization (to be removed)
-        if(IsTableEmpty(TABLE_ANSWERS)) {
-        	
-        	BufferedReader reader = null;
-        	try {
-        		// Open txt file in Assets folder, for reading
-        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_answers.txt"), "UTF-8")); 
-
-        	    // Parse each line of the text file
-        	    String text;
-        	    int userId;
-        	    int questionId;
-        	    String delim = "_";
-        	    String mLine = reader.readLine();
-        	    while (mLine != null) {
-        	       
-        	       String[] tokens = mLine.split(delim);
-        	       text = tokens[0];
-        	       userId = Integer.parseInt(tokens[1]);
-        	       questionId = Integer.parseInt(tokens[2]);
-        	       
-        	       Answer answer = new Answer(text, userId, questionId);
-        	       addAnswer(answer);
-        	       
-        	       mLine = reader.readLine();
-        	    }
-        	} catch (IOException e) {
-        		Log.e("DatabaseHelper", "open txt file error 1" + e);
-        	}
-        	finally {
-        	    if (reader != null) {
-        	         try {
-        	             reader.close();
-        	         } catch (IOException e) {
-        	        	 Log.e("DatabaseHelper", "open txt file error 2" + e);
-        	         }
-        	    }
-        	}
+        // ANSWERS clear table
+        if(!IsTableEmpty(TABLE_ANSWERS)) {
+        	deleteAnswers();
         }
+        
     }
     
     // INSERT Question
@@ -350,7 +316,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     // INSERT Answer
-    public void addAnswer (Answer answer) {
+    public long addAnswer (Answer answer) {
+    	Log.i(TAG, "Adding answer: " + answer.text());
     	ContentValues values = new ContentValues();
     	
     	values.put(ANSWERS_COLUMN_TEXT, answer.text());
@@ -360,7 +327,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = getWritableDatabase();
     	//long ret = db.insert(TABLE_ANSWERS, null, values);
     	//Log.i(TAG, "ret value = " + ret);
-    	db.insert(TABLE_ANSWERS, null, values);
+    	long ret = db.insert(TABLE_ANSWERS, null, values);
+    	
+    	return ret;
     }
     
     // SELECT * FROM ANSWERS
@@ -394,7 +363,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     		answers_list.add(answer);
     	}
     	
+    	for(int i=0; i<answers_list.size(); i++)
+        {
+        	Log.i("DB-Answer: ", "" + answers_list.get(i).text() 
+					+ " - " + answers_list.get(i).userId() 
+					+ " - " + answers_list.get(i).questionId());
+        }
+    	
     	return answers_list;
     }
+    
+    // DELETE * FROM ANSWERS
+    public void deleteAnswers () {
+    	Log.i(TAG, "Deleting answers");
+    	SQLiteDatabase db = getWritableDatabase();
+    	
+    	db.execSQL("delete from " + TABLE_ANSWERS);
+    	db.close();
+    }
+    
+    
     
 }

@@ -49,6 +49,7 @@ public class ServerSocketHelper {
 		}
 	}
 	
+	/** Get user info from same (server) device and store it in the database **/
 	public void addOwnUser() {
 		
 		//User user = new User(name);
@@ -58,16 +59,28 @@ public class ServerSocketHelper {
 		Device device = new Device();
 		device.setClientSocket(connectionSocket);
 		device.setIsGroupOwner(true);
-		User user = mActivity.currentUser;
-		user.setId(id);
-		device.setUser(user);
+
+		mActivity.currentUser.setId(id);
+		device.setUser(mActivity.currentUser);
 		device.setClientSocket(null);
+		
 		mDevices.add(device);
 		
-		for(int i=0; i<mDevices.size(); i++)
-	        	Log.i("Device: ", "" + mDevices.get(i).user().id() + ". " + mDevices.get(i).user().name()
-	        			+ " - " + mDevices.get(i).isGroupOwner() + " - " + mDevices.get(i).clientSocket().toString());
+//		for(int i=0; i<mDevices.size(); i++)
+//	        	Log.i("Device: ", "" + mDevices.get(i).user().id() + ". " + mDevices.get(i).user().name()
+//	        			+ " - " + mDevices.get(i).isGroupOwner() + " - " + mDevices.get(i).clientSocket().toString());
 	}
+	
+	/** Get answers from same (server) device and store them in the database **/
+	public void addOwnAnswers(Message message) {
+		
+		for(int i=0; i<message.clientAnswers.size(); i++)
+		{
+			int id = (int) mActivity.mDBHelper.addAnswer(message.clientAnswers.get(i));
+		}
+	}
+	
+	
 	
 	// Thread that creates a socket and accepts incoming connections from clients
 	public class ConnectServerThread extends Thread {
@@ -155,7 +168,7 @@ public class ServerSocketHelper {
 				   		baos.flush();
 				   		
 				   		// Read message type
-				   		if(message.type().equals("USER"))
+				   		if(message.type().equals("USER"))	// Get user-name entered by the client device's user
 				   		{
 				   			// Add user in database
 				   			Log.d("Input Stream - User name: ", message.user().name());
@@ -166,7 +179,8 @@ public class ServerSocketHelper {
 				   			for(int i=0; i<mDevices.size(); i++)
 				   				if(mDevices.get(i).clientSocket() == clientSocket)
 				   				{
-				   					Log.i(TAG, "Adding user in list: " + message.user().id() + ". " + message.user().name());
+//				   					Log.i(TAG, "Adding user in list: " + message.user().id() 
+//				   							+ ". " + message.user().name());
 				   					//User user = new User();
 				   					//user.setId(message.user().id());
 				   					//user.setName(message.user().name());
@@ -174,6 +188,21 @@ public class ServerSocketHelper {
 				   					
 				   					break;
 				   				}
+				   		}
+				   		else if(message.type().equals("ANSWERS"))
+				   		{
+//				   			Log.i(TAG, "Entered else if with list size: " + message.clientAnswers.size());
+//				   			for(int i=0; i<message.clientAnswers.size(); i++)
+//				   				Log.i("Answer: ", "" + message.clientAnswers.get(i).text() 
+//				   						+ " - " + message.clientAnswers.get(i).userId() 
+//				   						+ " - " + message.clientAnswers.get(i).questionId());
+				   			
+				   			// Add answers in database
+				   			for(int i=0; i<message.clientAnswers.size(); i++)
+				   			{
+				   				//message.clientAnswers.get(i).setId((int))
+				   				int id = (int) mActivity.mDBHelper.addAnswer(message.clientAnswers.get(i));
+				   			}
 				   		}
 				   		else
 				   		{
@@ -210,7 +239,7 @@ public class ServerSocketHelper {
 				buf = Serializer.serialize(message);
 				outputStream.write(buf, 0, buf.length);
 				
-				Log.i(TAG, "Sent message to client: " + message.user().id() + " " + message.user().name());
+				//Log.i(TAG, "Sent message to client: " + message.user().id() + " " + message.user().name());
 				
 			} catch (Exception e) {
 				e.printStackTrace();

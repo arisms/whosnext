@@ -1,0 +1,15 @@
+1_Which country do you come from?
+1_What is your home-town?
+1_What is your native language?
+1_When is your birthday (Month/Year)?
+1_What is your degree/major?
+2_What is your favorite movie/TV show?
+2_What is your favorite musician/band?
+2_What is your favorite book/magazine?
+2_What is your favorite hobby?
+2_What is your zodiac sign?
+3_Where was the last place you traveled to?
+3_Where would you like to travel next?
+3_What is your favorite animal?
+3_What is your favorite drink?
+3_What are you afraid of most? 
