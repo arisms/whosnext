@@ -24,15 +24,13 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 
 	// Member data
 	ListView mListView;
-	List<User> mUsersList;
-	List<Answer> mAnswersList;
-	List<Question> mQuestionsList;
+	//List<Answer> mAnswersList;
+	//List<Question> mQuestionsList;
 	DatabaseHelper mDBHelper;
 	List<String> mUsersStrings;
 	TextView questionAnswerTv;
 	Random rand = new Random();
-	Answer mRandomAnswer = new Answer();
-	Question mRandomQuestion = new Question();
+	Question mRandomQuestion;
 	final CharSequence emptyAnswerToast = "Wrong player! Try again...";
 	
 	Button button;
@@ -46,50 +44,30 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		MainActivity mActivity = (MainActivity) getActivity();
 		mDBHelper = mActivity.mDBHelper;
 		//playSound();
-		List<Answer> answers_list = mDBHelper.getAnswers();
-        
-		Log.i(TAG, "answers_list.size(): " + answers_list.size());
 		
-        for(int i=0; i<answers_list.size(); i++)
-        {
-        	Log.i("Answer: ", "" + answers_list.get(i).text() 
-					+ " - " + answers_list.get(i).userId() 
-					+ " - " + answers_list.get(i).questionId());
-        }
-		
-		// Hide keyboard
-//		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//	    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-		
-		// Get data from the database
-        mUsersList = mDBHelper.getUsers();
+		// Get users from the database
+        //mUsersList = mDBHelper.getUsers();
         
         /*****/
+		Log.d(TAG, "mUsersStrings");
         mUsersStrings = new ArrayList<String>();
-        for(int i=0; i<mUsersList.size(); i++)
-        	mUsersStrings.add(mUsersList.get(i).name());
+        for(int i=0; i<mActivity.currentUsers.size(); i++)
+        	mUsersStrings.add(mActivity.currentUsers.get(i).name());
         
         
 		//Link ListView to the data
 		mListView = (ListView) view.findViewById(android.R.id.list);
 
-		QuestionsAnswersListAdapter mAdapter = new QuestionsAnswersListAdapter(getActivity(), mUsersStrings, this, mUsersList);
+		QuestionsAnswersListAdapter mAdapter = new QuestionsAnswersListAdapter(getActivity(), mUsersStrings, this, mActivity.currentUsers);
 
 		mListView.setAdapter(mAdapter);
 		
-		// Get a list of all the Answers and Questions in the database
-		mAnswersList = mDBHelper.getAnswers();
-		mQuestionsList = mDBHelper.getQuestions();
-		
-		// Choose a random answer from the list
-		getRandomAnswer(mAnswersList);
-		
-		// Find the question with the same id
-		mRandomQuestion = mDBHelper.getQuestionById(mRandomAnswer.questionId());
+		// Find the question with the same id as the one in currentAnswer
+		mRandomQuestion = mDBHelper.getQuestionById(mActivity.currentAnswer.questionId());
 		
 		questionAnswerTv = (TextView) view.findViewById(R.id.random_question_answer);
 		questionAnswerTv.setText("Q: " + mRandomQuestion.text() + '\n' 
-				+ "A: " + mRandomAnswer.text());
+				+ "A: " + mActivity.currentAnswer.text());
 		
 		questionAnswerTv.requestFocus();
 		
@@ -105,22 +83,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		
 		
 		return view;
-	}
-	
-	public void getRandomAnswer(List<Answer> mAnswersList) {
-		
-		int randomId = randInt(1, mAnswersList.size());
-		
-		// Get function?
-		mRandomAnswer = mAnswersList.get(randomId);
-		//Log.i(TAG, "randomId = " + randomId);
-		//return mRandomAnswer;
-	}
-	
-	public int randInt(int min, int max) {
-	    
-	    int randomNum = rand.nextInt((max - min) + 1) + min;
-	    return randomNum;
 	}
 	
 	public void wrongPlayer() {
@@ -141,11 +103,11 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 
 	@Override
 	public void onSelectPlayer(int id) {
-		final int position = id - 1;
-		
-		Toast toast = Toast.makeText(getActivity(), "" + mUsersList.get(position).name(), Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
+//		final int position = id - 1;
+//		
+//		Toast toast = Toast.makeText(getActivity(), "" + mActivity.currentUsers.get(position).name(), Toast.LENGTH_SHORT);
+//		toast.setGravity(Gravity.CENTER, 0, 0);
+//		toast.show();
 		Log.d(TAG, "onSelectPlayer()");
 		
 		

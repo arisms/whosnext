@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class QuestionsFragment extends Fragment{
 	
@@ -138,14 +142,14 @@ public class QuestionsFragment extends Fragment{
 		}
 		
 		// Answer cannot be empty
-//		if(mAnswerEt.getText().toString().trim().length() == 0)
-//    	{
-//    		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);         <------------ Enable this!
-//    		toast.setGravity(Gravity.CENTER, 0, 0);
-//    		toast.show();
-//    		
-//    		return;
-//    	}
+		if(mAnswerEt.getText().toString().trim().length() == 0)
+    	{
+    		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER, 0, 0);
+    		toast.show();
+    		
+    		return;
+    	}
 		
 		// If Start Game is selected replace the fragment
 		if(mQuestionCounter == mTotalQuestions)
@@ -154,7 +158,7 @@ public class QuestionsFragment extends Fragment{
 			answersMessage.setType("ANSWERS");
 			answersMessage.setUser(mActivity.currentUser);
 			for(int i=0; i<clientAnswers.size(); i++) {
-				answersMessage.clientAnswers.add(clientAnswers.get(i));
+				answersMessage.answers_list.add(clientAnswers.get(i));
 			}
 			
 			if(mActivity.mGameDevice.isGroupOwner())
@@ -164,10 +168,14 @@ public class QuestionsFragment extends Fragment{
 				mActivity.cHelper.sendToServer(answersMessage);
 			}
 			
+			// Hide the soft keyboard
+			InputMethodManager imm = (InputMethodManager)mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(mAnswerEt.getWindowToken(), 0);
+			
 			mAnswerEt.clearFocus();
 			button.requestFocus();
 			
-			// Replace the fragment
+			// Start the game!
 			mListener.onStartGame();
 			return;
 		}

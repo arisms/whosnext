@@ -1,3 +1,25 @@
+public void onStartGame() {
+    	// When the user taps the Start Game button
+    	//Log.d(TAG, "onStartGame()");
+    	
+    	// Load GameMain Fragment
+//    	getSupportFragmentManager().beginTransaction()
+//			.replace(R.id.rootlayout, mGameMainFragment).commit();
+    	
+    	// If Group Owner, load GameMainFragment
+    	if(mGameDevice.isGroupOwner())
+    	{
+    		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mGameMainFragment).commit();
+    	}
+    	// If not group owner, load image fragment
+    	else
+    		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+    }
+
+
+
 for(int i=0; i<clientAnswers.size(); i++)
 	Log.i("Answer: ", "" + clientAnswers.get(i).text() 
 			+ " - " + clientAnswers.get(i).userId() + " - " + clientAnswers.get(i).questionId());

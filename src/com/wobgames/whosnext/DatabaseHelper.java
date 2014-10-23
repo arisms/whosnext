@@ -363,13 +363,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     		answers_list.add(answer);
     	}
     	
-    	for(int i=0; i<answers_list.size(); i++)
-        {
-        	Log.i("DB-Answer: ", "" + answers_list.get(i).text() 
-					+ " - " + answers_list.get(i).userId() 
-					+ " - " + answers_list.get(i).questionId());
-        }
-    	
     	return answers_list;
     }
     

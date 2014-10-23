@@ -46,6 +46,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	// Objects
 	public GameDevice mGameDevice = null;
 	public DatabaseHelper mDBHelper;
+	public Answer currentAnswer;
+	public List<User> currentUsers;
 	
 	// Game Info
 	public User currentUser;
@@ -350,20 +352,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	// When the user taps the Start Game button
     	//Log.d(TAG, "onStartGame()");
     	
-    	// Load GameMain Fragment
-//    	getSupportFragmentManager().beginTransaction()
-//			.replace(R.id.rootlayout, mGameMainFragment).commit();
-    	
-    	// If Group Owner, load GameMainFragment
-    	if(mGameDevice.isGroupOwner())
-    	{
-    		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.rootlayout, mGameMainFragment).commit();
-    	}
-    	// If not group owner, load image fragment
-    	else
-    		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+    	// Load Image Fragment (waiting screen)
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+		
+		if(mGameDevice.isGroupOwner())
+			sHelper.startGame();
     }
     
     /**
@@ -392,7 +386,21 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mQuestionsFragment).commit();
     	
+    }
+    
+    public void showToast(String toast) {
+    	//Log.i(TAG, "showToast()");
+    	Toast.makeText(MainActivity.this, toast,Toast.LENGTH_SHORT).show();
+    }
+    
+    public void startTurn(Answer answer, List<User> users_list) {
+    	currentAnswer = answer;
+    	currentUsers = new ArrayList<User>(users_list);
+    	Log.d(TAG, "startTurn");
     	
+    	// Load Game Main Fragment
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mGameMainFragment).addToBackStack(null).commit();
     }
 }
 

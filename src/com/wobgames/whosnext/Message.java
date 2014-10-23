@@ -11,11 +11,14 @@ public class Message implements Serializable {
 	
 	private String mType;
 	private User mUser;
-	public ArrayList<Answer> clientAnswers;
+	public ArrayList<Answer> answers_list;
+	public ArrayList<User> users_list;
+	private String mToast;
+	private Answer currentAnswer;
 	
 	public Message() {
-		Log.i("MESSAGE", "Message class created.");
-		clientAnswers = new ArrayList<Answer>();
+		answers_list = new ArrayList<Answer>();
+		users_list = new ArrayList<User>();
 	}
 
 	public void setType(String type) { mType = type; }
@@ -24,4 +27,9 @@ public class Message implements Serializable {
 	public void setUser(User user) { mUser = user; }
 	public User user() { return mUser; }
 	
+	public void setToast(String toast) {mToast = toast; }
+	public String toast() { return mToast; }
+	
+	public void setCurrentAnswer(Answer answer) { currentAnswer = answer; }
+	public Answer currentAnswer() { return currentAnswer; }
 }

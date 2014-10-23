@@ -49,7 +49,7 @@ public class ClientSocketHelper {
 					InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
 					//InetSocketAddress serverAddr = new InetSocketAddress(mActivity.SERVER_PORT);
 					connectionSocket.connect(serverAddr, 500);
-					
+					mActivity.peersRemaining = false;
 				} catch (Exception e) {
 			    	e.printStackTrace();
 			    	Log.d(TAG, "Client exception");
@@ -105,9 +105,12 @@ public class ClientSocketHelper {
 				   	
 				   	if(dataAvailable)
 				   	{
-				   		Message message = (Message) Serializer.deserialize(buf);
+				   		Log.i(TAG, "Entered receive message IF");
+				   		final Message message = (Message) Serializer.deserialize(buf);
 				   		dataAvailable = false;
 				   		baos.flush();
+				   		
+				   		Log.i(TAG, "Received message from server: " + message.type());
 				   		
 				   		// Read message type
 				   		if(message.type().equals("USER"))
@@ -118,9 +121,28 @@ public class ClientSocketHelper {
 				   			mActivity.currentUser.setId(message.user().id());
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
+				   		else if(message.type().equals("START")) {
+							
+				   			mActivity.runOnUiThread(new Runnable() {
+								  public void run() {
+									  mActivity.showToast(message.toast());
+								  }
+								});
+						}
+				   		else if(message.type().equals("PLAY")) {
+				   			Log.d(TAG, "message.type().equals(PLAY)");
+				   			mActivity.runOnUiThread(new Runnable() {
+								  public void run() {
+									  mActivity.showToast("Your turn to play!");
+								  }
+								});
+				   			
+				   			mActivity.startTurn(message.currentAnswer(), message.users_list);
+				   			
+				   		}
 				   		else
 				   		{
-				   			Log.d(TAG, "Not user");
+				   			Log.d(TAG, "Else");
 				   		}
 				   			
 				   	}
