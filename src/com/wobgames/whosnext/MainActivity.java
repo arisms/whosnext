@@ -393,14 +393,29 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	Toast.makeText(MainActivity.this, toast,Toast.LENGTH_SHORT).show();
     }
     
-    public void startTurn(Answer answer, List<User> users_list) {
+    public void startTurn(Answer answer) {
     	currentAnswer = answer;
-    	currentUsers = new ArrayList<User>(users_list);
-    	Log.d(TAG, "startTurn");
+    	
+//    	for(int i=0; i<users_list.size(); i++)
+//				Log.i(TAG, "In main activity users_list (argument): " + i + ". " + users_list.get(i));
+//    	for(int i=0; i<users_list.size(); i++)
+//			Log.i(TAG, "In main activity currentUsers (local variable): " + i + ". " + users_list.get(i));
     	
     	// Load Game Main Fragment
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameMainFragment).addToBackStack(null).commit();
+    }
+    
+    public void nextTurn() {
+    	// When the user taps the Start Game button
+    	//Log.d(TAG, "onStartGame()");
+    	
+    	// Load Image Fragment (waiting screen)
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+		
+		if(mGameDevice.isGroupOwner())
+			sHelper.startGame();
     }
 }
 

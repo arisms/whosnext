@@ -128,6 +128,7 @@ public class ServerSocketHelper {
 		if(message.type().equals("START")) {
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
+					  mActivity.currentUsers = new ArrayList<User>(msg.users_list);
 					  mActivity.showToast(msg.toast());
 				  }
 				});
@@ -171,33 +172,56 @@ public class ServerSocketHelper {
 		temp.start();
 	}
 	
+	public void continueGame() {
+		//...........TO DO
+		if(turnCounter == MAX_TURNS) {
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  mActivity.showToast("GAME OVER!");
+				  }
+			});
+		}
+		else {
+			mActivity.sHelper.randomize();
+		}
+		
+		
+	}
+	
 	public void randomize() {
 		Message message = new Message();
 		message.setType("PLAY");
 		
+		// Get a random device from the list, that is not the same as last time
+		int j = randInt(0, mDevices.size()-1);
+		while(mDevices.get(j).equals(lastUsedDevice))
+			j = randInt(0, mDevices.size()-1);
+		lastUsedDevice = mDevices.get(j);
+		//Log.d(TAG, "Random device: " + j + ". " + mDevices.get(j).toString());
+				
 		// Get a random Answer from the list, that hasn't been used
 		int i = randInt(0, gameAnswers.size()-1);
-		while(gameAnswers.get(i).used())
+		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id()))
 			i = randInt(0, gameAnswers.size()-1);
+		gameAnswers.get(i).setUsed(true);
 		message.setCurrentAnswer(gameAnswers.get(i));
-		Log.d(TAG, "Random answer: " + i + ". " + gameAnswers.get(i).text());
+		//Log.d(TAG, "Random answer: " + i + ". " + gameAnswers.get(i).text());
 		
-		// Get a random device from the list, that is not the same as last time
-		int j = randInt(1, mDevices.size()-1);
-		while(mDevices.get(j).equals(lastUsedDevice))
-			j = randInt(1, mDevices.size()-1);
-		lastUsedDevice = mDevices.get(j);
-		Log.d(TAG, "Random device: " + j + ". " + mDevices.get(j).toString());
 		turnCounter++;
+		
 		// Send message to selected device
-		sendMessage(mDevices.get(j).clientSocket(), message);
+		if(mDevices.get(j).isGroupOwner())	{ // If the target device is the server
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  mActivity.showToast("Your turn to play!");
+				  }
+				});
+ 			
+ 			mActivity.startTurn(message.currentAnswer());
+		}
+		else	// If the target device is a client
+			sendMessage(mDevices.get(j).clientSocket(), message);
 		
-		
-//		mActivity.runOnUiThread(new Runnable() {
-//			  public void run() {
-//				  mActivity.showToast("RANDOMIZE");
-//			  }
-//			});
 	}
 	
 	

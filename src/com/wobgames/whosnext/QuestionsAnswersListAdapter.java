@@ -40,7 +40,8 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		final int id = mUsersList.get(position).id();
 		
 		TextView tv = (TextView) view.findViewById(R.id.list_question);
-		tv.setText(strings.get(position));
+		//tv.setText(strings.get(position));
+		tv.setText(mUsersList.get(position).name());
 		
 		button = (Button) view.findViewById(R.id.select_player_button);
 		button.setOnClickListener(new View.OnClickListener() {

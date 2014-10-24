@@ -122,22 +122,26 @@ public class ClientSocketHelper {
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
 				   		else if(message.type().equals("START")) {
-							
+//				   			for(int i=0; i<message.users_list.size(); i++)
+//				   				Log.i(TAG, "Got message with users_list: " + i + ". " + message.users_list.get(i));
+				   			
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
+									  mActivity.currentUsers = new ArrayList<User>(message.users_list);
 									  mActivity.showToast(message.toast());
 								  }
 								});
 						}
 				   		else if(message.type().equals("PLAY")) {
 				   			Log.d(TAG, "message.type().equals(PLAY)");
+				   			
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
 									  mActivity.showToast("Your turn to play!");
 								  }
 								});
 				   			
-				   			mActivity.startTurn(message.currentAnswer(), message.users_list);
+				   			mActivity.startTurn(message.currentAnswer());
 				   			
 				   		}
 				   		else

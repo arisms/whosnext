@@ -161,6 +161,7 @@ public class QuestionsFragment extends Fragment{
 				answersMessage.answers_list.add(clientAnswers.get(i));
 			}
 			
+			// If the current device is the server
 			if(mActivity.mGameDevice.isGroupOwner())
 				mActivity.sHelper.addOwnAnswers(answersMessage);
 			else {
