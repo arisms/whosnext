@@ -6,6 +6,8 @@ import java.util.Random;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -123,4 +125,9 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		// If wrong player
 		//wrongPlayer();
 	}
+	
+	
+	
+	
+	
 }

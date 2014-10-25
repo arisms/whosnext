@@ -415,7 +415,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
 		
 		if(mGameDevice.isGroupOwner())
-			sHelper.startGame();
+			sHelper.continueGame();
+		else {
+			Message message = new Message();
+			message.setType("CONTINUE");
+			cHelper.sendToServer(message);
+		}
     }
 }
 

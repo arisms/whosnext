@@ -138,6 +138,7 @@ public class ServerSocketHelper {
 	
 	/** Takes care of game set-up procedure **/
 	public void startGame() {
+		Log.d(TAG, "startGame()");
 		
 		Thread temp = new Thread(new Runnable() {
 			@Override
@@ -173,6 +174,7 @@ public class ServerSocketHelper {
 	}
 	
 	public void continueGame() {
+		Log.d(TAG, "continueGame() , turnCounter = " + turnCounter);
 		//...........TO DO
 		if(turnCounter == MAX_TURNS) {
 			mActivity.runOnUiThread(new Runnable() {
@@ -189,6 +191,7 @@ public class ServerSocketHelper {
 	}
 	
 	public void randomize() {
+		Log.d(TAG, "randomize()");
 		Message message = new Message();
 		message.setType("PLAY");
 		
@@ -206,7 +209,9 @@ public class ServerSocketHelper {
 		gameAnswers.get(i).setUsed(true);
 		message.setCurrentAnswer(gameAnswers.get(i));
 		//Log.d(TAG, "Random answer: " + i + ". " + gameAnswers.get(i).text());
-		
+		Log.d(TAG, "randomize(), i,j = " + i + " " + j);
+		i=1;
+		j=1;
 		turnCounter++;
 		
 		// Send message to selected device
@@ -348,6 +353,9 @@ public class ServerSocketHelper {
 				   					break;
 				   				}
 				   			
+				   		}
+				   		else if(message.type().equals("CONTINUE")) {
+				   			continueGame();
 				   		}
 				   		else
 				   		{
