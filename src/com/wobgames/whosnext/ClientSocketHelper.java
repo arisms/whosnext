@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
@@ -16,7 +15,7 @@ public class ClientSocketHelper {
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
 	private Socket connectionSocket = new Socket();
-	byte buf[]  = new byte[1024];
+	//byte buf[]  = new byte[1024];
 	Message mMessage;
 	
 	
@@ -65,7 +64,7 @@ public class ClientSocketHelper {
 		@Override
 		public void run() {
 			Log.d(TAG, "SendMessageThread - run()");
-			
+			byte buf[]  = new byte[1024];
 			
 			try {
 				OutputStream outputStream = connectionSocket.getOutputStream();
@@ -88,12 +87,14 @@ public class ClientSocketHelper {
 		@Override
 		public void run() {
 			Log.d(TAG, "ReceiveMessageThread - run()");
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			//ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;
 			
 			while(true) {
 				try {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					byte buf[]  = new byte[1024];
 					InputStream inputStream = connectionSocket.getInputStream();
 					
 					// Wait for data from server
