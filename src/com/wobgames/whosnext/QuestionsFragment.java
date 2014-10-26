@@ -74,7 +74,7 @@ public class QuestionsFragment extends Fragment{
 	
 	@Override
 	public void onAttach(Activity activity) {
-		Log.d(TAG, "onAttach()");
+		//Log.d(TAG, "onAttach()");
 	    super.onAttach(activity);
 	    if (activity instanceof OnStartGameSelectedListener) {
 	    	mListener = (OnStartGameSelectedListener) activity;
@@ -86,9 +86,11 @@ public class QuestionsFragment extends Fragment{
         
 	public void nextQuestion()
 	{
+		Log.d(TAG, "nextQuestion()");
 		// Set user name
 		if(NAME)
 		{
+			Log.d(TAG, "nextQuestion() - NAME");
 			// Create currentUser object
 			mActivity.currentUser = new User("");
 			
@@ -107,6 +109,7 @@ public class QuestionsFragment extends Fragment{
 			// If name in currentUser is empty, send user-name to server
 			if(mActivity.currentUser.name().equals(""))
 			{
+				Log.d(TAG, "nextQuestion() - currentUser.name is empty");
 				mActivity.currentUser.setName(mAnswerEt.getText().toString());
 				
 				Message userMessage = new Message();
@@ -135,6 +138,7 @@ public class QuestionsFragment extends Fragment{
 			// Else store answer to clientAnswers list
 			else
 			{
+				Log.d(TAG, "nextQuestion() - currentUser.name NOT empty, adding answer to list");
 				Answer answer = new Answer(mAnswerEt.getText().toString(), 
 						mActivity.currentUser.id(), questions_list.get(mQuestionCounter-1).id());
 				clientAnswers.add(answer);
@@ -154,6 +158,7 @@ public class QuestionsFragment extends Fragment{
 		// If Start Game is selected replace the fragment
 		if(mQuestionCounter == mTotalQuestions)
 		{
+			Log.d(TAG, "nextQuestion() - start game selected");
 			Message answersMessage = new Message();
 			answersMessage.setType("ANSWERS");
 			answersMessage.setUser(mActivity.currentUser);
@@ -193,8 +198,6 @@ public class QuestionsFragment extends Fragment{
 		{
 			button.setText(getResources().getString(R.string.start_button));
 		}
-		
-		// Commit
 		
 		mQuestionCounter++;
 		

@@ -68,6 +68,7 @@ public class ServerSocketHelper {
 	
 	/** Get user info from same (server) device and store it in the database **/
 	public void addOwnUser() {
+		Log.d(TAG, "addOwnUser()");
 		
 		//User user = new User(name);
 		int id = (int)mActivity.mDBHelper.addUser(mActivity.currentUser);
@@ -87,6 +88,7 @@ public class ServerSocketHelper {
 	
 	/** Get answers from same (server) device and store them in the database **/
 	public void addOwnAnswers(Message message) {
+		Log.d(TAG, "addOwnAnswers()");
 		
 		for(int i=0; i<message.answers_list.size(); i++)
 		{
@@ -110,7 +112,7 @@ public class ServerSocketHelper {
 		for(int i=0; i<mDevices.size(); i++) {
 			// If the target device is a client
 			if(!(mDevices.get(i).isGroupOwner())) {
-				Log.d(TAG, "Sending message to device " + mDevices.get(i).clientSocket().toString());
+				//Log.d(TAG, "Sending message to device " + mDevices.get(i).clientSocket().toString());
 				sendMessage(mDevices.get(i).clientSocket(), message);
 			}
 			// If the target device is the server
@@ -123,6 +125,8 @@ public class ServerSocketHelper {
 	
 	/**  Process broadcast message when targeted to server **/
 	public void receiveBroadcastMessage(Message message) {
+		Log.d(TAG, "receiveBroadcastMessage()");
+		
 		final Message msg = message;
 		
 		if(message.type().equals("START")) {
@@ -199,19 +203,23 @@ public class ServerSocketHelper {
 		int j = randInt(0, mDevices.size()-1);
 		while(mDevices.get(j).equals(lastUsedDevice))
 			j = randInt(0, mDevices.size()-1);
+		//***********************************************************************************************************************/
+		if(lastUsedDevice != null)
+			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used: " + lastUsedDevice.user().name());
+		else
+			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used = null ");
+		//***********************************************************************************************************************/
 		lastUsedDevice = mDevices.get(j);
-		//Log.d(TAG, "Random device: " + j + ". " + mDevices.get(j).toString());
-				
+		
 		// Get a random Answer from the list, that hasn't been used
 		int i = randInt(0, gameAnswers.size()-1);
 		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id()))
 			i = randInt(0, gameAnswers.size()-1);
 		gameAnswers.get(i).setUsed(true);
 		message.setCurrentAnswer(gameAnswers.get(i));
-		//Log.d(TAG, "Random answer: " + i + ". " + gameAnswers.get(i).text());
-		Log.d(TAG, "randomize(), i,j = " + i + " " + j);
-		i=1;
-		j=1;
+		
+		Log.d(TAG, "randomize(), answer " + i + " out of " + gameAnswers.size());
+		
 		turnCounter++;
 		
 		// Send message to selected device
@@ -236,7 +244,7 @@ public class ServerSocketHelper {
 		
 		 @Override
 		 public void run() {         
-	    	Log.d(TAG, "SERVER THREAD STARTED");
+	    	Log.d(TAG, "ConnectServerThread - run");
 	    	
 	    	// Create new Socket
 		    try {
@@ -288,12 +296,12 @@ public class ServerSocketHelper {
 		
 		public ReceiveFromClientsThread(Socket clientConnectionSocket) {
 			clientSocket = clientConnectionSocket;
-			Log.d(TAG, "ReceiveFromClientsThread created...");
+			//Log.d(TAG, "ReceiveFromClientsThread created...");
 		}
 		
 		@Override
 		public void run() {
-			Log.d(TAG, "ReceiveFromClientsThread running...");
+			Log.d(TAG, "ReceiveFromClientsThread - run...");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;
@@ -385,6 +393,7 @@ public class ServerSocketHelper {
 		
 		@Override
 		public void run() {
+			Log.d(TAG, "SendToClientThread - run()");
 			
 			try {
 				OutputStream outputStream = clientSocket.getOutputStream();

@@ -55,6 +55,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 //		for(int i=0; i<mActivity.currentUsers.size(); i++)
 //			Log.i(TAG, "In fragment currentUsers (global variable): " + i + ". " + mActivity.currentUsers.get(i)); //------------
 		
+		Log.d(TAG, "onCreateView() - mActivity.currentUsers.size()" + mActivity.currentUsers.size());
         mUsersStrings = new ArrayList<String>();
         for(int i=0; i<mActivity.currentUsers.size(); i++)
         	mUsersStrings.add(mActivity.currentUsers.get(i).name());

@@ -43,7 +43,7 @@ public class ClientSocketHelper {
 
 			@Override
 			public void run() {   
-				Log.d(TAG, "Client Thread Started, info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
+				Log.d(TAG, "connectToServerThread - run(), info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
 				try {
 					connectionSocket.bind(null);
 					InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
@@ -64,7 +64,7 @@ public class ClientSocketHelper {
 		
 		@Override
 		public void run() {
-			Log.d(TAG, "SendMessageThread: " + mMessage);
+			Log.d(TAG, "SendMessageThread - run()");
 			
 			
 			try {
@@ -87,7 +87,7 @@ public class ClientSocketHelper {
 		
 		@Override
 		public void run() {
-			Log.d(TAG, "ReceiveMessageThread in client running...");
+			Log.d(TAG, "ReceiveMessageThread - run()");
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			int bytes;
 			boolean dataAvailable = false;

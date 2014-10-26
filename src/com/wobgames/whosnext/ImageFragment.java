@@ -29,9 +29,9 @@ public class ImageFragment extends Fragment{
         
         /****************** TIMER ******************/
 
-		timerValue = (TextView) view.findViewById(R.id.timerValue);
-		startTime = SystemClock.uptimeMillis();
-		customHandler.postDelayed(updateTimerThread, 0);
+//		timerValue = (TextView) view.findViewById(R.id.timerValue);
+//		startTime = SystemClock.uptimeMillis();
+//		customHandler.postDelayed(updateTimerThread, 0);
 
 		/******************************************/
 
