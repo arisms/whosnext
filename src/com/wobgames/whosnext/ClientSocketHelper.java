@@ -123,12 +123,11 @@ public class ClientSocketHelper {
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
 				   		else if(message.type().equals("START")) {
-//				   			for(int i=0; i<message.users_list.size(); i++)
-//				   				Log.i(TAG, "Got message with users_list: " + i + ". " + message.users_list.get(i));
+				   			mActivity.currentUsers = new ArrayList<User>(message.users_list);
 				   			
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
-									  mActivity.currentUsers = new ArrayList<User>(message.users_list);
+									  //mActivity.currentUsers = new ArrayList<User>(message.users_list);
 									  mActivity.showToast(message.toast());
 								  }
 								});

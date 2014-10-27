@@ -1,3 +1,59 @@
+public void randomize() {
+		Log.d(TAG, "randomize()");
+		Message message = new Message();
+		message.setType("PLAY");
+		
+		// Get a random device from the list, that is not the same as last time
+//		int j = randInt(0, mDevices.size()-1);
+//		while(mDevices.get(j).equals(lastUsedDevice))
+//			j = randInt(0, mDevices.size()-1);
+//		//***********************************************************************************************************************/
+//		if(lastUsedDevice != null)
+//			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used: " + lastUsedDevice.user().name());
+//		else
+//			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used = null ");
+//		//***********************************************************************************************************************/
+//		lastUsedDevice = mDevices.get(j);
+		
+		int j = getRandomDevice();
+		
+		lastUsedDevice = mDevices.get(j);
+		
+		// Get a random Answer from the list, that hasn't been used
+		int i = randInt(0, gameAnswers.size()-1);
+		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id())) {
+			Log.d(TAG, "randomize() - while - answers");
+			i = randInt(0, gameAnswers.size()-1);
+		}
+		gameAnswers.get(i).setUsed(true);
+		message.setCurrentAnswer(gameAnswers.get(i));
+		
+		Log.d(TAG, "randomize(), answer " + i + " out of " + gameAnswers.size());
+		
+		turnCounter++;
+		
+		// Send message to selected device
+		if(mDevices.get(j).isGroupOwner())	{ // If the target device is the server
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  mActivity.showToast("Your turn to play!");
+				  }
+				});
+ 			
+ 			mActivity.startTurn(message.currentAnswer());
+		}
+		else	// If the target device is a client
+			sendMessage(mDevices.get(j).clientSocket(), message);
+		
+	}
+
+
+
+
+
+
+
+
 public void onStartGame() {
     	// When the user taps the Start Game button
     	//Log.d(TAG, "onStartGame()");

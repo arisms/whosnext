@@ -130,9 +130,10 @@ public class ServerSocketHelper {
 		final Message msg = message;
 		
 		if(message.type().equals("START")) {
+			mActivity.currentUsers = new ArrayList<User>(msg.users_list);
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
-					  mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
 					  mActivity.showToast(msg.toast());
 				  }
 				});
@@ -155,13 +156,10 @@ public class ServerSocketHelper {
 				Message message = new Message();
 				message.setType("START");
 				message.setToast("Game started!");
+				
 				// Add list of users to the message
 				for(int i=0; i<mDevices.size(); i++) {
 					message.users_list.add(mDevices.get(i).user());
-//					if(mDevices.get(i).user() != null)
-//						Log.d(TAG, "Not null for i = " + i);
-//					else
-//						Log.d(TAG, "Null for i = " + i);
 				}
 				
 				broadcastMessage(message);
@@ -170,17 +168,17 @@ public class ServerSocketHelper {
 				gameAnswers = mActivity.mDBHelper.getAnswers();
 				
 				MAX_TURNS = gameAnswers.size();
-				
-				mActivity.sHelper.randomize();
 			}
 		});
 		temp.start();
+
+		mActivity.sHelper.randomize();
 	}
 	
 	public void continueGame() {
 		Log.d(TAG, "continueGame() , turnCounter = " + turnCounter);
 		//...........TO DO
-		if(turnCounter == MAX_TURNS) {
+		if(turnCounter > MAX_TURNS) {
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
 					  mActivity.showToast("GAME OVER!");
@@ -199,22 +197,22 @@ public class ServerSocketHelper {
 		Message message = new Message();
 		message.setType("PLAY");
 		
-		// Get a random device from the list, that is not the same as last time
-		int j = randInt(0, mDevices.size()-1);
-		while(mDevices.get(j).equals(lastUsedDevice))
-			j = randInt(0, mDevices.size()-1);
-		//***********************************************************************************************************************/
-		if(lastUsedDevice != null)
-			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used: " + lastUsedDevice.user().name());
-		else
-			Log.d(TAG, "randomize(), device " + j + " out of " + mDevices.size() + ", last used = null ");
-		//***********************************************************************************************************************/
+		// Get a random device from the list, that is not the same as last time	
+		int j;
+		j = getRandomDevice();
+		
+		// If all the answers left have the same userId as this device's user, pick another device
+		while(!findQuestionsWithDifferentUserId(mDevices.get(j).user().id()))
+			j = getRandomDevice();
+		
 		lastUsedDevice = mDevices.get(j);
 		
 		// Get a random Answer from the list, that hasn't been used
 		int i = randInt(0, gameAnswers.size()-1);
-		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id()))
+		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id())) {
+			Log.d(TAG, "randomize() - while - answers");
 			i = randInt(0, gameAnswers.size()-1);
+		}
 		gameAnswers.get(i).setUsed(true);
 		message.setCurrentAnswer(gameAnswers.get(i));
 		
@@ -449,6 +447,41 @@ public class ServerSocketHelper {
 	    
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 	    return randomNum;
+	}
+	
+	private int getRandomDevice() {
+		int k=0;
+		int j;
+		if(lastUsedDevice == null) {
+			j = 0; //randInt(0, mDevices.size()-1);
+			Log.d(TAG, "randomize() - lastUsedDevice == null, j = " + j);
+		}
+		else {
+			// Get last used device's position in the list
+			for(k=0; k<mDevices.size(); k++) {
+				if(mDevices.get(k).equals(lastUsedDevice))
+					break;
+			}
+			j = k+1;
+			Log.d(TAG, "randomize() - else j=k+1 = " + j);
+			
+			if(j==mDevices.size()) {
+				Log.d(TAG, "randomize() - j>mDevices.size() => j=0");
+				j=0;
+			}
+		}
+		return j;
+	}
+	
+	private boolean findQuestionsWithDifferentUserId(int userId) {
+		
+		// Return true if an answer with a different userId is found in the list
+		for(int i=0; i<gameAnswers.size(); i++) {
+			if(gameAnswers.get(i).userId() != userId)
+				return true;
+		}
+		
+		return false;
 	}
 }
 
