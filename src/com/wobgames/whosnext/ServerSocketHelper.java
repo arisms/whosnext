@@ -24,6 +24,7 @@ public class ServerSocketHelper {
 	public List<Answer> gameAnswers;
 	int MAX_TURNS;
 	int turnCounter;
+	public boolean gameStarted = false;
 	
 	public ServerSocketHelper(MainActivity activity) {
 		mActivity = activity;
@@ -138,20 +139,25 @@ public class ServerSocketHelper {
 				  }
 				});
 		}
+		else if(message.type().equals("GAME OVER")) {
+			mActivity.gameOver(message);
+		}
 		
 	}
 	
 	/** Takes care of game set-up procedure **/
 	public void startGame() {
-		Log.d(TAG, "startGame()");
 		
-		Thread temp = new Thread(new Runnable() {
+		Log.d(TAG, "startGame() - size = " + mDevices.size());
+		// Wait until all the devices have submitted their answers
+		while(!allDevicesReady()) {
+			// Wait...
+		}
+		
+		
+		Thread temp = new Thread(new Runnable() {				// <-----THREAD MIGHT NOT BE NEEDED. REMOVE?
 			@Override
 			public void run() {
-				// Wait until all the devices have submitted their answers
-				while(!allDevicesReady()) {
-					// Wait...
-				}
 				
 				Message message = new Message();
 				message.setType("START");
@@ -168,22 +174,35 @@ public class ServerSocketHelper {
 				gameAnswers = mActivity.mDBHelper.getAnswers();
 				
 				MAX_TURNS = gameAnswers.size();
+				gameStarted = true;
 			}
 		});
 		temp.start();
 
+		// Wait...
+		while(!gameStarted) {
+		}
 		mActivity.sHelper.randomize();
 	}
 	
 	public void continueGame() {
 		Log.d(TAG, "continueGame() , turnCounter = " + turnCounter);
 		//...........TO DO
+//		if(turnCounter > MAX_TURNS) {
+//			mActivity.runOnUiThread(new Runnable() {
+//				  public void run() {
+//					  mActivity.showToast("GAME OVER!");
+//				  }
+//			});
+//		}
+		
+		// If the game is over, broadcast corresponding message
 		if(turnCounter > MAX_TURNS) {
-			mActivity.runOnUiThread(new Runnable() {
-				  public void run() {
-					  mActivity.showToast("GAME OVER!");
-				  }
-			});
+			Message message = new Message();
+			message.setType("GAME OVER");
+			message.setToast("Game over!");
+			
+			broadcastMessage(message);
 		}
 		else {
 			mActivity.sHelper.randomize();

@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	GameMainFragment mGameMainFragment;
 	ImageFragment mImageFragment;
 	DeviceListFragment mDeviceListFragment;
+	GameOverFragment mGameOverFragment;
 	
 	// Objects
 	public GameDevice mGameDevice = null;
@@ -51,6 +52,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	
 	// Game Info
 	public User currentUser;
+	public int wrongAnswersNumber;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -92,6 +94,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mGameMainFragment = new GameMainFragment();
         mImageFragment = new ImageFragment();
         mDeviceListFragment = new DeviceListFragment();
+        mGameOverFragment = new GameOverFragment();
         
         // Create the Database
         mDBHelper = new DatabaseHelper(getApplication());
@@ -112,6 +115,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        
+        wrongAnswersNumber = 0;
     }
     
     /** onResume() **/
@@ -421,6 +426,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			message.setType("CONTINUE");
 			cHelper.sendToServer(message);
 		}
+    }
+    
+    public void gameOver(Message message) {
+    	// Load GameOver Fragment
+    	showToast(message.toast());
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mGameOverFragment).addToBackStack(null).commit();
     }
 }
 

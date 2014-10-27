@@ -144,6 +144,9 @@ public class ClientSocketHelper {
 				   			mActivity.startTurn(message.currentAnswer());
 				   			
 				   		}
+				   		else if(message.type().equals("GAME OVER")) {
+				   			mActivity.gameOver(message);
+				   		}
 				   		else
 				   		{
 				   			Log.d(TAG, "Else");

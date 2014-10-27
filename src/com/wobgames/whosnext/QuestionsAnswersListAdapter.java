@@ -37,7 +37,8 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = mInflater.inflate(R.layout.questions_answers_list_item, parent, false);
 		
-		final int id = mUsersList.get(position).id();
+		//final int id = mUsersList.get(position).id();
+		final int id = position;
 		
 		TextView tv = (TextView) view.findViewById(R.id.list_question);
 		//tv.setText(strings.get(position));

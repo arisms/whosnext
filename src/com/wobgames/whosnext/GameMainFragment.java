@@ -110,20 +110,25 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 
 	@Override
 	public void onSelectPlayer(int id) {
-//		final int position = id - 1;
-//		
+		//final int position = id - 1;
+		final int position = id;
+		
 //		Toast toast = Toast.makeText(getActivity(), "" + position + ". " 
 //				+ mActivity.currentUsers.get(position).name() + " - " 
 //				+ mActivity.currentUsers.get(position).id() + " | "
 //				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
 //		toast.show();
-//		Toast toast = Toast.makeText(getActivity(), "" + mActivity.currentUsers.get(position).name(), Toast.LENGTH_SHORT);
-//		toast.setGravity(Gravity.CENTER, 0, 0);
-//		toast.show();
-		Log.d(TAG, "onSelectPlayer()");
-		
-		mActivity.nextTurn();
-		// If wrong player
+
+		// If the correct player is chosen, send dialog
+		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id())
+			mActivity.nextTurn();
+		else {
+			// If wrong player
+			mActivity.wrongAnswersNumber++;
+			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
+			+ mActivity.currentAnswer.userId() + " - " + mActivity.currentUsers.get(position).id(), Toast.LENGTH_SHORT);
+			toast.show();
+		}
 		//wrongPlayer();
 	}
 	
