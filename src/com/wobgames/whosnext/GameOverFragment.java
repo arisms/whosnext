@@ -26,7 +26,12 @@ public class GameOverFragment extends Fragment{
 
         TextView text = (TextView) view.findViewById(R.id.game_over_text);
         
-        text.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
+        // If the current device is the Server, display game-over text
+        if(mActivity.mGameDevice.isGroupOwner()) {
+        	text.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
+        }
+        else
+        	text.setText("");
         
         return view;
 	}

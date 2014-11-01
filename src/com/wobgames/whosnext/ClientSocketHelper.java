@@ -157,11 +157,21 @@ public class ClientSocketHelper {
 				   			
 				   		}
 				   		else if(message.type().equals("GAME OVER")) {
+				   			Log.d(TAG, "message.type().equals(GAME OVER)");
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
-									  mActivity.gameOver(message);
+									  
+						   			mActivity.gameOver(message);
 								  }
 								});
+				   		}
+				   		else if(message.type().equals("WRONG ANSWERS")) {
+				   			Log.d(TAG, "WRONG ANSWERS");
+				   			// Send wrongAnswersNumber to server
+				   			Message msg = new Message();
+				   			msg.setType("WRONG ANSWERS");
+				   			msg.setWrongAnswers(mActivity.wrongAnswersNumber);
+				   			sendToServer(msg);
 				   		}
 				   		else
 				   		{

@@ -15,6 +15,7 @@ public class Message implements Serializable {
 	public ArrayList<User> users_list;
 	private String mToast;
 	private Answer currentAnswer;
+	private int wrongAnswers;
 	
 	public Message() {
 		answers_list = new ArrayList<Answer>();
@@ -32,4 +33,7 @@ public class Message implements Serializable {
 	
 	public void setCurrentAnswer(Answer answer) { currentAnswer = answer; }
 	public Answer currentAnswer() { return currentAnswer; }
+	
+	public void setWrongAnswers(int number) { wrongAnswers = number; }
+	public int wrongAnswers() { return wrongAnswers; }
 }

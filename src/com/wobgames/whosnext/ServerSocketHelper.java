@@ -25,6 +25,8 @@ public class ServerSocketHelper {
 	int MAX_TURNS;
 	int turnCounter;
 	public boolean gameStarted = false;
+	private boolean answerReceived;
+	private boolean wrongAnswers;
 	
 	public ServerSocketHelper(MainActivity activity) {
 		mActivity = activity;
@@ -65,6 +67,30 @@ public class ServerSocketHelper {
 				return false;
 		}
 		return true;
+	}
+	
+	/** Receive wrongAnswerNumber from clients **/
+	public void getWrongAnswers() {
+		Log.d(TAG, "getWrongAnswers()");
+		wrongAnswers = false;
+		
+		Message message = new Message();
+		message.setType("WRONG ANSWERS");
+		
+		// Send the message to each client device, and wait for the answer
+		for(int i=0; i<mDevices.size(); i++) {
+			answerReceived = false;
+			if(!(mDevices.get(i).isGroupOwner)) {
+				sendMessage(mDevices.get(i).clientSocket(), message);
+				Log.d(TAG, "Sent message to client");
+				
+				// Wait for the answer from the client
+				while(!answerReceived) {
+					// wait...
+				}
+			}
+		}
+		wrongAnswers = true;
 	}
 	
 	/** Get user info from same (server) device and store it in the database **/
@@ -144,6 +170,13 @@ public class ServerSocketHelper {
    						+ " Id: " + mActivity.currentUsers.get(i).id());
 		}
 		else if(message.type().equals("GAME OVER")) {
+			
+			// Get wrong answers from the clients
+			getWrongAnswers();
+			while(!wrongAnswers) {
+				// wait...
+			}
+			
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
 					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
@@ -403,6 +436,11 @@ public class ServerSocketHelper {
 				   		}
 				   		else if(message.type().equals("CONTINUE")) {
 				   			continueGame();
+				   		}
+				   		else if(message.type().equals("WRONG ANSWERS")) {
+				   			Log.d(TAG, "WRONG ANSWERS");
+				   			mActivity.wrongAnswersNumber += message.wrongAnswers();
+				   			answerReceived = true;
 				   		}
 				   		else
 				   		{
