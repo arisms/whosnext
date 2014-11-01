@@ -38,7 +38,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		View view = mInflater.inflate(R.layout.questions_answers_list_item, parent, false);
 		
 		//final int id = mUsersList.get(position).id();
-		final int id = position;
+		final int pos = position;
 		
 		TextView tv = (TextView) view.findViewById(R.id.list_question);
 		//tv.setText(strings.get(position));
@@ -48,7 +48,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
           	// If the answer text is empty
-          	mListener.onSelectPlayer(id);
+          	mListener.onSelectPlayer(pos);
 				
           }
       });

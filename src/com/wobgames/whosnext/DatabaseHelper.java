@@ -317,7 +317,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     // INSERT Answer
     public long addAnswer (Answer answer) {
-    	Log.i(TAG, "Adding answer: " + answer.text());
+    	Log.i(TAG, "Adding answer: " + answer.text() + " with userId: " + answer.userId());
     	ContentValues values = new ContentValues();
     	
     	values.put(ANSWERS_COLUMN_TEXT, answer.text());

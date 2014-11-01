@@ -15,6 +15,7 @@ public class ClientSocketHelper {
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
 	private Socket connectionSocket = new Socket();
+	private boolean userIdReceived = false;
 	//byte buf[]  = new byte[1024];
 	Message mMessage;
 	
@@ -64,6 +65,10 @@ public class ClientSocketHelper {
 		@Override
 		public void run() {
 			Log.d(TAG, "SendMessageThread - run()");
+			while(mMessage.type().equals("ANSWERS") && !userIdReceived) {
+				// Wait...
+			}
+				
 			byte buf[]  = new byte[1024];
 			
 			try {
@@ -106,7 +111,6 @@ public class ClientSocketHelper {
 				   	
 				   	if(dataAvailable)
 				   	{
-				   		Log.i(TAG, "Entered receive message IF");
 				   		final Message message = (Message) Serializer.deserialize(buf);
 				   		dataAvailable = false;
 				   		baos.flush();
@@ -120,10 +124,15 @@ public class ClientSocketHelper {
 				   			
 				   			// Get userId from server, and add it to mainActivity's currentUser
 				   			mActivity.currentUser.setId(message.user().id());
+				   			userIdReceived = true;
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
 				   		else if(message.type().equals("START")) {
 				   			mActivity.currentUsers = new ArrayList<User>(message.users_list);
+				   			
+				   			for(int i=0; i<mActivity.currentUsers.size(); i++) 
+				   				Log.d(TAG, "currentUsers" + i + " Name: " + mActivity.currentUsers.get(i).name()
+				   						+ " Id: " + mActivity.currentUsers.get(i).id());
 				   			
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
@@ -141,11 +150,18 @@ public class ClientSocketHelper {
 								  }
 								});
 				   			
+				   			Log.d(TAG, "Current Answer, Text: " + message.currentAnswer().text()
+				   					+ " UserId: " + message.currentAnswer().userId());
+				   			
 				   			mActivity.startTurn(message.currentAnswer());
 				   			
 				   		}
 				   		else if(message.type().equals("GAME OVER")) {
-				   			mActivity.gameOver(message);
+				   			mActivity.runOnUiThread(new Runnable() {
+								  public void run() {
+									  mActivity.gameOver(message);
+								  }
+								});
 				   		}
 				   		else
 				   		{

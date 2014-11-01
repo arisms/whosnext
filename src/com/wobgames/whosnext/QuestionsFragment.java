@@ -162,6 +162,11 @@ public class QuestionsFragment extends Fragment{
 			Message answersMessage = new Message();
 			answersMessage.setType("ANSWERS");
 			answersMessage.setUser(mActivity.currentUser);
+			
+			// Update userId in answers
+			for(int i=0; i<clientAnswers.size(); i++)
+				clientAnswers.get(i).setUserId(mActivity.currentUser.id());
+							
 			for(int i=0; i<clientAnswers.size(); i++) {
 				answersMessage.answers_list.add(clientAnswers.get(i));
 			}

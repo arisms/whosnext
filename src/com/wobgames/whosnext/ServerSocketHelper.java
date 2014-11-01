@@ -138,9 +138,19 @@ public class ServerSocketHelper {
 					  mActivity.showToast(msg.toast());
 				  }
 				});
+			
+			for(int i=0; i<mActivity.currentUsers.size(); i++) 
+   				Log.d(TAG, "currentUsers" + i + " Name: " + mActivity.currentUsers.get(i).name()
+   						+ " Id: " + mActivity.currentUsers.get(i).id());
 		}
 		else if(message.type().equals("GAME OVER")) {
-			mActivity.gameOver(message);
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+					  //mActivity.showToast(msg.toast());
+					  mActivity.gameOver(msg);
+				  }
+				});
 		}
 		
 	}
@@ -150,34 +160,40 @@ public class ServerSocketHelper {
 		
 		Log.d(TAG, "startGame() - size = " + mDevices.size());
 		// Wait until all the devices have submitted their answers
+		if(!allDevicesReady()) {
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+					  mActivity.showToast("Waiting for other devices...");
+				  }
+				});
+		}
 		while(!allDevicesReady()) {
 			// Wait...
 		}
+
+		Log.d(TAG, "Finished waiting...");
 		
+		Message message = new Message();
+		message.setType("START");
+		message.setToast("Game started!");
 		
-		Thread temp = new Thread(new Runnable() {				// <-----THREAD MIGHT NOT BE NEEDED. REMOVE?
-			@Override
-			public void run() {
-				
-				Message message = new Message();
-				message.setType("START");
-				message.setToast("Game started!");
-				
-				// Add list of users to the message
-				for(int i=0; i<mDevices.size(); i++) {
-					message.users_list.add(mDevices.get(i).user());
-				}
-				
-				broadcastMessage(message);
-				
-				// Get all answers from the database
-				gameAnswers = mActivity.mDBHelper.getAnswers();
-				
-				MAX_TURNS = gameAnswers.size();
-				gameStarted = true;
-			}
-		});
-		temp.start();
+		// Add list of users to the message
+		for(int i=0; i<mDevices.size(); i++) {
+			message.users_list.add(mDevices.get(i).user());
+		}
+		
+		broadcastMessage(message);
+		
+		// Get all answers from the database
+		gameAnswers = mActivity.mDBHelper.getAnswers();
+		
+		for(int i=0; i<gameAnswers.size(); i++)
+			Log.d(TAG, "Answer text: "+ gameAnswers.get(i).text()
+					+ "  - userId: " + gameAnswers.get(i).userId());
+		
+		MAX_TURNS = gameAnswers.size();
+		gameStarted = true;
 
 		// Wait...
 		while(!gameStarted) {
@@ -187,14 +203,6 @@ public class ServerSocketHelper {
 	
 	public void continueGame() {
 		Log.d(TAG, "continueGame() , turnCounter = " + turnCounter);
-		//...........TO DO
-//		if(turnCounter > MAX_TURNS) {
-//			mActivity.runOnUiThread(new Runnable() {
-//				  public void run() {
-//					  mActivity.showToast("GAME OVER!");
-//				  }
-//			});
-//		}
 		
 		// If the game is over, broadcast corresponding message
 		if(turnCounter > MAX_TURNS) {
@@ -227,10 +235,21 @@ public class ServerSocketHelper {
 		lastUsedDevice = mDevices.get(j);
 		
 		// Get a random Answer from the list, that hasn't been used
+		int counter = 0;
 		int i = randInt(0, gameAnswers.size()-1);
 		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id())) {
+			// Fix for infinite loop bug
+			if(counter > gameAnswers.size()) {
+				Message msg = new Message();
+				msg.setType("GAME OVER");
+				msg.setToast("Game over!");
+				
+				broadcastMessage(msg);
+				return;
+			}
 			Log.d(TAG, "randomize() - while - answers");
 			i = randInt(0, gameAnswers.size()-1);
+			counter++;
 		}
 		gameAnswers.get(i).setUsed(true);
 		message.setCurrentAnswer(gameAnswers.get(i));
@@ -238,6 +257,9 @@ public class ServerSocketHelper {
 		Log.d(TAG, "randomize(), answer " + i + " out of " + gameAnswers.size());
 		
 		turnCounter++;
+		
+		Log.d(TAG, "Current Answer, Text: " + message.currentAnswer().text()
+					+ " UserId: " + message.currentAnswer().userId());
 		
 		// Send message to selected device
 		if(mDevices.get(j).isGroupOwner())	{ // If the target device is the server

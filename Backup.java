@@ -1,3 +1,48 @@
+/** Takes care of game set-up procedure **/
+	public void startGame() {
+		
+		Log.d(TAG, "startGame() - size = " + mDevices.size());
+		// Wait until all the devices have submitted their answers
+		while(!allDevicesReady()) {
+			// Wait...
+		}
+		
+		
+		Thread temp = new Thread(new Runnable() {				// <-----THREAD MIGHT NOT BE NEEDED. REMOVE?
+			@Override
+			public void run() {
+				
+				Message message = new Message();
+				message.setType("START");
+				message.setToast("Game started!");
+				
+				// Add list of users to the message
+				for(int i=0; i<mDevices.size(); i++) {
+					message.users_list.add(mDevices.get(i).user());
+				}
+				
+				broadcastMessage(message);
+				
+				// Get all answers from the database
+				gameAnswers = mActivity.mDBHelper.getAnswers();
+				
+				MAX_TURNS = gameAnswers.size();
+				gameStarted = true;
+			}
+		});
+		temp.start();
+
+		// Wait...
+		while(!gameStarted) {
+		}
+		mActivity.sHelper.randomize();
+	}
+
+
+
+
+
+
 public void randomize() {
 		Log.d(TAG, "randomize()");
 		Message message = new Message();

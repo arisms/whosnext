@@ -109,15 +109,15 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	}
 
 	@Override
-	public void onSelectPlayer(int id) {
+	public void onSelectPlayer(int pos) {
 		//final int position = id - 1;
-		final int position = id;
+		final int position = pos;
 		
-//		Toast toast = Toast.makeText(getActivity(), "" + position + ". " 
-//				+ mActivity.currentUsers.get(position).name() + " - " 
-//				+ mActivity.currentUsers.get(position).id() + " | "
-//				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
-//		toast.show();
+		Toast toast1 = Toast.makeText(getActivity(), "Position: " + position + " Name: " 
+				+ mActivity.currentUsers.get(position).name() + " Id: " 
+				+ mActivity.currentUsers.get(position).id() + " Answer-UserId: "
+				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
+		toast1.show();
 
 		// If the correct player is chosen, send dialog
 		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id())
