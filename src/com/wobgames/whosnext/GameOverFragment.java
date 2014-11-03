@@ -24,14 +24,23 @@ public class GameOverFragment extends Fragment{
 		MainActivity mActivity = (MainActivity) getActivity();
         View view = inflater.inflate(R.layout.game_over_fragment, container, false);
 
-        TextView text = (TextView) view.findViewById(R.id.game_over_text);
+        TextView text1 = (TextView) view.findViewById(R.id.game_over_text1);
+        TextView text2 = (TextView) view.findViewById(R.id.game_over_text2);
+        TextView text3 = (TextView) view.findViewById(R.id.game_over_text3);
         
         // If the current device is the Server, display game-over text
         if(mActivity.mGameDevice.isGroupOwner()) {
-        	text.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
+        	text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
+        	text2.setText("Rounds Completed: " + (mActivity.sHelper.turnCounter-1));
+        	int score = (mActivity.sHelper.turnCounter-1)*100-mActivity.wrongAnswersNumber*50;
+        	text3.setText("Total Score: " + '\n' + (mActivity.sHelper.turnCounter-1) + "x100 - "
+        			+ mActivity.wrongAnswersNumber + "x50 = " + '\n' + score);
         }
-        else
-        	text.setText("");
+        else {
+        	text1.setText("");
+        	text2.setText("");
+        	text3.setText("");
+        }
         
         return view;
 	}

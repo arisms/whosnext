@@ -41,10 +41,12 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 
 		View view = inflater.inflate(R.layout.game_main_fragment, container, false);
 		
-		
 		mActivity = (MainActivity) getActivity();
 		mDBHelper = mActivity.mDBHelper;
 		//playSound();
+		
+		if(!mActivity.mGameDevice.isGroupOwner())
+			mActivity.wrongAnswersNumber = 0;
 		
 		// Wait for timer to be created in main Activity
 		while(!mActivity.timerCreated) {

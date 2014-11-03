@@ -22,11 +22,11 @@
             android:paddingRight="20dp"
             android:paddingBottom="40dp"
             android:gravity="center"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="30dp"
             />
         
         <TextView 
-            android:id="@+id/game_over_text"
+            android:id="@+id/game_over_text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="32sp" 
@@ -34,9 +34,36 @@
             android:paddingTop="40dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            />
+        
+        <TextView 
+            android:id="@+id/game_over_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp" 
+            android:text="@string/game_over"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingBottom="40dp"
             android:gravity="center"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="20dp"
+            />
+        
+        <TextView 
+            android:id="@+id/game_over_text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp" 
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_orange_light"
+            android:text="@string/game_over"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:gravity="center"
             />
     	
     </LinearLayout>

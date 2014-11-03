@@ -174,11 +174,11 @@ public class ServerSocketHelper {
 		else if(message.type().equals("GAME OVER")) {
 			
 			// Get wrong answers from the clients
-			getWrongAnswers();
-			while(!wrongAnswers) {
-				// wait...
-			}
-			
+//			getWrongAnswers();
+//			while(!wrongAnswers) {
+//				// wait...
+//			}
+//			
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
 					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
@@ -446,6 +446,7 @@ public class ServerSocketHelper {
 				   			
 				   		}
 				   		else if(message.type().equals("CONTINUE")) {
+				   			mActivity.wrongAnswersNumber += message.wrongAnswers();
 				   			continueGame();
 				   		}
 				   		else if(message.type().equals("WRONG ANSWERS")) {

@@ -429,6 +429,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 		else {
 			Message message = new Message();
 			message.setType("CONTINUE");
+			message.setWrongAnswers(wrongAnswersNumber);
 			cHelper.sendToServer(message);
 		}
     }
@@ -443,7 +444,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /** COUNTDOWN TIMER **/
     public void startTimer() {
-    	timer = new CounterClass(20000,1000);
+    	timer = new CounterClass(40000,1000);
     	timerCreated = true;
     	timer.start();
     }
