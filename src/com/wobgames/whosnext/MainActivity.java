@@ -2,7 +2,9 @@ package com.wobgames.whosnext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -17,8 +19,10 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
@@ -53,6 +57,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	// Game Info
 	public User currentUser;
 	public int wrongAnswersNumber;
+	public TextView textViewTime;
+	public boolean timerStarted;
+	public boolean timerCreated;
+	CounterClass timer = null;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -117,6 +125,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         
         wrongAnswersNumber = 0;
+        timerStarted = false;
+        timerCreated = false;
     }
     
     /** onResume() **/
@@ -401,11 +411,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     public void startTurn(Answer answer) {
     	currentAnswer = answer;
     	
-//    	for(int i=0; i<users_list.size(); i++)
-//				Log.i(TAG, "In main activity users_list (argument): " + i + ". " + users_list.get(i));
-//    	for(int i=0; i<users_list.size(); i++)
-//			Log.i(TAG, "In main activity currentUsers (local variable): " + i + ". " + users_list.get(i));
-    	
     	// Load Game Main Fragment
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameMainFragment).addToBackStack(null).commit();
@@ -434,6 +439,48 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameOverFragment).addToBackStack(null).commit();
     }
+    
+    
+    /** COUNTDOWN TIMER **/
+    public void startTimer() {
+    	timer = new CounterClass(20000,1000);
+    	timerCreated = true;
+    	timer.start();
+    }
+    
+    public void showTimer() {
+    	
+    	if(!timerStarted) {
+    		//textViewTime.setText("00:02:00");
+    		//timer = new CounterClass(120000,1000);
+    		//timer.start();
+        	timerStarted = true;
+    	}
+    }
+    
+	@SuppressLint("DefaultLocale") 
+	public class CounterClass extends CountDownTimer { 
+		public CounterClass(long millisInFuture, long countDownInterval) { 
+			super(millisInFuture, countDownInterval); 
+		} 
+		
+		@Override  
+        public void onFinish() {  
+			if(mGameDevice.isGroupOwner())
+				sHelper.finishGame();
+        }
+		
+		@Override  
+        public void onTick(long millisUntilFinished) { 
+			long millis = millisUntilFinished; 
+			String hms = String.format("%02d:%02d", 
+					TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), 
+					TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))); 
+			//System.out.println(hms); 
+			if(timerStarted)
+				textViewTime.setText(hms);
+		}
+	}
 }
 
 

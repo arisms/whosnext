@@ -7,6 +7,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.wobgames.whosnext.MainActivity.CounterClass;
+
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
 
@@ -137,6 +139,7 @@ public class ClientSocketHelper {
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
 									  //mActivity.currentUsers = new ArrayList<User>(message.users_list);
+									  mActivity.startTimer();
 									  mActivity.showToast(message.toast());
 								  }
 								});

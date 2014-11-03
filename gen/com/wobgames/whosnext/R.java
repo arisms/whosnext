@@ -58,11 +58,12 @@ public final class R {
         public static final int device_details=0x7f0a0014;
         public static final int device_list=0x7f0a0005;
         public static final int device_name=0x7f0a0013;
-        public static final int game_over_text=0x7f0a000b;
+        public static final int game_over_text=0x7f0a000c;
         public static final int header=0x7f0a0006;
         public static final int icon=0x7f0a0012;
         public static final int joingame=0x7f0a0004;
         public static final int list_question=0x7f0a000d;
+        public static final int mainTimer=0x7f0a000b;
         public static final int question_text=0x7f0a000f;
         public static final int random_question_answer=0x7f0a000a;
         public static final int rootlayout=0x7f0a0000;
@@ -71,7 +72,6 @@ public final class R {
         public static final int submit_question_button=0x7f0a0011;
         public static final int temp_text=0x7f0a0001;
         public static final int this_device=0x7f0a0007;
-        public static final int timerValue=0x7f0a000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

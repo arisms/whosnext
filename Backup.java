@@ -1,3 +1,50 @@
+public class ImageFragment extends Fragment{
+	
+	private long startTime = 0L;
+	private Handler customHandler = new Handler();
+	long timeInMilliseconds = 0L;
+	long timeSwapBuff = 0L;
+    long updatedTime = 0L;
+    TextView timerValue;
+
+
+	private static final String TAG = "ImageFragment";
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
+		
+        View view = inflater.inflate(R.layout.image_fragment, container, false);
+        
+        /****************** TIMER ******************/
+
+//		timerValue = (TextView) view.findViewById(R.id.timerValue);
+//		startTime = SystemClock.uptimeMillis();
+//		customHandler.postDelayed(updateTimerThread, 0);
+
+		/******************************************/
+
+        return view;
+	}
+	
+	
+	private Runnable updateTimerThread = new Runnable() {
+		public void run() {
+			timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+			updatedTime = timeSwapBuff + timeInMilliseconds;
+
+			int secs = (int) (updatedTime / 1000);
+			int mins = secs / 60;
+			secs = secs % 60;
+			int milliseconds = (int) (updatedTime % 1000);
+			timerValue.setText("" + mins + ":"
+				+ String.format("%02d", secs) + ":"
+				+ String.format("%03d", milliseconds));
+				customHandler.postDelayed(this, 0);
+		}
+	};
+}
+
+
 /** Takes care of game set-up procedure **/
 	public void startGame() {
 		
@@ -314,14 +361,6 @@ else
         	}
         }
 
-
-
-
-
-
-
-
-
 public class ServerService extends IntentService {
 
 	private final String TAG = "ServerService";
@@ -456,6 +495,8 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.Handler;
+import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -615,9 +656,11 @@ public class QuestionsActivity extends Activity {
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;

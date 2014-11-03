@@ -6,8 +6,6 @@ import java.util.Random;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -47,6 +45,13 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		mActivity = (MainActivity) getActivity();
 		mDBHelper = mActivity.mDBHelper;
 		//playSound();
+		
+		// Wait for timer to be created in main Activity
+		while(!mActivity.timerCreated) {
+			// wait...
+		}
+		mActivity.textViewTime = (TextView) view.findViewById(R.id.mainTimer);
+		mActivity.showTimer();
 		
 		// Get users from the database
         //mUsersList = mDBHelper.getUsers();
@@ -113,11 +118,11 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		//final int position = id - 1;
 		final int position = pos;
 		
-		Toast toast1 = Toast.makeText(getActivity(), "Position: " + position + " Name: " 
-				+ mActivity.currentUsers.get(position).name() + " Id: " 
-				+ mActivity.currentUsers.get(position).id() + " Answer-UserId: "
-				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
-		toast1.show();
+//		Toast toast1 = Toast.makeText(getActivity(), "Position: " + position + " Name: " 
+//				+ mActivity.currentUsers.get(position).name() + " Id: " 
+//				+ mActivity.currentUsers.get(position).id() + " Answer-UserId: "
+//				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
+//		toast1.show();
 
 		// If the correct player is chosen, send dialog
 		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id())
@@ -125,11 +130,11 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		else {
 			// If wrong player
 			mActivity.wrongAnswersNumber++;
-			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
-			+ mActivity.currentAnswer.userId() + " - " + mActivity.currentUsers.get(position).id(), Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
+//			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
+//					+ mActivity.currentAnswer.userId() + " - " + mActivity.currentUsers.get(position).id(), Toast.LENGTH_SHORT);
 			toast.show();
 		}
-		//wrongPlayer();
 	}
 	
 	

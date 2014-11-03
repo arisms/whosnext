@@ -158,9 +158,11 @@ public class ServerSocketHelper {
 		
 		if(message.type().equals("START")) {
 			mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+			
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
 					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+					  mActivity.startTimer();
 					  mActivity.showToast(msg.toast());
 				  }
 				});
@@ -229,9 +231,18 @@ public class ServerSocketHelper {
 		gameStarted = true;
 
 		// Wait...
-		while(!gameStarted) {
-		}
+//		while(!gameStarted) {
+//		}
+		
 		mActivity.sHelper.randomize();
+	}
+	
+	public void finishGame() {
+		Message message = new Message();
+		message.setType("GAME OVER");
+		message.setToast("Game over!");
+		
+		broadcastMessage(message);
 	}
 	
 	public void continueGame() {
@@ -280,7 +291,7 @@ public class ServerSocketHelper {
 				broadcastMessage(msg);
 				return;
 			}
-			Log.d(TAG, "randomize() - while - answers");
+			//Log.d(TAG, "randomize() - while - answers");
 			i = randInt(0, gameAnswers.size()-1);
 			counter++;
 		}

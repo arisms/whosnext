@@ -3,8 +3,6 @@ package com.wobgames.whosnext;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1L;
