@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -43,7 +45,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		
 		mActivity = (MainActivity) getActivity();
 		mDBHelper = mActivity.mDBHelper;
-		//playSound();
 		
 		if(!mActivity.mGameDevice.isGroupOwner())
 			mActivity.wrongAnswersNumber = 0;
@@ -52,6 +53,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		while(!mActivity.timerCreated) {
 			// wait...
 		}
+		playBeep();
 		mActivity.textViewTime = (TextView) view.findViewById(R.id.mainTimer);
 		mActivity.showTimer();
 		
@@ -105,10 +107,18 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		toast.show();
 	}
 	
-	public void playSound() {
+	public void playBeep() {
 		
-		MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.bell);
-		mediaPlayer.start();
+//		MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.beep);
+//		mediaPlayer.start();
+		
+		try {
+		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		    Ringtone r = RingtoneManager.getRingtone(mActivity, notification);
+		    r.play();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
 		
 		/************/
 		// MediaPlayer.setOnCompletionListener() <------!!!!!

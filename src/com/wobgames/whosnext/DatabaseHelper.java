@@ -132,7 +132,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     // Initialize Database
-    public void init() {
+    public void init(String level) {
+    	int current_round;
+    	if(level.equals("easy"))
+    		current_round = 1;
+    	else if(level.equals("normal"))
+    		current_round = 2;
+    	else
+    		current_round = 3;
     	
     	// QUESTIONS table initialization
         if(IsTableEmpty(TABLE_QUESTIONS)) {
@@ -141,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	BufferedReader reader = null;
         	try {
         		// Open txt file in Assets folder, for reading
-        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("default_questions.txt"), "UTF-8")); 
+        	    reader = new BufferedReader(new InputStreamReader(context.getAssets().open("questions.txt"), "UTF-8")); 
 
         	    // Parse each line of the text file
         	    String text;
@@ -154,8 +161,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	       round = Integer.parseInt(tokens[0]);
         	       text = tokens[1];
         	       
-        	       Question question = new Question(text, round);
-        	       addQuestion(question);
+        	       if(current_round == round) {
+        	    	   Question question = new Question(text, round);
+        	    	   addQuestion(question);
+        	       }
         	       
         	       mLine = reader.readLine();
         	    }
@@ -171,6 +180,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         	         }
         	    }
         	}
+        }
+        // QUESTIONS clear table
+        else
+        {
+        	deleteQuestions();
+        	init(level);
         }
         
         // USERS clear table
@@ -261,6 +276,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	Question result = new Question(text, round);
     	result.setId(id_final);
     	return result;
+    }
+    
+    // DELETE * FROM QUESTIONS
+    public void deleteQuestions () {
+    	Log.i(TAG, "Deleting questions");
+    	SQLiteDatabase db = getWritableDatabase();
+    	
+    	db.execSQL("delete from " + TABLE_QUESTIONS);
+    	db.close();
     }
     
     // INSERT User

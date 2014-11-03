@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import android.R.color;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -61,6 +63,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public boolean timerStarted;
 	public boolean timerCreated;
 	CounterClass timer = null;
+	public int MAX_TURNS = 30;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -106,7 +109,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         
         // Create the Database
         mDBHelper = new DatabaseHelper(getApplication());
-        mDBHelper.init();
+        mDBHelper.init("easy");
         
         /** WiFiDirect **/
         
@@ -444,7 +447,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /** COUNTDOWN TIMER **/
     public void startTimer() {
-    	timer = new CounterClass(40000,1000);
+    	timer = new CounterClass(80000,1000);
     	timerCreated = true;
     	timer.start();
     }
@@ -479,7 +482,16 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 					TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))); 
 			//System.out.println(hms); 
 			if(timerStarted)
+			{
+				
+//				if((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+//						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) <= 10) {
+////					textViewTime.setTextColor(color.holo_red_dark);
+//					MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tick);
+//					mediaPlayer.start();
+//				}
 				textViewTime.setText(hms);
+			}
 		}
 	}
 }

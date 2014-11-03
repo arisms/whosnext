@@ -227,7 +227,8 @@ public class ServerSocketHelper {
 			Log.d(TAG, "Answer text: "+ gameAnswers.get(i).text()
 					+ "  - userId: " + gameAnswers.get(i).userId());
 		
-		MAX_TURNS = gameAnswers.size();
+		//MAX_TURNS = gameAnswers.size();
+		MAX_TURNS = mActivity.MAX_TURNS;
 		gameStarted = true;
 
 		// Wait...
@@ -250,6 +251,7 @@ public class ServerSocketHelper {
 		
 		// If the game is over, broadcast corresponding message
 		if(turnCounter > MAX_TURNS) {
+			Log.d(TAG, "turnCounter > MAX_TURNS " + turnCounter + " " + MAX_TURNS);
 			Message message = new Message();
 			message.setType("GAME OVER");
 			message.setToast("Game over!");
@@ -283,7 +285,8 @@ public class ServerSocketHelper {
 		int i = randInt(0, gameAnswers.size()-1);
 		while(gameAnswers.get(i).used() || (gameAnswers.get(i).userId() == mDevices.get(j).user().id())) {
 			// Fix for infinite loop bug
-			if(counter > gameAnswers.size()) {
+			if(counter > (3*MAX_TURNS)) {
+				//Log.d(TAG, "counter > (3*gameAnswers.size())");
 				Message msg = new Message();
 				msg.setType("GAME OVER");
 				msg.setToast("Game over!");

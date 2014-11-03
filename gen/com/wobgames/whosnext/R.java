@@ -92,11 +92,14 @@ public final class R {
         public static final int questions=0x7f090001;
     }
     public static final class raw {
-        public static final int bell=0x7f040000;
+        public static final int beep=0x7f040000;
+        public static final int bell=0x7f040001;
+        public static final int tick=0x7f040002;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int choose_level=0x7f06000e;
         public static final int connect=0x7f06000c;
         public static final int create_game_button=0x7f060002;
         public static final int device_list_header=0x7f06000a;
