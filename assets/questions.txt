@@ -1,5 +1,8 @@
+0_Country?
+0_City?
+0_Job?
 1_Where are you from?
-1_When is your birthday? (Month & Year)
+1_When is your birthday?
 1_What do you study?
 1_What is the street name of your address?
 1_What was the name of your previous school?

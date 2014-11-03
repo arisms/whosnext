@@ -1,0 +1,115 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buttonsfragment"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:gravity="center">
+    
+    <LinearLayout 
+    	android:baselineAligned="false"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:background="@drawable/backrepeat" 
+    	android:gravity="top|left" >
+        
+       <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="52sp" 
+            android:text="@string/setup_game"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="60dp"
+            android:layout_gravity="center" />
+       
+       <TextView 
+            android:id="@+id/setFamiliarity_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:textSize="22sp"   
+			android:textStyle="normal"
+			android:layout_marginTop="20dp"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:layout_marginBottom="16dp"
+			/>
+        
+    	<Spinner
+    		android:id="@+id/setFamiliarity_spinner"
+    		android:layout_width="wrap_content"
+    		android:minWidth="240dp"
+    		android:layout_height="wrap_content"
+    		android:textSize="22sp"   
+    		android:gravity="center"
+			android:textStyle="normal"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:layout_marginBottom="30dp" />
+    	
+    	<TextView 
+            android:id="@+id/setTimer_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:textSize="22sp"   
+			android:textStyle="normal"
+			android:layout_marginTop="20dp"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:layout_marginBottom="16dp" />
+        
+    	<Spinner
+    		android:id="@+id/setTimer_spinner"
+    		android:layout_width="wrap_content"
+    		android:minWidth="240dp"
+    		android:layout_height="wrap_content"
+    		android:textSize="22sp"   
+			android:textStyle="normal"
+			android:gravity="center"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:layout_marginBottom="30dp" />
+    	
+    	<TextView 
+            android:id="@+id/setGroupName_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:textSize="22sp"   
+			android:textStyle="normal"
+			android:layout_marginTop="20dp"
+			android:paddingLeft="20dp"
+			android:paddingRight="10dp"
+			android:layout_marginBottom="16dp" />
+        
+    	<EditText 
+            android:id="@+id/setGroupName_edittext"
+            android:layout_width="wrap_content"
+            android:minWidth="240dp"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:hint="Group name"
+            android:singleLine="false"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+		 	android:layout_marginRight="20dp"
+		 	android:layout_marginBottom="20dp" />
+    	
+    	<Button android:id="@+id/submit_settings_button"
+        	android:layout_width="200dp"
+        	android:layout_height="80dp"
+        	android:layout_marginTop="5dp"
+        	android:background="@drawable/backrepeat_button"
+        	android:layout_gravity="right|bottom"
+        	android:text="@string/submit_button"
+        	android:layout_marginRight="20dp"
+        	android:textSize="22sp" />
+       
+
+    </LinearLayout>
+    
+</FrameLayout>

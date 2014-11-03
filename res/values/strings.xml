@@ -15,7 +15,9 @@
     <string name="please_wait">Please wait!</string>
     <string name="connect">Connect</string>
     <string name="game_over">Game Over</string>
-    <string name="choose_level">Choose difficulty level</string>
+    <string name="setup_game">Game Settings</string>
+    <string name="choose_familiarity">Familiarity between players:</string>
+    <string name="submit_button">Submit</string>
     
     <color name="dark1">#220A29</color>
     <color name="light1">#01A9DB</color>
@@ -23,6 +25,20 @@
     <color name="grey2">#585858</color>
     <color name="transparent">#66585858</color>
     
+    <string-array name="familiarity_levels_array">
+        <item>Strangers</item>
+        <item>Acquaintances</item>
+        <item>Friends</item>
+    </string-array>
     
+    <string-array name="timer_duration_array">
+        <item>1:00</item>
+        <item>1:30</item>
+        <item>2:00</item>
+        <item>2:30</item>
+        <item>3:00</item>
+        <item>3:30</item>
+        <item>4:00</item>
+    </string-array>
 
 </resources>

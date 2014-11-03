@@ -49,6 +49,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	ImageFragment mImageFragment;
 	DeviceListFragment mDeviceListFragment;
 	GameOverFragment mGameOverFragment;
+	GameSetupFragment mGameSetupFragment;
 	
 	// Objects
 	public GameDevice mGameDevice = null;
@@ -106,10 +107,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mImageFragment = new ImageFragment();
         mDeviceListFragment = new DeviceListFragment();
         mGameOverFragment = new GameOverFragment();
+        mGameSetupFragment = new GameSetupFragment();
         
         // Create the Database
         mDBHelper = new DatabaseHelper(getApplication());
-        mDBHelper.init("easy");
+        //mDBHelper.init("easy");
+        //mDBHelper.init("normal");
+        mDBHelper.init("hard");
         
         /** WiFiDirect **/
         
@@ -320,8 +324,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	sHelper.connect();
         
     	// Load DeviceList Fragment
+//    	getSupportFragmentManager().beginTransaction()
+//    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+    	
+    	// TEMPORARY!
     	getSupportFragmentManager().beginTransaction()
-    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+			.replace(R.id.rootlayout, mGameSetupFragment).addToBackStack(null).commit();
 
     }
     
@@ -447,7 +455,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /** COUNTDOWN TIMER **/
     public void startTimer() {
-    	timer = new CounterClass(80000,1000);
+    	timer = new CounterClass(150000,1000);
     	timerCreated = true;
     	timer.start();
     }

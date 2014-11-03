@@ -138,8 +138,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     		current_round = 1;
     	else if(level.equals("normal"))
     		current_round = 2;
-    	else
+    	else if(level.equals("hard"))
     		current_round = 3;
+    	else
+    		current_round = 0;
     	
     	// QUESTIONS table initialization
         if(IsTableEmpty(TABLE_QUESTIONS)) {

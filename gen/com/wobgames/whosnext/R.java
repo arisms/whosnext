@@ -8,6 +8,10 @@
 package com.wobgames.whosnext;
 
 public final class R {
+    public static final class array {
+        public static final int familiarity_levels_array=0x7f080000;
+        public static final int timer_duration_array=0x7f080001;
+    }
     public static final class attr {
     }
     public static final class color {
@@ -50,30 +54,38 @@ public final class R {
         public static final int stars3=0x7f020012;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0017;
-        public static final int answer_text=0x7f0a0012;
-        public static final int buttonsfragment=0x7f0a0002;
-        public static final int connect_button=0x7f0a0008;
-        public static final int creategame=0x7f0a0003;
-        public static final int device_details=0x7f0a0016;
-        public static final int device_list=0x7f0a0005;
-        public static final int device_name=0x7f0a0015;
-        public static final int game_over_text1=0x7f0a000c;
-        public static final int game_over_text2=0x7f0a000d;
-        public static final int game_over_text3=0x7f0a000e;
-        public static final int header=0x7f0a0006;
-        public static final int icon=0x7f0a0014;
-        public static final int joingame=0x7f0a0004;
-        public static final int list_question=0x7f0a000f;
-        public static final int mainTimer=0x7f0a000b;
-        public static final int question_text=0x7f0a0011;
-        public static final int random_question_answer=0x7f0a000a;
-        public static final int rootlayout=0x7f0a0000;
-        public static final int select_player_button=0x7f0a0010;
-        public static final int server_start_button=0x7f0a0009;
-        public static final int submit_question_button=0x7f0a0013;
-        public static final int temp_text=0x7f0a0001;
-        public static final int this_device=0x7f0a0007;
+        public static final int action_settings=0x7f0b001f;
+        public static final int answer_text=0x7f0b0013;
+        public static final int buttonsfragment=0x7f0b0002;
+        public static final int connect_button=0x7f0b0008;
+        public static final int creategame=0x7f0b0003;
+        public static final int device_details=0x7f0b0017;
+        public static final int device_list=0x7f0b0005;
+        public static final int device_name=0x7f0b0016;
+        public static final int game_over_text1=0x7f0b000d;
+        public static final int game_over_text2=0x7f0b000e;
+        public static final int game_over_text3=0x7f0b000f;
+        public static final int header=0x7f0b0006;
+        public static final int icon=0x7f0b0015;
+        public static final int joingame=0x7f0b0004;
+        public static final int list_question=0x7f0b0010;
+        public static final int mainTimer=0x7f0b000c;
+        public static final int question_text=0x7f0b0012;
+        public static final int random_answer=0x7f0b000b;
+        public static final int random_question=0x7f0b000a;
+        public static final int rootlayout=0x7f0b0000;
+        public static final int select_player_button=0x7f0b0011;
+        public static final int server_start_button=0x7f0b0009;
+        public static final int setFamiliarity_spinner=0x7f0b0019;
+        public static final int setFamiliarity_text=0x7f0b0018;
+        public static final int setGroupName_edittext=0x7f0b001d;
+        public static final int setGroupName_text=0x7f0b001c;
+        public static final int setTimer_spinner=0x7f0b001b;
+        public static final int setTimer_text=0x7f0b001a;
+        public static final int submit_question_button=0x7f0b0014;
+        public static final int submit_settings_button=0x7f0b001e;
+        public static final int temp_text=0x7f0b0001;
+        public static final int this_device=0x7f0b0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -86,10 +98,11 @@ public final class R {
         public static final int questions_answers_list_item=0x7f030007;
         public static final int questions_fragment=0x7f030008;
         public static final int row_devices=0x7f030009;
+        public static final int setup_fragment=0x7f03000a;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
-        public static final int questions=0x7f090001;
+        public static final int main=0x7f0a0000;
+        public static final int questions=0x7f0a0001;
     }
     public static final class raw {
         public static final int beep=0x7f040000;
@@ -99,7 +112,7 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int choose_level=0x7f06000e;
+        public static final int choose_familiarity=0x7f06000f;
         public static final int connect=0x7f06000c;
         public static final int create_game_button=0x7f060002;
         public static final int device_list_header=0x7f06000a;
@@ -110,7 +123,9 @@ public final class R {
         public static final int please_wait=0x7f06000b;
         public static final int questions_answers_header=0x7f060008;
         public static final int select_button=0x7f060004;
+        public static final int setup_game=0x7f06000e;
         public static final int start_button=0x7f060005;
+        public static final int submit_button=0x7f060010;
         public static final int title_activity_questions=0x7f060007;
     }
     public static final class style {
@@ -135,10 +150,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
+        public static final int AppTheme=0x7f090001;
     }
 }

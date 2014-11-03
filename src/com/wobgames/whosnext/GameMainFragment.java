@@ -30,7 +30,8 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	//List<Question> mQuestionsList;
 	DatabaseHelper mDBHelper;
 	List<String> mUsersStrings;
-	TextView questionAnswerTv;
+	TextView questionTv;
+	TextView answerTv;
 	Random rand = new Random();
 	Question mRandomQuestion;
 	MainActivity mActivity;
@@ -81,11 +82,12 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		// Find the question with the same id as the one in currentAnswer
 		mRandomQuestion = mDBHelper.getQuestionById(mActivity.currentAnswer.questionId());
 		
-		questionAnswerTv = (TextView) view.findViewById(R.id.random_question_answer);
-		questionAnswerTv.setText("Q: " + mRandomQuestion.text() + '\n' 
-				+ "A: " + mActivity.currentAnswer.text());
+		questionTv = (TextView) view.findViewById(R.id.random_question);
+		answerTv = (TextView) view.findViewById(R.id.random_answer);
+		questionTv.setText(mRandomQuestion.text());
+		answerTv.setText(mActivity.currentAnswer.text());
 		
-		questionAnswerTv.requestFocus();
+		questionTv.requestFocus();
 		
 		
 //		button = (Button) view.findViewById(R.id.select_player_button);
@@ -141,6 +143,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 			mActivity.nextTurn();
 		else {
 			// If wrong player
+			playBeep();
 			mActivity.wrongAnswersNumber++;
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
