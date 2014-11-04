@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import android.R.color;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -414,6 +412,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	
     }
     
+    /** Game Flow routines **/
     public void showToast(String toast) {
     	//Log.i(TAG, "showToast()");
     	Toast.makeText(MainActivity.this, toast,Toast.LENGTH_SHORT).show();
@@ -502,6 +501,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			}
 		}
 	}
+	
 }
 
 

@@ -52,6 +52,7 @@ public final class R {
         public static final int stars1=0x7f020010;
         public static final int stars2=0x7f020011;
         public static final int stars3=0x7f020012;
+        public static final int textbg1_2x=0x7f020013;
     }
     public static final class id {
         public static final int action_settings=0x7f0b001f;
@@ -76,12 +77,12 @@ public final class R {
         public static final int rootlayout=0x7f0b0000;
         public static final int select_player_button=0x7f0b0011;
         public static final int server_start_button=0x7f0b0009;
-        public static final int setFamiliarity_spinner=0x7f0b0019;
-        public static final int setFamiliarity_text=0x7f0b0018;
-        public static final int setGroupName_edittext=0x7f0b001d;
-        public static final int setGroupName_text=0x7f0b001c;
-        public static final int setTimer_spinner=0x7f0b001b;
-        public static final int setTimer_text=0x7f0b001a;
+        public static final int setFamiliarity_spinner=0x7f0b001b;
+        public static final int setFamiliarity_text=0x7f0b001a;
+        public static final int setGroupName_edittext=0x7f0b0019;
+        public static final int setGroupName_text=0x7f0b0018;
+        public static final int setTimer_spinner=0x7f0b001d;
+        public static final int setTimer_text=0x7f0b001c;
         public static final int submit_question_button=0x7f0b0014;
         public static final int submit_settings_button=0x7f0b001e;
         public static final int temp_text=0x7f0b0001;

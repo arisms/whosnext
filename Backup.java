@@ -1,3 +1,20 @@
+/**
+ * onSelectFamiliaritySpinner - GameSetupFragment
+ * When the user selects familiarity level from the spinner
+ */
+public void onItemSelected(AdapterView<?> parent, View view,
+		int pos, long id) {
+	Toast.makeText(MainActivity.this, "OOOK",Toast.LENGTH_SHORT).show();
+}
+
+/**
+ * onNothingSelected - GameSetupFragment
+ * When the user selects nothing from the familiarity spinner
+ */
+public void onNothingSelected(AdapterView<?> parent) {
+	
+}
+
 public class ImageFragment extends Fragment{
 	
 	private long startTime = 0L;
@@ -662,6 +679,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
