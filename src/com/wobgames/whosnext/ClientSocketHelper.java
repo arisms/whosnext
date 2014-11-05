@@ -126,7 +126,6 @@ public class ClientSocketHelper {
 				   			
 				   			// Get userId from server, and add it to mainActivity's currentUser
 				   			mActivity.currentUser.setId(message.user().id());
-				   			mActivity.familiarityLevel = message.level;
 				   			userIdReceived = true;
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}
@@ -176,6 +175,16 @@ public class ClientSocketHelper {
 				   			msg.setType("WRONG ANSWERS");
 				   			msg.setWrongAnswers(mActivity.wrongAnswersNumber);
 				   			sendToServer(msg);
+				   		}
+				   		else if(message.type().equals("LEVEL")) {
+				   			Log.d(TAG, "LEVEL");
+				   			mActivity.familiarityLevel = message.level;
+				   			mActivity.timerDuration = message.timerDuration;
+				   			//mActivity.
+				   			mActivity.mDBHelper = new DatabaseHelper(mActivity.getApplication());
+				   			mActivity.mDBHelper.init(mActivity.familiarityLevel);
+				   			mActivity.getSupportFragmentManager().beginTransaction()
+				   				.replace(R.id.rootlayout, mActivity.mQuestionsFragment).commit();
 				   		}
 				   		else
 				   		{

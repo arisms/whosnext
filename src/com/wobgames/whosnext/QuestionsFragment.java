@@ -131,15 +131,8 @@ public class QuestionsFragment extends Fragment{
 					
 					// Send the User info to the server (user-name) and wait to receive the id
 					mActivity.cHelper.sendToServer(userMessage);
-					mActivity.cHelper.receiveFromServer();
+					//mActivity.cHelper.receiveFromServer();
 					
-					// Wait until message with level and userId has been received
-		        	while(!mActivity.cHelper.userIdReceived) {
-		        		// wait...
-		        	}
-		        	// Create the Database (to get the questions)
-		        	mActivity.mDBHelper = new DatabaseHelper(mActivity.getApplication());
-		        	mActivity.mDBHelper.init(mActivity.familiarityLevel);
 				}
 				
 			}

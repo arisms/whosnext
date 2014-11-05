@@ -293,9 +293,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	        	cHelper.connect();
 	        	threadStarted = true;
         	}
+        	// Start receive message from server thread
+        	cHelper.receiveFromServer();
         	
+//        	getSupportFragmentManager().beginTransaction()
+//				.replace(R.id.rootlayout, mQuestionsFragment).commit();
         	getSupportFragmentManager().beginTransaction()
-				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+				.replace(R.id.rootlayout, mImageFragment).commit();
         }
     }
     
@@ -432,6 +436,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * When the button Start Game is pressed in DevieListFragment
      */
     public void onListStartGame() {
+    	// send familiarityLevel to clients
+    	Message initMsg = new Message();
+    	initMsg.setType("LEVEL");
+    	initMsg.level = familiarityLevel;
+    	initMsg.timerDuration = timerDuration;
+    	sHelper.broadcastMessage(initMsg);
     	
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mQuestionsFragment).commit();

@@ -134,7 +134,7 @@ public class ServerSocketHelper {
 	
 	/** Send a message to every device **/
 	public void broadcastMessage(Message message) {
-		Log.d(TAG, "broadcastMessage, mDevices.size(): " + mDevices.size());
+		Log.d(TAG, "broadcastMessage, mDevices.size(): " + mDevices.size() + ", type: " + message.type());
 		// Iterate for every device
 		for(int i=0; i<mDevices.size(); i++) {
 			// If the target device is a client
@@ -186,6 +186,9 @@ public class ServerSocketHelper {
 					  mActivity.gameOver(msg);
 				  }
 				});
+		}
+		else {
+			// Ignore...
 		}
 		
 	}
@@ -417,7 +420,6 @@ public class ServerSocketHelper {
 				   			// Add user in database
 				   			Log.d("Input Stream - User name: ", message.user().name());
 				   			message.user().setId((int)mActivity.mDBHelper.addUser(message.user()));
-				   			message.level = mActivity.familiarityLevel;
 				   			// Update Devices list with user info
 				   			for(int i=0; i<mDevices.size(); i++)
 				   				if(mDevices.get(i).clientSocket() == clientSocket)
@@ -494,7 +496,7 @@ public class ServerSocketHelper {
 				buf = Serializer.serialize(message);
 				outputStream.write(buf, 0, buf.length);
 				
-				//Log.i(TAG, "Sent message to client: " + message.user().id() + " " + message.user().name());
+				Log.i(TAG, "Sent message to client: " + message.type());
 				
 			} catch (Exception e) {
 				e.printStackTrace();
