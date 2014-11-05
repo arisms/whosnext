@@ -12,7 +12,7 @@
     <string name="questions_answers_header">Please answer the questions below</string>
     <string name="game_main_header">Choose the correct player!</string>
     <string name="device_list_header">List of devices in range</string>
-    <string name="please_wait">Please wait!</string>
+    <string name="please_wait">Please wait...</string>
     <string name="connect">Connect</string>
     <string name="game_over">Game Over</string>
     <string name="setup_game">Game Settings</string>
@@ -25,6 +25,7 @@
     <color name="grey2">#585858</color>
     <color name="transparent">#66585858</color>
     <color name="lightblue">#A0F5FB</color>
+    <color name="terminalgreen">#00F900</color>
     
     <string-array name="familiarity_levels_array">
         <item>Strangers</item>

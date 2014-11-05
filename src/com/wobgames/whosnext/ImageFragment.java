@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class ImageFragment extends Fragment{
 	
-	//TextView timerText;
+	TextView wait1;
 	
 	private static final String TAG = "ImageFragment";
 	
@@ -18,6 +18,10 @@ public class ImageFragment extends Fragment{
 		Log.d(TAG, "onCreateView");
 		
         View view = inflater.inflate(R.layout.image_fragment, container, false);
+        MainActivity mActivity = (MainActivity) getActivity();
+        
+        wait1 = (TextView) view.findViewById(R.id.wait1);
+        wait1.setTypeface(mActivity.exoregular);
         
         //MainActivity mActivity = (MainActivity) getActivity();
         /****************** TIMER ******************/

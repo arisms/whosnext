@@ -11,11 +11,12 @@
     	android:background="@drawable/backrepeat"
     	android:gravity="top|center_horizontal" >
     
-        <TextView 
+        <TextView android:id="@+id/wait1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="48sp" 
             android:text="@string/please_wait"
+            android:textColor="@color/lightblue"
             android:paddingTop="40dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"

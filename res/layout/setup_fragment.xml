@@ -37,7 +37,7 @@
         
     	<EditText 
             android:id="@+id/setGroupName_edittext"
-            android:layout_width="260dp"
+            android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:singleLine="true"
             android:textSize="18sp" 
@@ -61,14 +61,14 @@
         
     	<Spinner
     		android:id="@+id/setFamiliarity_spinner"
-    		android:layout_width="260dp"
+    		android:layout_width="fill_parent"
     		android:minWidth="260dp"
     		android:layout_height="50dp"   
     		android:gravity="left"
 			android:textStyle="normal"
 			android:layout_gravity="left"
 			android:paddingLeft="5dp"
-			android:background="@drawable/text_frame_1l"
+			android:background="@drawable/spinner_frame_1l"
 			android:layout_marginBottom="20dp" />
     	
     	<TextView 
@@ -83,14 +83,14 @@
         
     	<Spinner
     		android:id="@+id/setTimer_spinner"
-    		android:layout_width="260dp"
+    		android:layout_width="fill_parent"
     		android:minWidth="260dp"
     		android:layout_height="50dp"   
     		android:gravity="left"
 			android:textStyle="normal"
 			android:layout_gravity="left"
 			android:paddingLeft="5dp"
-			android:background="@drawable/text_frame_1l"
+			android:background="@drawable/spinner_frame_1l"
 			android:layout_marginBottom="30dp" />
     	
     	<Button android:id="@+id/submit_settings_button"
