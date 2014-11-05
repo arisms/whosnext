@@ -1,8 +1,7 @@
 package com.wobgames.whosnext;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameSetupFragment extends Fragment {
+@SuppressLint("ClickableViewAccessibility") public class GameSetupFragment extends Fragment {
 	private static final String TAG = "GameSetupFragment";
 	
 	TextView tvHeader;
@@ -36,12 +35,7 @@ public class GameSetupFragment extends Fragment {
 		
 		// Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.setup_fragment, container, false);
-        MainActivity mActivity = (MainActivity) getActivity();
-        
-        // Play sound effect - TEMPORARY
-        mActivity.soundpool.play(mActivity.soundIds[0], 1, 1, 1, 0, 1);
-        mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
-        
+        final MainActivity mActivity = (MainActivity) getActivity();
         
         // Set text views and edit view
         etGroupName = (EditText) view.findViewById(R.id.setGroupName_edittext);
@@ -134,8 +128,39 @@ public class GameSetupFragment extends Fragment {
         button = (Button) view.findViewById(R.id.submit_settings_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	Toast toast = Toast.makeText(getActivity(), "Submit settings", Toast.LENGTH_SHORT);
-        		toast.show();
+            	
+            	// Check if group name is empty
+        		
+            	int level;
+            	if(spinner1.getSelectedItem().toString().equals("Strangers"))
+            		level = 1;
+            	else if(spinner1.getSelectedItem().toString().equals("Acquaintances"))
+            		level = 2;
+            	else if(spinner1.getSelectedItem().toString().equals("Friends"))
+            		level = 3;
+            	else
+            		level = 0;
+            	
+            	int duration;
+            	if(spinner2.getSelectedItem().toString().equals("1:00"))
+            		duration = 60000;
+            	else if(spinner2.getSelectedItem().toString().equals("1:30"))
+            		duration = 90000;
+            	else if(spinner2.getSelectedItem().toString().equals("2:00"))
+            		duration = 120000;
+            	else if(spinner2.getSelectedItem().toString().equals("2:30"))
+            		duration = 150000;
+            	else if(spinner2.getSelectedItem().toString().equals("3:00"))
+            		duration = 180000;
+            	else if(spinner2.getSelectedItem().toString().equals("3:30"))
+            		duration = 210000;
+            	else if(spinner2.getSelectedItem().toString().equals("4:00"))
+            		duration = 240000;
+            	else
+            		duration = 300000;
+            		
+            	// Call MainActivity's createGame()
+            	mActivity.createGame(etGroupName.getText().toString(), level, duration);
             }
         });
         

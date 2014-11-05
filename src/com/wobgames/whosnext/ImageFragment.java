@@ -20,9 +20,6 @@ public class ImageFragment extends Fragment{
         View view = inflater.inflate(R.layout.image_fragment, container, false);
         MainActivity mActivity = (MainActivity) getActivity();
         
-        // Play sound effect - TEMPORARY
-        mActivity.soundpool.play(mActivity.soundIds[1], 1, 1, 1, 0, 1);
-        
         wait1 = (TextView) view.findViewById(R.id.wait1);
         wait1.setTypeface(mActivity.exoregular);
         

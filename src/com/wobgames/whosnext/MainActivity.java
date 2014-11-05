@@ -58,10 +58,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public Answer currentAnswer;
 	public List<User> currentUsers;
 	
-	public Typeface exoregular;
-	public SoundPool soundpool;
-	public int soundIds[] = new int[10];;
-	
 	// Game Info
 	public User currentUser;
 	public int wrongAnswersNumber;
@@ -70,6 +66,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public boolean timerCreated;
 	CounterClass timer = null;
 	public int MAX_TURNS = 30;
+	public Typeface exoregular;
+	public SoundPool soundpool;
+	public int soundIds[] = new int[10];;
+	int familiarityLevel = 0;
+	public String groupName;
+	int timerDuration = 0;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -116,9 +118,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         
         // Create the Database
         mDBHelper = new DatabaseHelper(getApplication());
-        //mDBHelper.init("easy");
-        //mDBHelper.init("normal");
-        mDBHelper.init("hard");
+        mDBHelper.init(familiarityLevel);
         
         /** WiFiDirect **/
         
@@ -301,15 +301,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         }
     }
     
-    /* ************ Fragment Interfaces ************ */
-    
-    /**
-     * onCreateGame() - ButtonsFragment
-     */
-    @Override
-    public void onCreateGame() {
-    	// When the user taps the Create Game button
-    	//Log.d(TAG, "onCreateGame()");
+    public void createGame(String groupName, int level, int duration) {
+    	// Called after tapping the Submit button in GameSetupFragment
+    	this.groupName = groupName;
+    	familiarityLevel = level;
+    	timerDuration = duration;
+    	
+    	//showToast(groupName + " " + level + " " + duration);
     	
     	// Check if WiFiP2p is enabled
     	if (!isWifiP2pEnabled) {
@@ -339,13 +337,22 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	sHelper.connect();
         
     	// Load DeviceList Fragment
-//    	getSupportFragmentManager().beginTransaction()
-//    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+    	getSupportFragmentManager().beginTransaction()
+    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+    }
+    
+    /* ************ Fragment Interfaces ************ */
+    
+    /**
+     * onCreateGame() - ButtonsFragment
+     */
+    @Override
+    public void onCreateGame() {
+    	// When the user taps the Create Game button
     	
-    	// TEMPORARY!
+    	// Load the GameSetupFragment 
     	getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameSetupFragment).addToBackStack(null).commit();
-
     }
     
     /**
@@ -471,7 +478,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     
     /** COUNTDOWN TIMER **/
     public void startTimer() {
-    	timer = new CounterClass(150000,1000);
+    	timer = new CounterClass(timerDuration,1000);
     	timerCreated = true;
     	timer.start();
     }

@@ -131,12 +131,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	public void onSelectPlayer(int pos) {
 		//final int position = id - 1;
 		final int position = pos;
-		
-//		Toast toast1 = Toast.makeText(getActivity(), "Position: " + position + " Name: " 
-//				+ mActivity.currentUsers.get(position).name() + " Id: " 
-//				+ mActivity.currentUsers.get(position).id() + " Answer-UserId: "
-//				+ mActivity.currentAnswer.userId(), Toast.LENGTH_SHORT);
-//		toast1.show();
 
 		// If the correct player is chosen, send dialog
 		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id())

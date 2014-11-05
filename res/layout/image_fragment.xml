@@ -2,14 +2,18 @@
     android:id="@+id/buttonsfragment"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/mapbg1"
+     >
+    
     <LinearLayout 
     	android:baselineAligned="false"
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:background="@drawable/backrepeat"
-    	android:gravity="top|center_horizontal" >
+    	android:gravity="top|center_horizontal"
+    	android:layout_margin="12dp"
+    	 >
     
         <TextView android:id="@+id/wait1"
             android:layout_width="wrap_content"
@@ -18,8 +22,6 @@
             android:text="@string/please_wait"
             android:textColor="@color/lightblue"
             android:paddingTop="40dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:paddingBottom="40dp"
             android:gravity="center"
             android:layout_marginBottom="60dp"

@@ -1,3 +1,49 @@
+ /**
+     * onCreateGame() - ButtonsFragment
+     */
+    @Override
+    public void onCreateGame() {
+    	// When the user taps the Create Game button
+    	//Log.d(TAG, "onCreateGame()");
+    	
+    	// Check if WiFiP2p is enabled
+    	if (!isWifiP2pEnabled) {
+            Toast.makeText(MainActivity.this, "Wi-Fi Direct is not enabled.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+    	
+    	// Discover Peers
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "Peers Discovery Initiated",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Toast.makeText(MainActivity.this, "Peers Discovery Failed : " + reasonCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        // Create the server socket and threads
+        sHelper = new ServerSocketHelper(this); 
+    	sHelper.connect();
+        
+    	// Load DeviceList Fragment
+//    	getSupportFragmentManager().beginTransaction()
+//    		.replace(R.id.rootlayout, mDeviceListFragment).addToBackStack(null).commit();
+    	
+    	// TEMPORARY!
+    	getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mGameSetupFragment).addToBackStack(null).commit();
+
+    }
+
+
 <TextView 
            android:id="@+id/main_header"
            android:layout_width="wrap_content"
@@ -449,6 +495,7 @@ OutputStream outputStream = clientSocket.getOutputStream();
 
 import com.wobgames.whosnext.Serializer;
 import com.wobgames.whosnext.User;
+import com.wobgames.whosnext.ServerSocketHelper;
 public class SendMessageThread extends Thread {
 		
 		@Override
@@ -523,6 +570,7 @@ import java.util.Map;
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.Handler;

@@ -36,6 +36,10 @@ public class DeviceListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		mView = inflater.inflate(R.layout.device_list_fragment, container, false);
+		final MainActivity mActivity = (MainActivity) getActivity();
+		
+		// Play sound effect
+        mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
 		
 		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));

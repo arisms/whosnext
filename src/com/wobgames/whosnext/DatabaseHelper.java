@@ -132,16 +132,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     // Initialize Database
-    public void init(String level) {
-    	int current_round;
-    	if(level.equals("easy"))
-    		current_round = 1;
-    	else if(level.equals("normal"))
-    		current_round = 2;
-    	else if(level.equals("hard"))
-    		current_round = 3;
-    	else
-    		current_round = 0;
+    public void init(int level) {
+    	int current_round = level;
     	
     	// QUESTIONS table initialization
         if(IsTableEmpty(TABLE_QUESTIONS)) {
