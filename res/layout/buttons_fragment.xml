@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:gravity="center">
+    
     <LinearLayout 
     	android:baselineAligned="false"
     	android:orientation="vertical"
@@ -13,29 +14,35 @@
     	android:gravity="center" >
         
        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="52sp" 
-            android:text="Who's next?"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginBottom="80dp"
-            android:gravity="center" />
+           android:id="@+id/main_header"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="48sp" 
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:layout_marginBottom="70dp"
+           android:textColor="@color/lightblue"
+           android:gravity="center" />
         
     	<Button android:id="@+id/creategame"
-        	android:layout_width="200dp"
-        	android:layout_height="80dp"
-        	android:text="@string/create_game_button"
-        	android:layout_marginBottom="28dp"
-        	android:background="@drawable/backrepeat_button"
-        	android:textSize="22sp" />
+        	android:layout_width="240dp"
+        	android:layout_height="50dp"
+        	android:layout_marginBottom="24dp"
+        	android:background="@drawable/create_game_button2"
+        	android:textSize="20sp" />
     
     	<Button android:id="@+id/joingame"
-        	android:layout_width="200dp"
-        	android:layout_height="80dp"
-        	android:text="@string/join_game_button"
-        	android:layout_marginTop="28dp" 
-        	android:background="@drawable/backrepeat_button"
-        	android:textSize="22sp" />
+        	android:layout_width="240dp"
+        	android:layout_height="50dp"
+        	android:layout_marginBottom="24dp" 
+        	android:background="@drawable/join_game_button2"
+        	android:textSize="20sp" />
+    	
+    	<Button android:id="@+id/highscores"
+        	android:layout_width="240dp"
+        	android:layout_height="50dp"
+        	android:background="@drawable/high_scores_button2"
+        	android:textSize="20sp" />
+    	
     </LinearLayout>
 </FrameLayout>

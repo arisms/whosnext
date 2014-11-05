@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -54,6 +55,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public DatabaseHelper mDBHelper;
 	public Answer currentAnswer;
 	public List<User> currentUsers;
+	
+	public Typeface exoregular;
 	
 	// Game Info
 	public User currentUser;
@@ -132,6 +135,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         wrongAnswersNumber = 0;
         timerStarted = false;
         timerCreated = false;
+        
+        // Typefaces
+        exoregular = Typeface.createFromAsset(getAssets(), "Exo-Regular.otf");
     }
     
     /** onResume() **/

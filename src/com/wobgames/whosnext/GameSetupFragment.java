@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,10 +19,12 @@ import android.widget.Toast;
 public class GameSetupFragment extends Fragment {
 	private static final String TAG = "GameSetupFragment";
 	
+	TextView tvHeader;
 	TextView tvFamiliarity;
 	TextView tvTimer;
 	TextView tvGroupName;
 	EditText etGroupName;
+	Button button;
 	
 	String famLevel = "";
 	String timerDuration = "";
@@ -31,16 +34,26 @@ public class GameSetupFragment extends Fragment {
 		
 		// Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.setup_fragment, container, false);
-        
+        MainActivity mActivity = (MainActivity) getActivity();
         
         // Set text views and edit view
         etGroupName = (EditText) view.findViewById(R.id.setGroupName_edittext);
+        etGroupName.setHint("Group Name");
+        etGroupName.setTypeface(mActivity.exoregular);
+        
+        tvHeader = (TextView) view.findViewById(R.id.setup_header);
+        tvHeader.setTypeface(mActivity.exoregular);
         
         tvFamiliarity = (TextView) view.findViewById(R.id.setFamiliarity_text);
+        tvFamiliarity.setTypeface(mActivity.exoregular);
         tvFamiliarity.setText("Select familiarity level");
+        
         tvTimer = (TextView) view.findViewById(R.id.setTimer_text);
+        tvTimer.setTypeface(mActivity.exoregular);
         tvTimer.setText("Set timer duration");
+        
         tvGroupName = (TextView) view.findViewById(R.id.setGroupName_text);
+        tvGroupName.setTypeface(mActivity.exoregular);
         tvGroupName.setText("Set the group's name");
         
         /** Set spinners **/
@@ -60,9 +73,6 @@ public class GameSetupFragment extends Fragment {
                 // parent.getItemAtPosition(pos)
         		
         		famLevel = parent.getItemAtPosition(pos).toString();
-        		
-        		Toast toast = Toast.makeText(getActivity(), famLevel, Toast.LENGTH_SHORT);
-        		toast.show();
             }
         	
             public void onNothingSelected(AdapterView<?> parent) {
@@ -96,9 +106,6 @@ public class GameSetupFragment extends Fragment {
                 // parent.getItemAtPosition(pos)
         		
         		timerDuration = parent.getItemAtPosition(pos).toString();
-        		
-        		Toast toast = Toast.makeText(getActivity(), timerDuration, Toast.LENGTH_SHORT);
-        		toast.show();
             }
         	
             public void onNothingSelected(AdapterView<?> parent) {
@@ -117,16 +124,15 @@ public class GameSetupFragment extends Fragment {
 			}
 		});
         
+        button = (Button) view.findViewById(R.id.submit_settings_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	Toast toast = Toast.makeText(getActivity(), "Submit settings", Toast.LENGTH_SHORT);
+        		toast.show();
+            }
+        });
+        
         return view;
 	}
-	
-//	// Hide the soft keyboard
-//				InputMethodManager imm = (InputMethodManager)mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-//				imm.hideSoftInputFromWindow(mAnswerEt.getWindowToken(), 0);
-//				
-//				mAnswerEt.clearFocus();
-//				button.requestFocus();
-
-	
 	
 }

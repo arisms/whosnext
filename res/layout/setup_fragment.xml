@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
+    android:background="@drawable/backrepeat" 
     android:gravity="center">
     
     <LinearLayout 
@@ -10,108 +11,93 @@
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:background="@drawable/backrepeat" 
     	android:gravity="top|center"
-    	android:layout_margin="12dp" >
+    	android:layout_margin="20dp" >
         
        <TextView 
+           android:id="@+id/setup_header"
            	android:layout_width="fill_parent"
            	android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-			android:background="@drawable/backrepeat_h"
-			android:textSize="20sp"   
+			android:background="@drawable/header_background2"
+			android:textSize="24sp"   
+			android:textColor="@color/lightblue"
             android:text="@string/setup_game"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginBottom="30dp" />
               
        <TextView 
             android:id="@+id/setGroupName_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:textSize="22sp"   
+			android:textSize="20sp"   
 			android:textStyle="normal"
-			android:layout_marginTop="20dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp"
-			android:layout_gravity="left" />
+			android:layout_gravity="left" 
+			android:textColor="@android:color/white"
+			android:layout_marginBottom="5dp" />
         
     	<EditText 
             android:id="@+id/setGroupName_edittext"
-            android:layout_width="wrap_content"
-            android:minWidth="240dp"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:hint="Group name"
-            android:singleLine="false"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginLeft="5dp"
-		 	android:layout_marginRight="20dp"
-		 	android:layout_marginBottom="5dp"
-		 	android:layout_gravity="left" />
+            android:layout_width="260dp"
+            android:layout_height="50dp"
+            android:singleLine="true"
+            android:textSize="18sp" 
+            android:gravity="left"
+			android:paddingLeft="5dp"
+			android:paddingRight="12dp"
+			android:paddingTop="12dp"
+		 	android:layout_gravity="left"
+		 	android:background="@drawable/text_frame_1l"
+		 	android:layout_marginBottom="20dp" />
        
        <TextView 
             android:id="@+id/setFamiliarity_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:textSize="22sp"   
+			android:textSize="20sp"   
 			android:textStyle="normal"
-			android:layout_marginTop="20dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="20dp"
 			android:layout_gravity="left"
-			/>
+			android:textColor="@android:color/white"
+			android:layout_marginBottom="5dp" />
         
     	<Spinner
     		android:id="@+id/setFamiliarity_spinner"
-    		android:layout_width="wrap_content"
-    		android:minWidth="240dp"
-    		android:layout_height="wrap_content"
-    		android:textSize="22sp"
-    		android:minHeight="20dp"   
-    		android:gravity="center"
+    		android:layout_width="260dp"
+    		android:minWidth="260dp"
+    		android:layout_height="50dp"   
+    		android:gravity="left"
 			android:textStyle="normal"
+			android:layout_gravity="left"
 			android:paddingLeft="5dp"
-			android:paddingRight="10dp"
-			android:layout_marginLeft="20dp"
-			android:layout_marginRight="20dp"
-			android:layout_marginBottom="5dp"
-			android:layout_gravity="left" />
+			android:background="@drawable/text_frame_1l"
+			android:layout_marginBottom="20dp" />
     	
     	<TextView 
             android:id="@+id/setTimer_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:textSize="22sp"   
+			android:textSize="20sp"   
 			android:textStyle="normal"
-			android:layout_marginTop="20dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="20dp"
-			android:layout_gravity="left" />
+			android:layout_gravity="left" 
+			android:layout_marginBottom="5dp"
+			android:textColor="@android:color/white" />
         
     	<Spinner
     		android:id="@+id/setTimer_spinner"
-    		android:layout_width="wrap_content"
-    		android:minWidth="240dp"
-    		android:layout_height="wrap_content"
-    		android:minHeight="20dp"
-    		android:textSize="22sp"   
+    		android:layout_width="260dp"
+    		android:minWidth="260dp"
+    		android:layout_height="50dp"   
+    		android:gravity="left"
 			android:textStyle="normal"
-			android:gravity="center"
+			android:layout_gravity="left"
 			android:paddingLeft="5dp"
-			android:paddingRight="20dp"
-			android:layout_marginLeft="20dp"
-			android:layout_marginRight="20dp"
-			android:layout_marginBottom="5dp" 
-			android:layout_gravity="left" />
+			android:background="@drawable/text_frame_1l"
+			android:layout_marginBottom="30dp" />
     	
     	<Button android:id="@+id/submit_settings_button"
-        	android:layout_width="160dp"
-        	android:layout_height="40dp"
-        	android:layout_marginTop="5dp"
-        	android:background="@drawable/backrepeat_button"
-        	android:layout_gravity="right|bottom"
-        	android:text="@string/submit_button"
-        	android:textSize="22sp" />
+        	android:layout_width="180dp"
+        	android:layout_height="50dp"
+        	android:background="@drawable/submit_button"
+        	android:layout_gravity="right|bottom" />
        
 
     </LinearLayout>

@@ -1,4 +1,18 @@
+<TextView 
+           android:id="@+id/main_header"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="52sp" 
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:layout_marginBottom="80dp"
+           android:gravity="center" />
+
+
 /**
+
+
+ * 
  * onSelectFamiliaritySpinner - GameSetupFragment
  * When the user selects familiarity level from the spinner
  */
