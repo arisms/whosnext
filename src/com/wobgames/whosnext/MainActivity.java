@@ -116,9 +116,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         mGameOverFragment = new GameOverFragment();
         mGameSetupFragment = new GameSetupFragment();
         
-        // Create the Database
-        mDBHelper = new DatabaseHelper(getApplication());
-        mDBHelper.init(familiarityLevel);
+        // ------>
         
         /** WiFiDirect **/
         
@@ -306,6 +304,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     	this.groupName = groupName;
     	familiarityLevel = level;
     	timerDuration = duration;
+    	
+    	 // Create the Database
+        mDBHelper = new DatabaseHelper(getApplication());
+        mDBHelper.init(familiarityLevel);
     	
     	//showToast(groupName + " " + level + " " + duration);
     	

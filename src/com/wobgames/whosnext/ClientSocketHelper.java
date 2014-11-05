@@ -17,7 +17,7 @@ public class ClientSocketHelper {
 	private MainActivity mActivity;
 	private GameDevice mGameDevice;
 	private Socket connectionSocket = new Socket();
-	private boolean userIdReceived = false;
+	public boolean userIdReceived = false;
 	//byte buf[]  = new byte[1024];
 	Message mMessage;
 	
@@ -126,6 +126,7 @@ public class ClientSocketHelper {
 				   			
 				   			// Get userId from server, and add it to mainActivity's currentUser
 				   			mActivity.currentUser.setId(message.user().id());
+				   			mActivity.familiarityLevel = message.level;
 				   			userIdReceived = true;
 				   			//mActivity.currentUser.setName(message.user().name());
 				   		}

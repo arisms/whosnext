@@ -134,6 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Initialize Database
     public void init(int level) {
     	int current_round = level;
+    	Log.d(TAG, "DB init with level: " + level);
     	
     	// QUESTIONS table initialization
         if(IsTableEmpty(TABLE_QUESTIONS)) {

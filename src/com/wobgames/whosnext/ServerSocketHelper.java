@@ -417,6 +417,7 @@ public class ServerSocketHelper {
 				   			// Add user in database
 				   			Log.d("Input Stream - User name: ", message.user().name());
 				   			message.user().setId((int)mActivity.mDBHelper.addUser(message.user()));
+				   			message.level = mActivity.familiarityLevel;
 				   			// Update Devices list with user info
 				   			for(int i=0; i<mDevices.size(); i++)
 				   				if(mDevices.get(i).clientSocket() == clientSocket)

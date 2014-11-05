@@ -130,37 +130,40 @@ import android.widget.Toast;
             public void onClick(View v) {
             	
             	// Check if group name is empty
-        		
-            	int level;
-            	if(spinner1.getSelectedItem().toString().equals("Strangers"))
-            		level = 1;
-            	else if(spinner1.getSelectedItem().toString().equals("Acquaintances"))
-            		level = 2;
-            	else if(spinner1.getSelectedItem().toString().equals("Friends"))
-            		level = 3;
-            	else
-            		level = 0;
-            	
-            	int duration;
-            	if(spinner2.getSelectedItem().toString().equals("1:00"))
-            		duration = 60000;
-            	else if(spinner2.getSelectedItem().toString().equals("1:30"))
-            		duration = 90000;
-            	else if(spinner2.getSelectedItem().toString().equals("2:00"))
-            		duration = 120000;
-            	else if(spinner2.getSelectedItem().toString().equals("2:30"))
-            		duration = 150000;
-            	else if(spinner2.getSelectedItem().toString().equals("3:00"))
-            		duration = 180000;
-            	else if(spinner2.getSelectedItem().toString().equals("3:30"))
-            		duration = 210000;
-            	else if(spinner2.getSelectedItem().toString().equals("4:00"))
-            		duration = 240000;
-            	else
-            		duration = 300000;
-            		
-            	// Call MainActivity's createGame()
-            	mActivity.createGame(etGroupName.getText().toString(), level, duration);
+        		if(etGroupName.getText().toString().equals(""))
+        			mActivity.showToast("Group name cannot be empty!");
+        		else {
+	            	int level;
+	            	if(spinner1.getSelectedItem().toString().equals("Strangers"))
+	            		level = 1;
+	            	else if(spinner1.getSelectedItem().toString().equals("Acquaintances"))
+	            		level = 2;
+	            	else if(spinner1.getSelectedItem().toString().equals("Friends"))
+	            		level = 3;
+	            	else
+	            		level = 0;
+	            	
+	            	int duration;
+	            	if(spinner2.getSelectedItem().toString().equals("1:00"))
+	            		duration = 60000;
+	            	else if(spinner2.getSelectedItem().toString().equals("1:30"))
+	            		duration = 90000;
+	            	else if(spinner2.getSelectedItem().toString().equals("2:00"))
+	            		duration = 120000;
+	            	else if(spinner2.getSelectedItem().toString().equals("2:30"))
+	            		duration = 150000;
+	            	else if(spinner2.getSelectedItem().toString().equals("3:00"))
+	            		duration = 180000;
+	            	else if(spinner2.getSelectedItem().toString().equals("3:30"))
+	            		duration = 210000;
+	            	else if(spinner2.getSelectedItem().toString().equals("4:00"))
+	            		duration = 240000;
+	            	else
+	            		duration = 300000;
+	            		
+	            	// Call MainActivity's createGame()
+	            	mActivity.createGame(etGroupName.getText().toString(), level, duration);
+        		}
             }
         });
         

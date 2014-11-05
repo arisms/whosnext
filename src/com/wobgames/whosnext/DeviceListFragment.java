@@ -136,6 +136,8 @@ public class DeviceListFragment extends ListFragment {
                 if (bottom != null) {
                     bottom.setText(getDeviceStatus(device.status));
                 }
+                if(getDeviceStatus(device.status).equals("Available"))
+                	bottom.append(" - Tap to connect");
             }
             return v;
         }

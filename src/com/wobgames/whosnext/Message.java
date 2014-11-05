@@ -14,6 +14,7 @@ public class Message implements Serializable {
 	private String mToast;
 	private Answer currentAnswer;
 	private int wrongAnswers;
+	public int level;
 	
 	public Message() {
 		answers_list = new ArrayList<Answer>();
