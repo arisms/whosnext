@@ -9,6 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -57,6 +59,8 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 	public List<User> currentUsers;
 	
 	public Typeface exoregular;
+	public SoundPool soundpool;
+	public int soundIds[] = new int[10];;
 	
 	// Game Info
 	public User currentUser;
@@ -138,6 +142,13 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         
         // Typefaces
         exoregular = Typeface.createFromAsset(getAssets(), "Exo-Regular.otf");
+        
+        // Sound Effects
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        soundpool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        soundIds[0] = soundpool.load(this, R.raw.tick_clock2, 1);
+        soundIds[1] = soundpool.load(this, R.raw.buzz, 1);
+        soundIds[2] = soundpool.load(this, R.raw.menu_select1, 1);
     }
     
     /** onResume() **/

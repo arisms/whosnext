@@ -1,6 +1,8 @@
 package com.wobgames.whosnext;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +37,11 @@ public class GameSetupFragment extends Fragment {
 		// Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.setup_fragment, container, false);
         MainActivity mActivity = (MainActivity) getActivity();
+        
+        // Play sound effect - TEMPORARY
+        mActivity.soundpool.play(mActivity.soundIds[0], 1, 1, 1, 0, 1);
+        mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
+        
         
         // Set text views and edit view
         etGroupName = (EditText) view.findViewById(R.id.setGroupName_edittext);
