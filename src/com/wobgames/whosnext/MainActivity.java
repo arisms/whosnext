@@ -73,6 +73,8 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	int familiarityLevel = 0;
 	public String groupName;
 	int timerDuration = 0;
+	public boolean timeUp = false;
+	int roundsCompleted = 0;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -442,18 +444,19 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
      */
     public void onListStartGame() {
     	// Check if all peer devices are connected
-    	
-    	
-    	// send familiarityLevel to clients
-    	Message initMsg = new Message();
-    	initMsg.setType("LEVEL");
-    	initMsg.level = familiarityLevel;
-    	initMsg.timerDuration = timerDuration;
-    	sHelper.broadcastMessage(initMsg);
-    	
-    	getSupportFragmentManager().beginTransaction()
-			.replace(R.id.rootlayout, mQuestionsFragment).commit();
-    	
+    	if(peersRemaining) 
+    		showToast("Not all the devices are connected...");
+    	else {
+	    	// send familiarityLevel to clients
+	    	Message initMsg = new Message();
+	    	initMsg.setType("LEVEL");
+	    	initMsg.level = familiarityLevel;
+	    	initMsg.timerDuration = timerDuration;
+	    	sHelper.broadcastMessage(initMsg);
+	    	
+	    	getSupportFragmentManager().beginTransaction()
+				.replace(R.id.rootlayout, mQuestionsFragment).commit();
+    	}
     }
     
     /**
@@ -574,6 +577,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 			if(mGameDevice.isGroupOwner()) {
 				soundpool.play(soundIds[3], 1, 1, 1, 0, 1);
 				sHelper.finishGame();
+				timeUp = true;
 			}
         }
 		

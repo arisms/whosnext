@@ -14,6 +14,7 @@ public class Message implements Serializable {
 	private String mToast;
 	private Answer currentAnswer;
 	private int wrongAnswers;
+	private int roundsCompleted;
 	public int level;
 	public int timerDuration;
 	
@@ -36,4 +37,7 @@ public class Message implements Serializable {
 	
 	public void setWrongAnswers(int number) { wrongAnswers = number; }
 	public int wrongAnswers() { return wrongAnswers; }
+	
+	public void setRoundsCompleted(int number) { roundsCompleted = number; }
+	public int roundsCompleted() { return roundsCompleted; }
 }

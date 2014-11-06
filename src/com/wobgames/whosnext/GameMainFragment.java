@@ -56,7 +56,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		while(!mActivity.timerCreated) {
 			// wait...
 		}
-		playBeep();
 		mActivity.textViewTime = (TextView) view.findViewById(R.id.mainTimer);
 		mActivity.showTimer();
 		
@@ -111,24 +110,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		toast.show();
 	}
 	
-	public void playBeep() {
-		
-//		MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(), R.raw.beep);
-//		mediaPlayer.start();
-		
-		try {
-		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		    Ringtone r = RingtoneManager.getRingtone(mActivity, notification);
-		    r.play();
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-		
-		/************/
-		// MediaPlayer.setOnCompletionListener() <------!!!!!
-		
-	}
-	
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 		//mActivity.showToast("Position: " + position);
@@ -145,8 +126,6 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 			mActivity.nextTurn();
 		else {
 			// If wrong player
-			//playBeep();	// SOUNDPOOL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			
 			mActivity.wrongAnswersNumber++;
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 

@@ -174,6 +174,14 @@ public class ServerSocketHelper {
 					  mActivity.gameOver(msg);
 				  }
 				});
+			
+			// Send message with wrong answers and rounds completed to clients
+			message = new Message();
+			message.setType("FINAL INFO");
+			message.setWrongAnswers(mActivity.wrongAnswersNumber);
+			message.setRoundsCompleted(turnCounter-1);
+			
+			broadcastMessage(message);
 		}
 		else {
 			// Ignore...
@@ -319,7 +327,8 @@ public class ServerSocketHelper {
 		Log.d(TAG, "restartGame()");
 		
 		mActivity.wrongAnswersNumber = 0;
-
+		mActivity.timeUp = false;
+		
 		// Start the timer
 		mActivity.runOnUiThread(new Runnable() {
 		  public void run() {
