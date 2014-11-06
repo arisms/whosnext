@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -102,7 +98,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	
 	public void wrongPlayer() {
 		Toast toast = Toast.makeText(getActivity(), emptyAnswerToast, Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.setGravity(Gravity.CENTER | Gravity.TOP, 0, 0);
 		toast.show();
 	}
 	
@@ -126,6 +122,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
 //					+ mActivity.currentAnswer.userId() + " - " + mActivity.currentUsers.get(position).id(), Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER | Gravity.TOP, 0, 120);
 			toast.show();
 			mActivity.soundpool.play(mActivity.soundIds[5], (float)0.3, (float)0.3, 1, 0, 1);
 		}

@@ -7,8 +7,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.wobgames.whosnext.MainActivity.CounterClass;
-
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.util.Log;
 
@@ -166,6 +164,7 @@ public class ClientSocketHelper {
 				   		}
 				   		else if(message.type().equals("GAME OVER")) {
 				   			Log.d(TAG, "message.type().equals(GAME OVER)");
+				   			mActivity.timeUp = message.timeUp;
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
 									  
@@ -210,7 +209,7 @@ public class ClientSocketHelper {
 				   			mActivity.wrongAnswersNumber = message.wrongAnswers();
 				   			mActivity.roundsCompleted = message.roundsCompleted();
 				   			mActivity.mGameOverFragment.updateText();
-				   			mActivity.timeUp = message.timeUp;
+				   			
 				   		}
 				   		else
 				   		{

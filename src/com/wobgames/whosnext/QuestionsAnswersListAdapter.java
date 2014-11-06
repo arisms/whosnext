@@ -16,7 +16,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 	//private static final String TAG = "QuestionsAnswerListAdapter";
 	
 	private LayoutInflater mInflater;
-	private final List<String> strings;
+	//private final List<String> strings;
 	private final List<User> mUsersList;
 	//private final Map<String, String> mMap;
 	final CharSequence emptyAnswerToast = "Wrong player! Try again...";
@@ -29,7 +29,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		
 		this.mUsersList = new ArrayList<User>(users);
 		this.mListener = listener;
-		this.strings = strings; 
+		//this.strings = strings; 
 		
 		this.mInflater = LayoutInflater.from(context);
 		mActivity = (MainActivity) context;
@@ -40,7 +40,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		View view = mInflater.inflate(R.layout.questions_answers_list_item, parent, false);
 		
 		//final int id = mUsersList.get(position).id();
-		final int pos = position;
+		//final int pos = position;
 		
 		TextView tv = (TextView) view.findViewById(R.id.list_question);
 		//tv.setText(strings.get(position));

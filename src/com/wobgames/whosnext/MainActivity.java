@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -505,9 +506,14 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
     
     
     /** Game Flow routines **/
-    public void showToast(String toast) {
-    	//Log.i(TAG, "showToast()");
-    	Toast.makeText(MainActivity.this, toast,Toast.LENGTH_SHORT).show();
+    public void showToast(String stringToast) {
+
+    	Toast toast = Toast.makeText(MainActivity.this, stringToast,Toast.LENGTH_SHORT);
+    	
+    	if(stringToast.equals("Your turn to play!"))
+    		toast.setGravity(Gravity.CENTER | Gravity.TOP, 0, 100);
+    	
+    	toast.show();
     }
     
     public void startTurn(Answer answer) {

@@ -3,9 +3,9 @@ package com.wobgames.whosnext;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
 
-public class DeviceListFragment extends ListFragment {
+@SuppressLint("InflateParams") public class DeviceListFragment extends ListFragment {
 
 	public static final String TAG = "DeviceListFragment";
 	

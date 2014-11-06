@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("ClickableViewAccessibility") public class GameSetupFragment extends Fragment {
-	private static final String TAG = "GameSetupFragment";
+	//private static final String TAG = "GameSetupFragment";
 	
 	TextView tvHeader;
 	TextView tvFamiliarity;

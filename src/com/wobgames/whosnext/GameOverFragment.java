@@ -39,10 +39,6 @@ public class GameOverFragment extends Fragment{
 
         header = (TextView) view.findViewById(R.id.game_over_header);
         header.setTypeface(mActivity.exoregular);
-        if(mActivity.timeUp)
-        	header.setText("Time up!");
-        else
-        	header.setText("Game completed!");
         
         text1 = (TextView) view.findViewById(R.id.game_over_text1);
         text2 = (TextView) view.findViewById(R.id.game_over_text2);
@@ -55,8 +51,18 @@ public class GameOverFragment extends Fragment{
         	int score = (mActivity.sHelper.turnCounter-1)*100-mActivity.wrongAnswersNumber*50;
         	text3.setText("Total Score: " + '\n' + (mActivity.sHelper.turnCounter-1) + "x100 - "
         			+ mActivity.wrongAnswersNumber + "x50 = " + score);
+        	
+        	if(mActivity.timeUp)
+            	header.setText("Time up!");
+            else
+            	header.setText("Game completed!");
         }
         else if(!clientTextsSet) {
+        	if(mActivity.timeUp)
+            	header.setText("Time up!");
+            else
+            	header.setText("Game completed!");
+        	
         	text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
         	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
         	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
@@ -114,6 +120,11 @@ public class GameOverFragment extends Fragment{
 	    	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
 	    	text3.setText("Total Score: " + '\n' + (mActivity.roundsCompleted) + "x100 - "
 	    			+ mActivity.wrongAnswersNumber + "x50 = " + score);
+	    	
+	    	if(mActivity.timeUp)
+	        	header.setText("Time up!");
+	        else
+	        	header.setText("Game completed!");
 		}
 	}
 }

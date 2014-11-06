@@ -243,6 +243,7 @@ public class ServerSocketHelper {
 		Message message = new Message();
 		message.setType("GAME OVER");
 		message.setToast("Game over!");
+		message.timeUp = mActivity.timeUp;
 		
 		broadcastMessage(message);
 	}

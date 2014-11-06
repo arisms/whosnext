@@ -204,7 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	
     	SQLiteDatabase db = getWritableDatabase();
     	//long ret = db.insert(TABLE_QUESTIONS, null, values);
-    	long ret = db.insert(TABLE_QUESTIONS, null, values);
+    	db.insert(TABLE_QUESTIONS, null, values);
     	db.close();
     	//Log.i(TAG, "ID? = " + ret + " TEXT = " + question.text());
     }
