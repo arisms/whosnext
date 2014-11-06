@@ -131,8 +131,8 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-		mActivity.showToast("Position: " + position);
-		//onSelectPlayer(position);
+		//mActivity.showToast("Position: " + position);
+		onSelectPlayer(position);
     }
 
 	@Override

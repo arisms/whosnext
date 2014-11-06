@@ -43,14 +43,7 @@
         	android:background="@color/transparent" >
 		</ListView>
 		
-        <Button android:id="@+id/connect_button"
-        	android:layout_width="130dp"
-        	android:layout_height="45dp"
-        	android:layout_marginTop="10dp"
-        	android:background="@drawable/backrepeat_button"
-        	android:layout_gravity="left"
-        	android:text="@string/connect"
-        	android:textSize="18sp" />
+        
          
     </LinearLayout>
     

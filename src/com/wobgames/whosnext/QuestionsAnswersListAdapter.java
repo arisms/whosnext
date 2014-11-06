@@ -22,6 +22,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 	final CharSequence emptyAnswerToast = "Wrong player! Try again...";
 	Button button;
 	OnSelectPlayerListener mListener;
+	MainActivity mActivity;
 	
 	public QuestionsAnswersListAdapter(Context context, List<String> strings, OnSelectPlayerListener listener, List<User> users) {
 		super(context, R.layout.questions_answers_list_item, strings);
@@ -31,6 +32,7 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		this.strings = strings; 
 		
 		this.mInflater = LayoutInflater.from(context);
+		mActivity = (MainActivity) context;
 	}
 	
 	@Override
@@ -43,15 +45,16 @@ public class QuestionsAnswersListAdapter extends ArrayAdapter<String>{
 		TextView tv = (TextView) view.findViewById(R.id.list_question);
 		//tv.setText(strings.get(position));
 		tv.setText(mUsersList.get(position).name());
+		tv.setTypeface(mActivity.exoregular);
 		
-		button = (Button) view.findViewById(R.id.select_player_button);
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-          	// If the answer text is empty
-          	mListener.onSelectPlayer(pos);
-				
-          }
-      });
+//		button = (Button) view.findViewById(R.id.select_player_button);
+//		button.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//          	// If the answer text is empty
+//          	mListener.onSelectPlayer(pos);
+//				
+//          }
+//      });
 		
 //		EditText et = (EditText) view.findViewById(R.id.list_answer);
 //		et.setText(strings.get(position));

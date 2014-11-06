@@ -5,29 +5,17 @@
     android:orientation="horizontal"
     android:gravity="center"
     >
-    
         
     <TextView
         android:id="@+id/list_question" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:gravity="left|center_vertical"
+        android:gravity="center"
         android:layout_alignParentLeft="true"
         android:layout_gravity="left|center_vertical"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
         />
     
-    <Button android:id="@+id/select_player_button"
-        	android:layout_width="160dp"
-        	android:layout_height="fill_parent"
-        	android:background="@drawable/backrepeat_button"
-        	android:layout_marginRight="10dp"
-        	android:layout_gravity="right"
-        	android:text="@string/select_button"
-        	android:layout_alignParentRight="true"
-        	android:layout_margin="10dp"
-        	/>
 </RelativeLayout>

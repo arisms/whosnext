@@ -48,13 +48,13 @@ public class DeviceListFragment extends ListFragment {
 		
 		
 		
-		// Connect button
-		buttonConnect = (Button) mView.findViewById(R.id.connect_button);
-        buttonConnect.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	mListener.onConnect();
-            }
-        });
+//		// Connect button
+//		buttonConnect = (Button) mView.findViewById(R.id.connect_button);
+//        buttonConnect.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//            	mListener.onConnect();
+//            }
+//        });
         
         // Start Game button
         buttonStart = (Button) mView.findViewById(R.id.server_start_button);
