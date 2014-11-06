@@ -38,6 +38,7 @@ public class GameOverFragment extends Fragment{
         View view = inflater.inflate(R.layout.game_over_fragment, container, false);
 
         header = (TextView) view.findViewById(R.id.game_over_header);
+        header.setTypeface(mActivity.exoregular);
         if(mActivity.timeUp)
         	header.setText("Time up!");
         else
@@ -46,7 +47,6 @@ public class GameOverFragment extends Fragment{
         text1 = (TextView) view.findViewById(R.id.game_over_text1);
         text2 = (TextView) view.findViewById(R.id.game_over_text2);
         text3 = (TextView) view.findViewById(R.id.game_over_text3);
-        Log.d(TAG, "After texts...");
         
         // If the current device is the Server, display game-over text
         if(mActivity.mGameDevice.isGroupOwner()) {
@@ -54,14 +54,14 @@ public class GameOverFragment extends Fragment{
         	text2.setText("Rounds Completed: " + (mActivity.sHelper.turnCounter-1));
         	int score = (mActivity.sHelper.turnCounter-1)*100-mActivity.wrongAnswersNumber*50;
         	text3.setText("Total Score: " + '\n' + (mActivity.sHelper.turnCounter-1) + "x100 - "
-        			+ mActivity.wrongAnswersNumber + "x50 = " + '\n' + score);
+        			+ mActivity.wrongAnswersNumber + "x50 = " + score);
         }
         else if(!clientTextsSet) {
         	text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
         	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
         	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
         	text3.setText("Total Score: " + '\n' + (mActivity.roundsCompleted) + "x100 - "
-        			+ mActivity.wrongAnswersNumber + "x50 = " + '\n' + score);
+        			+ mActivity.wrongAnswersNumber + "x50 = " + score);
         	clientTextsSet = true;
         }
         
@@ -113,7 +113,7 @@ public class GameOverFragment extends Fragment{
 	    	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
 	    	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
 	    	text3.setText("Total Score: " + '\n' + (mActivity.roundsCompleted) + "x100 - "
-	    			+ mActivity.wrongAnswersNumber + "x50 = " + '\n' + score);
+	    			+ mActivity.wrongAnswersNumber + "x50 = " + score);
 		}
 	}
 }

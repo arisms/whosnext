@@ -26,6 +26,7 @@ public class QuestionsFragment extends Fragment{
 	List<Question> questions_list;
 	DatabaseHelper mDBHelper;
 	List<String> mQuestionsStrings;
+	TextView mHeaderTv;
 	TextView mQuestionTv;
 	EditText mAnswerEt;
 	int mQuestionCounter = 0;
@@ -55,8 +56,12 @@ public class QuestionsFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.questions_fragment, container, false);
         
+        mHeaderTv = (TextView) view.findViewById(R.id.questions_header);
+        mHeaderTv.setTypeface(mActivity.exoregular);
         mQuestionTv = (TextView) view.findViewById(R.id.question_text);
+        mQuestionTv.setTypeface(mActivity.exoregular);
         mAnswerEt = (EditText) view.findViewById(R.id.answer_text);
+        mAnswerEt.setTypeface(mActivity.exoregular);
         
         button = (Button) view.findViewById(R.id.submit_question_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +104,7 @@ public class QuestionsFragment extends Fragment{
 			// Clear answer text
 			mAnswerEt.setText("");
 	        
-			button.setText(getResources().getString(R.string.next_button));
+			//button.setText(getResources().getString(R.string.next_button));
 	        NAME = false;
 	        
 	        return;
@@ -204,10 +209,11 @@ public class QuestionsFragment extends Fragment{
 		mQuestionTv.setText(mQuestionsStrings.get(mQuestionCounter));
 		mQuestionTv.append(" (" + (mQuestionCounter+1) + "/" + mTotalQuestions + ")");
 		
-		// For last question, change the button text
+		// For last question, change the button
 		if(mQuestionCounter == mTotalQuestions-1)
 		{
-			button.setText(getResources().getString(R.string.start_button));
+			//button.setText(getResources().getString(R.string.start_button));
+			button.setBackground(getResources().getDrawable(R.drawable.start_button));
 		}
 		
 		mQuestionCounter++;

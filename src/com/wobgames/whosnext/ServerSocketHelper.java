@@ -180,6 +180,7 @@ public class ServerSocketHelper {
 			message.setType("FINAL INFO");
 			message.setWrongAnswers(mActivity.wrongAnswersNumber);
 			message.setRoundsCompleted(turnCounter-1);
+			message.timeUp = mActivity.timeUp;
 			
 			broadcastMessage(message);
 		}
@@ -328,6 +329,7 @@ public class ServerSocketHelper {
 		
 		mActivity.wrongAnswersNumber = 0;
 		mActivity.timeUp = false;
+		mActivity.mGameOverFragment.clientTextsSet = false;
 		
 		// Start the timer
 		mActivity.runOnUiThread(new Runnable() {

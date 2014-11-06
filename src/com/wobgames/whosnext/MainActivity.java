@@ -563,6 +563,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
     		//timer = new CounterClass(120000,1000);
     		//timer.start();
         	timerStarted = true;
+        	textViewTime.setTypeface(exoregular);
     	}
     }
     
@@ -576,8 +577,8 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
         public void onFinish() {  
 			if(mGameDevice.isGroupOwner()) {
 				soundpool.play(soundIds[3], 1, 1, 1, 0, 1);
-				sHelper.finishGame();
 				timeUp = true;
+				sHelper.finishGame();
 			}
         }
 		
@@ -587,13 +588,15 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 			String hms = String.format("%02d:%02d", 
 					TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), 
 					TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))); 
-			//System.out.println(hms); 
+			
 			if(timerStarted)
 			{
 				
-				if((TimeUnit.MILLISECONDS.toSeconds(millis) - 
-						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 10) {
-					soundpool.play(soundIds[0], (float)0.3, (float)0.3, 1, 1, 1);
+				if(((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 10)
+						|| ((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+								TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 5)) {
+					soundpool.play(soundIds[0], (float)0.3, (float)0.3, 1, 0, 1);
 				}
 				textViewTime.setText(hms);
 			}

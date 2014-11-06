@@ -2,38 +2,36 @@
     android:id="@+id/buttonsfragment"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/mapbg2" >
     
     <LinearLayout 
     	android:baselineAligned="false"
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:background="@drawable/backrepeat"
-    	android:gravity="top|center_horizontal" >
+    	android:gravity="center"
+    	android:layout_margin="12dp" >
     
         <TextView 
             android:id="@+id/game_over_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="48sp" 
-            android:paddingTop="40dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="40dp"
+            android:paddingBottom="30dp"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             />
         
         <TextView 
             android:id="@+id/game_over_text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32sp" 
-            android:paddingTop="40dp"
+            android:textSize="24sp" 
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="20dp"
             android:gravity="center"
             android:layout_marginBottom="10dp"
             />
@@ -42,39 +40,38 @@
             android:id="@+id/game_over_text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32sp" 
-            android:text="@string/game_over"
+            android:textSize="24sp" 
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="40dp"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             />
         
         <TextView 
             android:id="@+id/game_over_text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32sp" 
+            android:textSize="24sp" 
             android:textStyle="bold"
             android:textColor="@android:color/holo_orange_light"
             android:text="@string/game_over"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="20dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             />
         
         <Button android:id="@+id/restart_game_button"
         	android:layout_width="240dp"
         	android:layout_height="50dp"
-        	android:background="@drawable/submit_button"
+        	android:background="@drawable/restart_button"
+        	android:layout_marginBottom="24dp"
         	android:textSize="20sp" />
         
         <Button android:id="@+id/quit_game_button"
         	android:layout_width="240dp"
         	android:layout_height="50dp"
-        	android:background="@drawable/high_scores_button2"
+        	android:background="@drawable/quit_button"
         	android:textSize="20sp" />
         
     </LinearLayout>

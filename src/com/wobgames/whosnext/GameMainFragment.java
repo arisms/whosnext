@@ -31,6 +31,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 	//List<Question> mQuestionsList;
 	DatabaseHelper mDBHelper;
 	List<String> mUsersStrings;
+	TextView headerTv;
 	TextView questionTv;
 	TextView answerTv;
 	Random rand = new Random();
@@ -83,23 +84,18 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		// Find the question with the same id as the one in currentAnswer
 		mRandomQuestion = mDBHelper.getQuestionById(mActivity.currentAnswer.questionId());
 		
+		headerTv = (TextView) view.findViewById(R.id.main_game_header);
+		headerTv.setTypeface(mActivity.exoregular);
+		
 		questionTv = (TextView) view.findViewById(R.id.random_question);
-		answerTv = (TextView) view.findViewById(R.id.random_answer);
+		questionTv.setTypeface(mActivity.exoregular);
 		questionTv.setText(mRandomQuestion.text());
+		
+		answerTv = (TextView) view.findViewById(R.id.random_answer);
+		answerTv.setTypeface(mActivity.exoregular);
 		answerTv.setText(mActivity.currentAnswer.text());
 		
 		questionTv.requestFocus();
-		
-		
-//		button = (Button) view.findViewById(R.id.select_player_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//            	// If the answer text is empty
-//            	
-//            	wrongPlayer();
-//            }
-//        });
-		
 		
 		return view;
 	}

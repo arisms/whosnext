@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.os.Bundle;
@@ -117,8 +118,8 @@ public class DeviceListFragment extends ListFragment {
      */
     private class WiFiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
     	private List<WifiP2pDevice> items;
-
-        /**
+        
+    	/**
          * @param context
          * @param textViewResourceId
          * @param objects
@@ -142,7 +143,9 @@ public class DeviceListFragment extends ListFragment {
             WifiP2pDevice device = items.get(position);
             if (device != null) {
                 TextView top = (TextView) v.findViewById(R.id.device_name);
+                top.setTypeface(mActivity.exoregular);
                 TextView bottom = (TextView) v.findViewById(R.id.device_details);
+                bottom.setTypeface(mActivity.exoregular);
                 if (top != null) {
                     top.setText(device.deviceName);
                 }
@@ -183,6 +186,7 @@ public class DeviceListFragment extends ListFragment {
     	//Log.d(TAG, "updateThisDevice()");
         this.device = device;
         TextView header = (TextView) mView.findViewById(R.id.this_device);
+        header.setTypeface(mActivity.exoregular);
         header.setText(device.deviceName);
         header.append(" - " + getDeviceStatus(device.status));
 }

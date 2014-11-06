@@ -17,6 +17,7 @@ public class Message implements Serializable {
 	private int roundsCompleted;
 	public int level;
 	public int timerDuration;
+	public boolean timeUp;
 	
 	public Message() {
 		answers_list = new ArrayList<Answer>();

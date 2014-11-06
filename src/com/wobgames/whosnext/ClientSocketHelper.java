@@ -197,6 +197,7 @@ public class ClientSocketHelper {
 				   			mActivity.wrongAnswersNumber = 0;
 				   			mActivity.onRestartButton();
 				   			mActivity.timeUp = false;
+				   			mActivity.mGameOverFragment.clientTextsSet = false;
 				   			
 				   			// Start the timer
 				   			mActivity.runOnUiThread(new Runnable() {
@@ -209,6 +210,7 @@ public class ClientSocketHelper {
 				   			mActivity.wrongAnswersNumber = message.wrongAnswers();
 				   			mActivity.roundsCompleted = message.roundsCompleted();
 				   			mActivity.mGameOverFragment.updateText();
+				   			mActivity.timeUp = message.timeUp;
 				   		}
 				   		else
 				   		{

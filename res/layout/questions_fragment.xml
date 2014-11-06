@@ -2,7 +2,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:background="@drawable/backrepeat" 
+    android:background="@drawable/mapbg2" 
     android:gravity="top">
     
     <LinearLayout 
@@ -12,12 +12,12 @@
     	android:layout_height="fill_parent" 
     	android:layout_margin="12dp" >
     	
-        <TextView 
+        <TextView android:id="@+id/questions_header"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:text="@string/questions_answers_header"
             android:layout_marginBottom="10dp"
-			android:background="@drawable/backrepeat_h"
+			android:background="@drawable/header_background2"
 			android:textSize="20sp"   
 			android:gravity="center"
 			/>
@@ -41,16 +41,15 @@
            	 android:layout_marginBottom="5dp"
              android:hint="Answer"
              android:singleLine="false"
-             android:paddingBottom="10dp"
-             android:gravity="top"
+             android:paddingLeft="5dp"
+             android:gravity="left"
              />
          
          <Button android:id="@+id/submit_question_button"
         	android:layout_width="160dp"
         	android:layout_height="40dp"
         	android:layout_marginTop="5dp"
-        	android:background="@drawable/backrepeat_button"
-        	android:text="@string/submit_button"
+        	android:background="@drawable/next_button"
         	android:layout_gravity="bottom|right"
         	android:textSize="22sp" />
          

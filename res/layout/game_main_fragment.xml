@@ -2,7 +2,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:background="@drawable/backrepeat" 
+    android:background="@drawable/mapbg2" 
     android:gravity="top">
     
     <LinearLayout 
@@ -12,12 +12,12 @@
     	android:layout_height="fill_parent" 
     	android:layout_margin="12dp" >
     	
-        <TextView 
+        <TextView android:id="@+id/main_game_header"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:text="@string/game_main_header"
             android:layout_marginBottom="10dp"
-			android:background="@drawable/backrepeat_h"
+			android:background="@drawable/header_background2"
 			android:textSize="20sp"   
 			android:gravity="center"
 			/>
