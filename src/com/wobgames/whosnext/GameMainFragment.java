@@ -152,6 +152,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
 //					+ mActivity.currentAnswer.userId() + " - " + mActivity.currentUsers.get(position).id(), Toast.LENGTH_SHORT);
 			toast.show();
+			mActivity.soundpool.play(mActivity.soundIds[5], (float)0.3, (float)0.3, 1, 0, 1);
 		}
 	}
 	

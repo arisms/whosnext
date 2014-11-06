@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:background="@drawable/mapbg1" 
-    android:gravity="top">
+    android:gravity="top"
+    >
     
     <LinearLayout 
     	android:baselineAligned="false"
@@ -40,7 +41,8 @@
         	android:layout_height="0dp"
         	android:layout_weight="1"
         	android:layout_width="match_parent"
-        	android:background="@color/transparent" >
+        	android:background="@color/transparent"
+        	android:layout_marginBottom="50dp" >
 		</ListView>
 		
         

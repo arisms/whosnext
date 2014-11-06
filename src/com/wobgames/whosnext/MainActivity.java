@@ -145,8 +145,11 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         soundpool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         soundIds[0] = soundpool.load(this, R.raw.tick_clock2, 1);
-        soundIds[1] = soundpool.load(this, R.raw.buzz, 1);
+        soundIds[1] = soundpool.load(this, R.raw.doorbell2, 1);
         soundIds[2] = soundpool.load(this, R.raw.menu_select1, 1);
+        soundIds[3] = soundpool.load(this, R.raw.time_up2, 1);
+        soundIds[4] = soundpool.load(this, R.raw.level_completed, 1);
+        soundIds[5] = soundpool.load(this, R.raw.buzz2, 1);
     }
     
     /** onResume() **/
@@ -456,6 +459,7 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     }
     
     public void startTurn(Answer answer) {
+    	soundpool.play(soundIds[1], (float)0.2, (float)0.2, 1, 0, 1);
     	currentAnswer = answer;
     	
     	// Load Game Main Fragment
@@ -482,8 +486,12 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     }
     
     public void gameOver(Message message) {
-    	// Load GameOver Fragment
+    	timer.cancel();
+    	soundpool.play(soundIds[4], (float)0.4, (float)0.4, 1, 0, 1);
+    	
     	showToast(message.toast());
+    	
+    	// Load GameOver Fragment
 		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameOverFragment).addToBackStack(null).commit();
     }
@@ -514,8 +522,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 		
 		@Override  
         public void onFinish() {  
-			if(mGameDevice.isGroupOwner())
+			if(mGameDevice.isGroupOwner()) {
+				soundpool.play(soundIds[3], 1, 1, 1, 0, 1);
 				sHelper.finishGame();
+			}
         }
 		
 		@Override  
@@ -528,12 +538,10 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			if(timerStarted)
 			{
 				
-//				if((TimeUnit.MILLISECONDS.toSeconds(millis) - 
-//						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) <= 10) {
-////					textViewTime.setTextColor(color.holo_red_dark);
-//					MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.tick);
-//					mediaPlayer.start();
-//				}
+				if((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 10) {
+					soundpool.play(soundIds[0], (float)0.3, (float)0.3, 1, 1, 1);
+				}
 				textViewTime.setText(hms);
 			}
 		}

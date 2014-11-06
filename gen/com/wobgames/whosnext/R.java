@@ -127,12 +127,12 @@ public final class R {
         public static final int questions=0x7f0a0001;
     }
     public static final class raw {
-        public static final int beep=0x7f040000;
-        public static final int bell=0x7f040001;
-        public static final int buzz=0x7f040002;
+        public static final int buzz2=0x7f040000;
+        public static final int doorbell2=0x7f040001;
+        public static final int level_completed=0x7f040002;
         public static final int menu_select1=0x7f040003;
-        public static final int tick=0x7f040004;
-        public static final int tick_clock2=0x7f040005;
+        public static final int tick_clock2=0x7f040004;
+        public static final int time_up2=0x7f040005;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
