@@ -24,9 +24,7 @@ public class ServerSocketHelper {
 	public List<Answer> gameAnswers;
 	int MAX_TURNS;
 	int turnCounter;
-	public boolean gameStarted = false;
 	private boolean answerReceived;
-	private boolean wrongAnswers;
 	
 	public ServerSocketHelper(MainActivity activity) {
 		mActivity = activity;
@@ -72,7 +70,6 @@ public class ServerSocketHelper {
 	/** Receive wrongAnswerNumber from clients **/
 	public void getWrongAnswers() {
 		Log.d(TAG, "getWrongAnswers()");
-		wrongAnswers = false;
 		
 		Message message = new Message();
 		message.setType("WRONG ANSWERS");
@@ -90,7 +87,6 @@ public class ServerSocketHelper {
 				}
 			}
 		}
-		wrongAnswers = true;
 	}
 	
 	/** Get user info from same (server) device and store it in the database **/
@@ -173,16 +169,8 @@ public class ServerSocketHelper {
 		}
 		else if(message.type().equals("GAME OVER")) {
 			
-			// Get wrong answers from the clients
-//			getWrongAnswers();
-//			while(!wrongAnswers) {
-//				// wait...
-//			}
-//			
 			mActivity.runOnUiThread(new Runnable() {
 				  public void run() {
-					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
-					  //mActivity.showToast(msg.toast());
 					  mActivity.gameOver(msg);
 				  }
 				});
@@ -233,7 +221,7 @@ public class ServerSocketHelper {
 		
 		//MAX_TURNS = gameAnswers.size();
 		MAX_TURNS = mActivity.MAX_TURNS;
-		gameStarted = true;
+		//gameStarted = true;
 
 		// Wait...
 //		while(!gameStarted) {
@@ -327,6 +315,31 @@ public class ServerSocketHelper {
 		
 	}
 	
+	public void restartGame() {
+		Log.d(TAG, "restartGame()");
+		
+		mActivity.wrongAnswersNumber = 0;
+
+		// Start the timer
+		mActivity.runOnUiThread(new Runnable() {
+		  public void run() {
+			  mActivity.startTimer();
+		  }
+		});
+		
+		// Reset all answers to not used
+		for(int i=0; i<gameAnswers.size(); i++) 
+			gameAnswers.get(i).setUsed(false);
+		
+		turnCounter = 0;
+		
+		// Send message to all the devices
+		Message restartMessage = new Message();
+		restartMessage.setType("RESTART");
+		broadcastMessage(restartMessage);
+		
+		randomize();
+	}
 	
 	// Thread that creates a socket and accepts incoming connections from clients
 	public class ConnectServerThread extends Thread {

@@ -17,7 +17,7 @@ public class ButtonsFragment extends Fragment {
 	// Member Data
 	Button mCreateGame;
 	Button mJoinGame;
-	OnButtonSelectedListener mListener;
+	ButtonsFragmentListener mListener;
 	
 	TextView mainHeader;
 	
@@ -60,8 +60,8 @@ public class ButtonsFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach()");
 	    super.onAttach(activity);
-	    if (activity instanceof OnButtonSelectedListener) {
-	    	mListener = (OnButtonSelectedListener) activity;
+	    if (activity instanceof ButtonsFragmentListener) {
+	    	mListener = (ButtonsFragmentListener) activity;
 	    } else {
 	      throw new ClassCastException(activity.toString()
 	          + " must implemenet ButtonsFragment.OnButtonSelectedListener");
@@ -69,7 +69,7 @@ public class ButtonsFragment extends Fragment {
 	  }
 	
 	
-	public interface OnButtonSelectedListener {
+	public interface ButtonsFragmentListener {
 		
 		public void onCreateGame();
 		

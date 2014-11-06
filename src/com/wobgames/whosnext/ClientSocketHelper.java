@@ -98,6 +98,11 @@ public class ClientSocketHelper {
 			int bytes;
 			boolean dataAvailable = false;
 			
+			// Wait for the socket to connect
+			while(!connectionSocket.isConnected()) {
+				// wait...
+			}
+			
 			while(true) {
 				try {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -132,9 +137,9 @@ public class ClientSocketHelper {
 				   		else if(message.type().equals("START")) {
 				   			mActivity.currentUsers = new ArrayList<User>(message.users_list);
 				   			
-				   			for(int i=0; i<mActivity.currentUsers.size(); i++) 
-				   				Log.d(TAG, "currentUsers" + i + " Name: " + mActivity.currentUsers.get(i).name()
-				   						+ " Id: " + mActivity.currentUsers.get(i).id());
+//				   			for(int i=0; i<mActivity.currentUsers.size(); i++) 
+//				   				Log.d(TAG, "currentUsers" + i + " Name: " + mActivity.currentUsers.get(i).name()
+//				   						+ " Id: " + mActivity.currentUsers.get(i).id());
 				   			
 				   			mActivity.runOnUiThread(new Runnable() {
 								  public void run() {
@@ -185,6 +190,19 @@ public class ClientSocketHelper {
 				   			mActivity.mDBHelper.init(mActivity.familiarityLevel);
 				   			mActivity.getSupportFragmentManager().beginTransaction()
 				   				.replace(R.id.rootlayout, mActivity.mQuestionsFragment).commit();
+				   		}
+				   		else if(message.type().equals("RESTART")) {
+				   			Log.d(TAG, "RESTART");
+				   			
+				   			mActivity.wrongAnswersNumber = 0;
+				   			mActivity.onRestartButton();
+				   			
+				   			// Start the timer
+				   			mActivity.runOnUiThread(new Runnable() {
+								  public void run() {
+									  mActivity.startTimer();
+								  }
+								});
 				   		}
 				   		else
 				   		{

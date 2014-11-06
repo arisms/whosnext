@@ -28,12 +28,13 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
 import com.wobgames.whosnext.DeviceListFragment.OnCreateGroupListener;
+import com.wobgames.whosnext.GameOverFragment.GameOverFragmentListener;
 import com.wobgames.whosnext.QuestionsFragment.OnStartGameSelectedListener;
 
-public class MainActivity extends FragmentActivity implements OnButtonSelectedListener, OnStartGameSelectedListener, 
-	PeerListListener, OnCreateGroupListener, ConnectionInfoListener {
+public class MainActivity extends FragmentActivity implements ButtonsFragmentListener, OnStartGameSelectedListener, 
+	PeerListListener, OnCreateGroupListener, ConnectionInfoListener, GameOverFragmentListener {
 	
 	// ^(?!dalvikvm)
 	
@@ -440,6 +441,9 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
      * When the button Start Game is pressed in DevieListFragment
      */
     public void onListStartGame() {
+    	// Check if all peer devices are connected
+    	
+    	
     	// send familiarityLevel to clients
     	Message initMsg = new Message();
     	initMsg.setType("LEVEL");
@@ -451,6 +455,51 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			.replace(R.id.rootlayout, mQuestionsFragment).commit();
     	
     }
+    
+    /**
+     * onQuit - GameOverFragment
+     * 
+     */
+    @Override
+    public void onQuitButton() {
+    	
+    	mManager.removeGroup(mChannel, new ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "removeGroup onSuccess -");
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Log.d(TAG, "removeGroup onFailure -" + reason);
+            }
+        });
+    	
+    	// Kill the app
+    	android.os.Process.killProcess(android.os.Process.myPid());
+    }
+    
+    /**
+     * onRestart - GameOverFragment
+     * 
+     */
+    @Override
+    public void onRestartButton() {
+    	
+    	// Load Image Fragment (waiting screen)
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
+
+		// If the device is the server
+		if(mGameDevice.isGroupOwner()) {
+			sHelper.restartGame();
+		}
+		
+    }
+    
+    
+    
     
     /** Game Flow routines **/
     public void showToast(String toast) {
@@ -546,7 +595,6 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
 			}
 		}
 	}
-	
 }
 
 

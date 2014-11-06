@@ -1,11 +1,15 @@
 package com.wobgames.whosnext;
 
+import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class GameOverFragment extends Fragment{
@@ -14,6 +18,9 @@ public class GameOverFragment extends Fragment{
 	long timeSwapBuff = 0L;
     long updatedTime = 0L;
     TextView timerValue;
+    Button mQuitButton;
+    Button mRestartButton;
+    GameOverFragmentListener mListener;
 
 
 	private static final String TAG = "ImageFragment";
@@ -42,9 +49,42 @@ public class GameOverFragment extends Fragment{
         	text3.setText("");
         }
         
+        mRestartButton = (Button) view.findViewById(R.id.restart_game_button);
+        mRestartButton.setOnClickListener(new View.OnClickListener() {
+    		@Override
+    		public void onClick(View v) {
+    			mListener.onRestartButton();
+    		}
+    	});
+        
+        mQuitButton = (Button) view.findViewById(R.id.quit_game_button);
+        mQuitButton.setOnClickListener(new View.OnClickListener() {
+    		@Override
+    		public void onClick(View v) {
+    			mListener.onQuitButton();
+    		}
+    	});
+        
         return view;
 	}
 	
+	@Override
+	public void onAttach(Activity activity) {
+		Log.d(TAG, "onAttach()");
+	    super.onAttach(activity);
+	    if (activity instanceof ButtonsFragmentListener) {
+	    	mListener = (GameOverFragmentListener) activity;
+	    } else {
+	      throw new ClassCastException(activity.toString()
+	          + " must implemenet GameOverFragment.GameOverFragmentListener");
+	    }
+	  }
 	
+	public interface GameOverFragmentListener {
+		
+		public void onRestartButton();
+		
+		public void onQuitButton();
+	}
 
 }

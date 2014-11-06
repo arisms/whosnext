@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
+import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
 
 public class DeviceListFragment extends ListFragment {
 
@@ -71,7 +71,7 @@ public class DeviceListFragment extends ListFragment {
 	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach()");
 	    super.onAttach(activity);
-	    if (activity instanceof OnButtonSelectedListener) {
+	    if (activity instanceof ButtonsFragmentListener) {
 	    	mListener = (OnCreateGroupListener) activity;
 	    } else {
 	      throw new ClassCastException(activity.toString()
