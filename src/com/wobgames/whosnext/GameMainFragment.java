@@ -7,6 +7,7 @@ import java.util.Random;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -127,6 +128,12 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		// MediaPlayer.setOnCompletionListener() <------!!!!!
 		
 	}
+	
+	@Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+		mActivity.showToast("Position: " + position);
+		//onSelectPlayer(position);
+    }
 
 	@Override
 	public void onSelectPlayer(int pos) {
@@ -138,7 +145,8 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 			mActivity.nextTurn();
 		else {
 			// If wrong player
-			playBeep();
+			//playBeep();	// SOUNDPOOL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
 			mActivity.wrongAnswersNumber++;
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
