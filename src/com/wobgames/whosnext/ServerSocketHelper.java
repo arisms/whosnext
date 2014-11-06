@@ -197,6 +197,7 @@ public class ServerSocketHelper {
 	public void startGame() {
 		
 		Log.d(TAG, "startGame() - size = " + mDevices.size());
+		
 		// Wait until all the devices have submitted their answers
 		if(!allDevicesReady()) {
 			mActivity.runOnUiThread(new Runnable() {

@@ -44,6 +44,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 
 		View view = inflater.inflate(R.layout.game_main_fragment, container, false);
 		
+		
 		mActivity = (MainActivity) getActivity();
 		mDBHelper = mActivity.mDBHelper;
 		

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wobgames.whosnext.ButtonsFragment.OnButtonSelectedListener;
@@ -30,19 +31,22 @@ public class DeviceListFragment extends ListFragment {
 	
 	Button buttonConnect;
 	Button buttonStart;
-
+	MainActivity mActivity;
 	
 	// onCreateView
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
 		mView = inflater.inflate(R.layout.device_list_fragment, container, false);
-		final MainActivity mActivity = (MainActivity) getActivity();
+		mActivity = (MainActivity) getActivity();
 		
 		// Play sound effect
         mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
 		
 		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
+		
+		
 		
 		// Connect button
 		buttonConnect = (Button) mView.findViewById(R.id.connect_button);
@@ -74,6 +78,13 @@ public class DeviceListFragment extends ListFragment {
 	          + " must implemenet ButtonsFragment.OnButtonSelectedListener");
 	    }
 	  }
+	
+	@Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+		WifiP2pDevice device = (WifiP2pDevice) l.getItemAtPosition(position);
+		if(getDeviceStatus(device.status).equals("Available"))
+			mActivity.onConnect();
+    }
 	
 	/**
      * @return this device
@@ -116,6 +127,7 @@ public class DeviceListFragment extends ListFragment {
                 List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
+            
         }
         
         @Override
@@ -125,6 +137,7 @@ public class DeviceListFragment extends ListFragment {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(R.layout.row_devices, null);
+                
             }
             WifiP2pDevice device = items.get(position);
             if (device != null) {
@@ -139,6 +152,7 @@ public class DeviceListFragment extends ListFragment {
                 if(getDeviceStatus(device.status).equals("Available"))
                 	bottom.append(" - Tap to connect");
             }
+            
             return v;
         }
     }

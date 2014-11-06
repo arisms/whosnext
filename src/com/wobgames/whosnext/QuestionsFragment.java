@@ -187,8 +187,13 @@ public class QuestionsFragment extends Fragment{
 			mAnswerEt.clearFocus();
 			button.requestFocus();
 			
+			if(mActivity.mGameDevice.isGroupOwner())
+				mActivity.getSupportFragmentManager().beginTransaction()
+					.replace(R.id.rootlayout, mActivity.mImageFragment).addToBackStack(null).commit();
+			
 			// Start the game!
 			mListener.onStartGame();
+			
 			return;
 		}
 		

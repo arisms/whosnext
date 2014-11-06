@@ -404,14 +404,15 @@ public class MainActivity extends FragmentActivity implements OnButtonSelectedLi
     @Override
     public void onStartGame() {
     	// When the user taps the Start Game button
-    	//Log.d(TAG, "onStartGame()");
+    	Log.d(TAG, "onStartGame()");
     	
     	// Load Image Fragment (waiting screen)
 		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mImageFragment).addToBackStack(null).commit();
 		
-		if(mGameDevice.isGroupOwner())
+		if(mGameDevice.isGroupOwner()) {
 			sHelper.startGame();
+		}
     }
     
     /**
