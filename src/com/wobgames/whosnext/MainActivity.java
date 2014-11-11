@@ -154,6 +154,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
         soundIds[3] = soundpool.load(this, R.raw.time_up2, 1);
         soundIds[4] = soundpool.load(this, R.raw.level_completed, 1);
         soundIds[5] = soundpool.load(this, R.raw.buzz2, 1);
+        soundIds[6] = soundpool.load(this, R.raw.beep, 1);
     }
     
     /** onResume() **/
@@ -598,12 +599,18 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 			if(timerStarted)
 			{
 				
-				if(((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+				if( (((TimeUnit.MILLISECONDS.toSeconds(millis) - 
 						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 10)
 						|| ((TimeUnit.MILLISECONDS.toSeconds(millis) - 
-								TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 5)) {
+								TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) == 5))
+						&& (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))) == 0		) {
 					soundpool.play(soundIds[0], (float)0.3, (float)0.3, 1, 0, 1);
 				}
+				if(TimeUnit.MILLISECONDS.toSeconds(millis) - 
+						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)) == 0) {
+					soundpool.play(soundIds[6], (float)0.3, (float)0.3, 1, 0, 1);
+				}
+				
 				textViewTime.setText(hms);
 			}
 		}

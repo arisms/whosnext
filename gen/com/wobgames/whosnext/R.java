@@ -74,9 +74,10 @@ public final class R {
         public static final int stars3=0x7f020023;
         public static final int start_button=0x7f020024;
         public static final int submit_button=0x7f020025;
-        public static final int text_frame1=0x7f020026;
-        public static final int text_frame_1l=0x7f020027;
-        public static final int textbg1_2x=0x7f020028;
+        public static final int sword=0x7f020026;
+        public static final int text_frame1=0x7f020027;
+        public static final int text_frame_1l=0x7f020028;
+        public static final int textbg1_2x=0x7f020029;
     }
     public static final class id {
         public static final int action_settings=0x7f0b0026;
@@ -137,12 +138,13 @@ public final class R {
         public static final int questions=0x7f0a0001;
     }
     public static final class raw {
-        public static final int buzz2=0x7f040000;
-        public static final int doorbell2=0x7f040001;
-        public static final int level_completed=0x7f040002;
-        public static final int menu_select1=0x7f040003;
-        public static final int tick_clock2=0x7f040004;
-        public static final int time_up2=0x7f040005;
+        public static final int beep=0x7f040000;
+        public static final int buzz2=0x7f040001;
+        public static final int doorbell2=0x7f040002;
+        public static final int level_completed=0x7f040003;
+        public static final int menu_select1=0x7f040004;
+        public static final int tick_clock2=0x7f040005;
+        public static final int time_up2=0x7f040006;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;

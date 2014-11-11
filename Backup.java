@@ -1,4 +1,61 @@
- /**
+/** Takes care of game set-up procedure **/
+	public void startGame() {
+		
+		Log.d(TAG, "startGame() - size = " + mDevices.size());
+		
+		// Wait until all the devices have submitted their answers
+		if(!allDevicesReady()) {
+			mActivity.runOnUiThread(new Runnable() {
+				  public void run() {
+					  //mActivity.currentUsers = new ArrayList<User>(msg.users_list);
+					  mActivity.showToast("Waiting for other devices...");
+				  }
+				});
+		}
+		while(!allDevicesReady()) {
+			// Wait...
+		}
+
+		Log.d(TAG, "Finished waiting...");
+		
+		Message message = new Message();
+		message.setType("START");
+		message.setToast("Game started!");
+		
+		// Add list of users to the message
+		for(int i=0; i<mDevices.size(); i++) {
+			message.users_list.add(mDevices.get(i).user());
+		}
+		
+		broadcastMessage(message);
+		
+		// Get all answers from the database
+		gameAnswers = mActivity.mDBHelper.getAnswers();
+		
+		for(int i=0; i<gameAnswers.size(); i++)
+			Log.d(TAG, "Answer text: "+ gameAnswers.get(i).text()
+					+ "  - userId: " + gameAnswers.get(i).userId());
+		
+		//MAX_TURNS = gameAnswers.size();
+		MAX_TURNS = mActivity.MAX_TURNS;
+		//gameStarted = true;
+
+		// Wait...
+//		while(!gameStarted) {
+//		}
+		
+		mActivity.sHelper.randomize();
+	} 
+
+
+
+
+
+
+/**
+
+
+     * 
      * onCreateGame() - ButtonsFragment
      */
     @Override
