@@ -12,16 +12,16 @@
 2_Name your favorite movie/TV show.
 2_Name your favorite musician/band.
 2_What is your favorite hobby?
-2_Your favorite drink/food?
+2_Your favorite drink?
 2_Name a sport you like to watch most.
 2_What is your zodiac sign?
 2_Where was the last place you traveled to?
 2_What is your worst fear?
-3_What is your zodiac sign?
+3_What is your favorite food?
 3_Where was the last place you traveled to?
 3_What is your worst fear?
-3_Name a celebrity that you would call your idol.
+3_Your favorite celebrity?
 3_A chore that you hate doing?
-3_A country that you would prefer it didn't exist?
-3_If you won the lottery, what is the first thing you would do?
-3_Out of all the people here, who do you like the most?
+3_A place that you want to visit most?
+3_If you win the lottery, what is the first thing you will do?
+3_Who is your favorite person in the world?

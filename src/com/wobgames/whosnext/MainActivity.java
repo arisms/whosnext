@@ -76,6 +76,8 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	int timerDuration = 0;
 	public boolean timeUp = false;
 	int roundsCompleted = 0;
+	int myRounds = 0;
+	int myErrors = 0;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;

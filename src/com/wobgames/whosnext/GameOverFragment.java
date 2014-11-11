@@ -46,11 +46,11 @@ public class GameOverFragment extends Fragment{
         
         // If the current device is the Server, display game-over text
         if(mActivity.mGameDevice.isGroupOwner()) {
-        	text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
-        	text2.setText("Rounds Completed: " + (mActivity.sHelper.turnCounter-1));
-        	int score = (mActivity.sHelper.turnCounter-1)*100-mActivity.wrongAnswersNumber*50;
-        	text3.setText("Total Score: " + '\n' + (mActivity.sHelper.turnCounter-1) + "x100 - "
-        			+ mActivity.wrongAnswersNumber + "x50 = " + score);
+        	text1.setText("Wrong Answers: " + mActivity.myErrors);
+        	text2.setText("Rounds Completed: " + (mActivity.myRounds));
+        	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
+        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
+        			+ mActivity.myErrors + "x50 = " + score);
         	
         	if(mActivity.timeUp)
             	header.setText("Time up!");
@@ -63,11 +63,11 @@ public class GameOverFragment extends Fragment{
             else
             	header.setText("Game completed!");
         	
-        	text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
-        	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
-        	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
-        	text3.setText("Total Score: " + '\n' + (mActivity.roundsCompleted) + "x100 - "
-        			+ mActivity.wrongAnswersNumber + "x50 = " + score);
+        	text1.setText("Wrong Answers: " + mActivity.myErrors);
+        	text2.setText("Rounds Completed: " + (mActivity.myRounds));
+        	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
+        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
+        			+ mActivity.myErrors + "x50 = " + score);
         	clientTextsSet = true;
         }
         
@@ -115,11 +115,11 @@ public class GameOverFragment extends Fragment{
 
 	public void updateText() {
 		if(!clientTextsSet) {
-			text1.setText("Wrong Answers: " + mActivity.wrongAnswersNumber);
+			text1.setText("Wrong Answers: " + mActivity.myErrors);
 	    	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
-	    	int score = (mActivity.roundsCompleted)*100-mActivity.wrongAnswersNumber*50;
-	    	text3.setText("Total Score: " + '\n' + (mActivity.roundsCompleted) + "x100 - "
-	    			+ mActivity.wrongAnswersNumber + "x50 = " + score);
+	    	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
+	    	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
+	    			+ mActivity.myErrors + "x50 = " + score);
 	    	
 	    	if(mActivity.timeUp)
 	        	header.setText("Time up!");

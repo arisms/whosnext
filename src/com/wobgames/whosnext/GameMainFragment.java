@@ -114,10 +114,14 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		final int position = pos;
 
 		// If the correct player is chosen, send dialog
-		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id())
+		if(mActivity.currentAnswer.userId() == mActivity.currentUsers.get(position).id()) {
+			mActivity.myRounds++;
+			mActivity.roundsCompleted++;
 			mActivity.nextTurn();
+		}
 		else {
 			// If wrong player
+			mActivity.myErrors++;
 			mActivity.wrongAnswersNumber++;
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
 //			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again..." + '\n' 
