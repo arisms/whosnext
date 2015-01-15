@@ -33,7 +33,6 @@ public class GameOverFragment extends Fragment{
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
-		
 		mActivity = (MainActivity) getActivity();
         View view = inflater.inflate(R.layout.game_over_fragment, container, false);
 
@@ -48,9 +47,9 @@ public class GameOverFragment extends Fragment{
         if(mActivity.mGameDevice.isGroupOwner()) {
         	text1.setText("Wrong Answers: " + mActivity.myErrors);
         	text2.setText("Rounds Completed: " + (mActivity.myRounds));
-        	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
-        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
-        			+ mActivity.myErrors + "x50 = " + score);
+        	int score = (mActivity.myRounds)*50-mActivity.myErrors*100;
+        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x50 - "
+        			+ mActivity.myErrors + "x100 = " + score);
         	
         	if(mActivity.timeUp)
             	header.setText("Time up!");
@@ -65,9 +64,9 @@ public class GameOverFragment extends Fragment{
         	
         	text1.setText("Wrong Answers: " + mActivity.myErrors);
         	text2.setText("Rounds Completed: " + (mActivity.myRounds));
-        	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
-        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
-        			+ mActivity.myErrors + "x50 = " + score);
+        	int score = (mActivity.myRounds)*50-mActivity.myErrors*100;
+        	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x50 - "
+        			+ mActivity.myErrors + "x100 = " + score);
         	clientTextsSet = true;
         }
         
@@ -117,9 +116,9 @@ public class GameOverFragment extends Fragment{
 		if(!clientTextsSet) {
 			text1.setText("Wrong Answers: " + mActivity.myErrors);
 	    	text2.setText("Rounds Completed: " + (mActivity.roundsCompleted));
-	    	int score = (mActivity.myRounds)*100-mActivity.myErrors*50;
-	    	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x100 - "
-	    			+ mActivity.myErrors + "x50 = " + score);
+	    	int score = (mActivity.myRounds)*50-mActivity.myErrors*100;
+	    	text3.setText("Total Score: " + '\n' + (mActivity.myRounds) + "x50 - "
+	    			+ mActivity.myErrors + "x100 = " + score);
 	    	
 	    	if(mActivity.timeUp)
 	        	header.setText("Time up!");

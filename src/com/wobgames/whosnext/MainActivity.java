@@ -23,6 +23,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -78,6 +79,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	int roundsCompleted = 0;
 	int myRounds = 0;
 	int myErrors = 0;
+	Vibrator v;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -143,6 +145,8 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
         wrongAnswersNumber = 0;
         timerStarted = false;
         timerCreated = false;
+        
+        v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         
         // Typefaces
         exoregular = Typeface.createFromAsset(getAssets(), "Exo-Regular.otf");
@@ -521,6 +525,10 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
     
     public void startTurn(Answer answer) {
     	soundpool.play(soundIds[1], (float)0.2, (float)0.2, 1, 0, 1);
+    	
+    	 // Vibrate for 600 milliseconds
+    	 v.vibrate(600);
+    	
     	currentAnswer = answer;
     	
     	// Load Game Main Fragment
@@ -551,7 +559,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
     	soundpool.play(soundIds[4], (float)0.4, (float)0.4, 1, 0, 1);
     	
     	showToast(message.toast());
-    	
+    	v.vibrate(600);
     	// Load GameOver Fragment
 		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.rootlayout, mGameOverFragment).addToBackStack(null).commit();
@@ -608,9 +616,15 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 						&& (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))) == 0		) {
 					soundpool.play(soundIds[0], (float)0.3, (float)0.3, 1, 0, 1);
 				}
+				if((TimeUnit.MILLISECONDS.toSeconds(millis) - 
+						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))) <= 10
+						&& (TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))) == 0) {
+					// Vibrate for 600 milliseconds
+			    	 v.vibrate(50);
+				}
 				if(TimeUnit.MILLISECONDS.toSeconds(millis) - 
 						TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)) == 0) {
-					soundpool.play(soundIds[6], (float)0.3, (float)0.3, 1, 0, 1);
+					soundpool.play(soundIds[6], (float)0.3, (float)0.3, 1, 1, 1);
 				}
 				
 				textViewTime.setText(hms);

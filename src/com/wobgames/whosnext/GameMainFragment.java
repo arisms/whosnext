@@ -121,6 +121,7 @@ public class GameMainFragment extends ListFragment implements OnSelectPlayerList
 		}
 		else {
 			// If wrong player
+			mActivity.v.vibrate(600);
 			mActivity.myErrors++;
 			mActivity.wrongAnswersNumber++;
 			Toast toast = Toast.makeText(getActivity(), "Wrong player! Please try again...", Toast.LENGTH_SHORT);
