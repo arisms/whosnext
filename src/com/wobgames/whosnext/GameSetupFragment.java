@@ -130,9 +130,9 @@ import android.widget.Toast;
             public void onClick(View v) {
             	
             	// Check if group name is empty
-        		if(etGroupName.getText().toString().equals(""))
-        			mActivity.showToast("Group name cannot be empty!");
-        		else {
+//        		if(etGroupName.getText().toString().equals(""))
+//        			mActivity.showToast("Group name cannot be empty!");
+//        		else {
 	            	int level;
 	            	if(spinner1.getSelectedItem().toString().equals("Strangers"))
 	            		level = 1;
@@ -164,7 +164,7 @@ import android.widget.Toast;
 	            	// Call MainActivity's createGame()
 	            	mActivity.createGame(etGroupName.getText().toString(), level, duration);
         		}
-            }
+//            }
         });
         
         return view;

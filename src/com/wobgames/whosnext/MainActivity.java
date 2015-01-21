@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	public int MAX_TURNS = 30;
 	public Typeface exoregular;
 	public SoundPool soundpool;
-	public int soundIds[] = new int[10];;
+	public int soundIds[] = new int[10];
 	int familiarityLevel = 0;
 	public String groupName;
 	int timerDuration = 0;
@@ -80,6 +80,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	int myRounds = 0;
 	int myErrors = 0;
 	Vibrator v;
+	boolean list_flag = false;
 	
 	// WiFi p2p
 	WifiP2pManager mManager;
@@ -90,7 +91,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	private boolean threadStarted = false;
 	WifiP2pDevice mDevice = null;
 	List<WifiP2pDevice> mPeers;
-	private int peersCounter;
+	//private int peersCounter;
 	public int totalPeers;
 	public List<GameDevice> connectedDevices;
 	public int SERVER_PORT = 8888;
@@ -133,7 +134,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
         mChannel = mManager.initialize(this, getMainLooper(), null);
         //mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
         connectedDevices = new ArrayList<GameDevice>();
-        peersCounter = 0;
+        //peersCounter = 0;
         
         // Intent filter & intents
         mIntentFilter = new IntentFilter();
@@ -215,43 +216,6 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
         }
     }
     
-    // Connect to a single device from the list of peers
-    public void connect(List<WifiP2pDevice> peers) {
-    	
-    	//Log.d(TAG, "Connect to peer: " + peers.get(peersCounter).deviceName + " - " + peersCounter);
-    	
-    	WifiP2pDevice peerDevice;
-    	WifiP2pConfig config;
-    	
-    	// Connect to the device in the list of peers pointed by peersCounter
-    	// if it is not already connected
-    	if(mDeviceListFragment.getDeviceStatus(peers.get(peersCounter).status) == "Available")
-    	{
-    		peerDevice = peers.get(peersCounter);
-    		config = new WifiP2pConfig();
-    		config.deviceAddress = peerDevice.deviceAddress;
-    		config.wps.setup = WpsInfo.PBC;
-    		config.groupOwnerIntent = 15;   // Make current device group owner
-    		
-    		mManager.connect(mChannel, config, new ActionListener() {
-    			
-                @Override
-                public void onSuccess() {
-                    // WiFiDirectBroadcastReceiver will notify.
-                }
-
-                @Override
-                public void onFailure(int reason) {
-                    Toast.makeText(MainActivity.this, "Connect failed. Retry.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-    		
-    		peersCounter++;
-    	}
-    	
-    }
-        
     /** PeerListListener **/
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
@@ -260,6 +224,8 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	    	if(mDeviceListFragment != null && mDeviceListFragment.isAdded()) {
 	    		mDeviceListFragment.updatePeerList(peerList);
 	    		mDeviceListFragment.updateThisDevice(mDevice);
+	    		
+	    		list_flag = true;
 	    	}
     }
     
@@ -433,28 +399,100 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
      * onConnect - DeviceListFragment
      * when the Connect button in the DeviceListFragment is pressed
      */
-    public void onConnect() {
+    public void onConnect(WifiP2pDevice device) {
     	// Connect current device to all peers in the list, 
     	// and set it as group owner
-    	//Log.d(TAG, "onConnect()");
+    	Log.d(TAG, "onConnect()");
     	
     	// Get the list of peer devices from the fragment
     	mPeers = new ArrayList<WifiP2pDevice>(mDeviceListFragment.getPeersList());
     	totalPeers = mPeers.size();
     	
-    	if(mPeers.size() > 0 && peersCounter < totalPeers)
-    		connect(mPeers);
+//    	if(mPeers.size() > 0 && peersCounter < totalPeers) {
+    	if(mPeers.size() > 0) {
+    		Log.d(TAG, "onConnect() - IF");
+    		connect(mPeers, device);
+    	}
     }
     
-    /**
+    // Connect to a single device from the list of peers
+	    public void connect(List<WifiP2pDevice> peers, WifiP2pDevice device) {
+	    	
+	    	Log.d(TAG, "connect(): " + device.deviceName);
+	    	
+	    	WifiP2pDevice peerDevice;
+	    	WifiP2pConfig config;
+	    	
+	    	
+	    	for (int i=0; i<peers.size(); i++) {
+	    		peerDevice = peers.get(i);
+	    		if(peerDevice.deviceName.equals(device.deviceName)) 
+	    		{
+	    			Log.d(TAG, "In if - name: " + peerDevice.deviceName);
+	    			config = new WifiP2pConfig();
+	    			config.deviceAddress = peerDevice.deviceAddress;
+	    			config.wps.setup = WpsInfo.PBC;
+	    			config.groupOwnerIntent = 15;   // Make current device group owner
+	    			
+	    			mManager.connect(mChannel, config, new ActionListener() {
+	    				
+	    	            @Override
+	    	            public void onSuccess() {
+	    	                // WiFiDirectBroadcastReceiver will notify.
+	    	            }
+	
+	    	            @Override
+	    	            public void onFailure(int reason) {
+	    	                Toast.makeText(MainActivity.this, "Connect failed. Retry.",
+	    	                        Toast.LENGTH_SHORT).show();
+	    	            }
+	    	        });
+	    			//peersCounter++;
+	    			break;
+	    		}
+	    	}
+	    	
+	    	
+	    		
+	    	
+	    	// Connect to the device in the list of peers pointed by peersCounter
+	    	// if it is not already connected
+	//    	if(mDeviceListFragment.getDeviceStatus(peers.get(peersCounter).status) == "Available")
+	//    	{
+	//    		peerDevice = peers.get(peersCounter);
+	//    		config = new WifiP2pConfig();
+	//    		config.deviceAddress = peerDevice.deviceAddress;
+	//    		config.wps.setup = WpsInfo.PBC;
+	//    		config.groupOwnerIntent = 15;   // Make current device group owner
+	//    		
+	//    		mManager.connect(mChannel, config, new ActionListener() {
+	//    			
+	//                @Override
+	//                public void onSuccess() {
+	//                    // WiFiDirectBroadcastReceiver will notify.
+	//                }
+	//
+	//                @Override
+	//                public void onFailure(int reason) {
+	//                    Toast.makeText(MainActivity.this, "Connect failed. Retry.",
+	//                            Toast.LENGTH_SHORT).show();
+	//                }
+	//            });
+	//    		
+	//    		peersCounter++;
+	//    	}
+	    	
+	    }
+
+	/**
      * onStart - DeviceListFragment
      * When the button Start Game is pressed in DevieListFragment
      */
     public void onListStartGame() {
     	// Check if all peer devices are connected
-    	if(peersRemaining) 
-    		showToast("Not all the devices are connected...");
-    	else {
+//    	if(peersRemaining) 
+//    		showToast("Not all the devices are connected...");
+//    	else {
 	    	// send familiarityLevel to clients
 	    	Message initMsg = new Message();
 	    	initMsg.setType("LEVEL");
@@ -464,7 +502,7 @@ public class MainActivity extends FragmentActivity implements ButtonsFragmentLis
 	    	
 	    	getSupportFragmentManager().beginTransaction()
 				.replace(R.id.rootlayout, mQuestionsFragment).commit();
-    	}
+//    	}
     }
     
     /**

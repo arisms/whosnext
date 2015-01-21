@@ -44,16 +44,22 @@ public class ClientSocketHelper {
 			@Override
 			public void run() {   
 				Log.d(TAG, "connectToServerThread - run(), info.groupOwnerAddress: " + info.groupOwnerAddress.getHostAddress());
-				try {
-					connectionSocket.bind(null);
-					InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
-					//InetSocketAddress serverAddr = new InetSocketAddress(mActivity.SERVER_PORT);
-					connectionSocket.connect(serverAddr, 500);
-					mActivity.peersRemaining = false;
-				} catch (Exception e) {
-			    	e.printStackTrace();
-			    	Log.d(TAG, "Client exception");
-			   	}
+				//while(true) {
+					try {
+						Log.d(TAG, "BEFORE CONNECTION");
+						connectionSocket.bind(null);
+						InetSocketAddress serverAddr = new InetSocketAddress(info.groupOwnerAddress.getHostAddress(), mActivity.SERVER_PORT);
+						//InetSocketAddress serverAddr = new InetSocketAddress(mActivity.SERVER_PORT);
+						connectionSocket.connect(serverAddr, 2000);
+						mActivity.peersRemaining = false;
+						Log.d(TAG, "AFTER CONNECTION");
+						//mActivity.showToast("YES");
+					} catch (Exception e) {
+				    	e.printStackTrace();
+				    	Log.d(TAG, "Client exception");
+				    	
+				   	}
+				//}
 			}
 	    });
 		connectToServerThread.start();

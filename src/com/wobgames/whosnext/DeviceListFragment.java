@@ -42,7 +42,7 @@ import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
 		mActivity = (MainActivity) getActivity();
 		
 		// Play sound effect
-        mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
+        //mActivity.soundpool.play(mActivity.soundIds[2], 1, 1, 1, 0, 1);
 		
 		peers.clear();
 		this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
@@ -83,8 +83,18 @@ import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 		WifiP2pDevice device = (WifiP2pDevice) l.getItemAtPosition(position);
-		if(getDeviceStatus(device.status).equals("Available"))
-			mActivity.onConnect();
+		Log.d(TAG, "onListItemClick " + device.deviceName);
+		if(getDeviceStatus(device.status).equals("Available") && 
+				(device.deviceName.equals("Whosnext1") ||
+				 device.deviceName.equals("Whosnext2") ||
+				 device.deviceName.equals("Whosnext3") ||
+				 device.deviceName.equals("Whosnext4") ||
+				 device.deviceName.equals("Whosnext5") ||
+				 device.deviceName.equals("Whosnext6") ||
+				 device.deviceName.equals("Whosnext7"))
+				) {
+			mActivity.onConnect(device);
+		}
     }
 	
 	/**
@@ -202,7 +212,7 @@ import com.wobgames.whosnext.ButtonsFragment.ButtonsFragmentListener;
      */
     public interface OnCreateGroupListener {
 		
-		public void onConnect();
+		public void onConnect(WifiP2pDevice device);
 		
 		public void onListStartGame();
 	}
