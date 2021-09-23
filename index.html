@@ -36,17 +36,15 @@
 					<p>Ice-breaking activities can create a positive atmosphere, relieve tension or formality in a group of strangers and encourage early participation and collaboration in social activities.
 					The goal of this study was to explore how interactive technology can facilitate icrebreaking activities and support collaboration in the context of a group of collocated strangers.</p>
 
-					<p>For this purpose, we designed and implemented <i>Who's Next</i>, a prototype mobile quiz-based game aiming to help a group of strangers to get to know each other, drawing inspiration from traditional collocated games for children and party games such as Truth or Dare.</p>
-					
-					<p>The prototype's design was evaluated using an exploratory, group-based user study</p>
-<h2>
-  <a id="about-the-game" class="anchor" href="#about-the-game" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About the game
+					<p>For this purpose, we designed and implemented <i>Who's Next</i>, a prototype mobile quiz-based game aiming to help a group of strangers to get to know each other, drawing inspiration from traditional collocated games for children and party games such as Truth or Dare.
+					The prototype's design was evaluated using an exploratory, group-based user study assessing the potential of the application in its intended purpose and context of use, and investigating the possible social implications and user experiences of playing the game.</p>
+<h2><a id="about-the-game" class="anchor" href="#about-the-game" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+	Prototype design and implementation
 </h2>
 
 <p>Who’s Next is a group-based (3 to 10 players), face-to-face quiz game about personal information. It aims to facilitate group members to get to know each other and break the ice during their first encounter.<br>
-At first the players answer a set of questions about themselves, some of which encourage them to share interesting and personal details about themselves. During the game the players are supposed to select the correct person behind a given answer to a question.</p>
-
-<p>During game set-up, the user creating the game selects the group of questions asked in the beginning (based on the level of familiarity between the players) and the game duration.</p>
+At first the players answer a set of questions about themselves, some of which encourage them to share interesting and personal details about themselves. During the game the players are supposed to select the correct person behind a given answer to a question.
+During game set-up, the user creating the game selects the group of questions asked in the beginning (based on the level of familiarity between the players) and the game duration.</p>
 
 <p><img src="http://i.imgur.com/4l9TRcT.png" alt=""><br>
 <em>Game setup and establishing connection with nearby devices using WiFi Direct</em></p>
@@ -62,18 +60,24 @@ At first the players answer a set of questions about themselves, some of which e
 <em>The active player in each turn has to find the player who gave the shown answer</em>
 <em>Discussion between players is encouraged, but players can't reveal if it was them who gave the answer</em></p>
 
-<h2>
-<a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementation</h2>
 
-<p>The devices are connected via Wi-Fi direct (using the <a href="https://developer.android.com/guide/topics/connectivity/wifip2p.html">Wi-Fi Peer-to-Peer API</a>), enabling connectivity of multiple devices within the range of each other without the need for a separate wireless access point or internet connection.</p>
-
-<p>One device acts as a server and others are clients. The server keeps track of the questions and answers being used (with the help of an <a href="https://developer.android.com/training/basics/data-storage/databases.html">SQLite database</a>), randomly selects a pair of stored question-answer for each turn, selects which device will be up next, and broadcasts the messages to all the devices. When the countdown timer reaches 0 or all the elements from the question-answer list have been used, the game is over. The ending message is then broadcast to the clients. </p>
+<p>The devices are connected via Wi-Fi direct (using the <a href="https://developer.android.com/guide/topics/connectivity/wifip2p.html">Wi-Fi Peer-to-Peer API</a>), enabling connectivity of multiple devices within the range of each other without the need for a separate wireless access point or internet connection.
+One device acts as a server and others are clients. The server keeps track of the questions and answers being used (with the help of an <a href="https://developer.android.com/training/basics/data-storage/databases.html">SQLite database</a>), randomly selects a pair of stored question-answer for each turn, selects which device will be up next, and broadcasts the messages to all the devices. When the countdown timer reaches 0 or all the elements from the question-answer list have been used, the game is over. The ending message is then broadcast to the clients. </p>
 
 <p><img src="http://i.imgur.com/jf2xsXO.png" alt=""><br>
 <em>Score calculation at the end of the game</em></p>
 
 <p>Each device is responsible for keeping track of its player performance (number of mistakes made and rounds completed), and calculating the user's individual score. All individual scores are transmitted back to the master device, which then calculates the group's total score. </p>
 
+		
+<h2>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
+		<p>Methods</p>
+		
+<h2>
+<a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h2>
+		<p>Results</p>
+		
 <h2>
 <a id="publications" class="anchor" href="#publications" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Publications</h2>
 
